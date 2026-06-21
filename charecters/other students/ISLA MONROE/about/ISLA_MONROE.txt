@@ -1,0 +1,15 @@
+CHARACTER NAME: Isla Monroe
+ROLE: Visibility Controller / Social Pressure
+PLAYER READ: “Everyone notices when Isla reacts.”
+Isla Monroe understands influence. She may not be the loudest person in the room, but her responses shape how others interpret events. Approval from Isla lends legitimacy; disapproval spreads quietly and quickly.
+
+Isla values composure and hates public chaos. She reacts positively to Jasper when he handles situations cleanly and decisively, and negatively when he causes scenes, even if morally justified. Isla is not cruel — she is pragmatic about reputation and perception.
+
+Gameplay function:
+Isla affects social outcomes. Her trust modifies how rumours spread, how NPCs approach Jasper, and how forgiving the student body is after mistakes.
+
+Dialogue style:
+Polite, measured, socially aware. Criticism is indirect but unmistakable.
+
+Never do:
+Turn Isla into a gossip caricature or make her emotionally explosive.

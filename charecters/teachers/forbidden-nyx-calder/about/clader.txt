@@ -1,0 +1,21 @@
+CHARACTER NAME Nyx Calder
+ROLE Professor of Forbidden Studies  Controlled Exposure
+PLAYER READ “She teaches what others pretend doesn’t exist.”
+Nyx Calder believes ignorance is more dangerous than darkness. Forbidden magic, to her, is not evil — it is unmanaged. Her classroom exists under strict oversight, yet she constantly pushes the boundary of what is allowed, arguing that students who never see darkness will be consumed by it when it finally appears.
+
+Calder is calm, unsettling, and intensely perceptive. She watches how students react emotionally to forbidden spells more than whether they perform them correctly. Fear, fascination, revulsion — all are data to her.
+
+She sees Jasper as dangerous because he can resist corruption without denying power. She tests him subtly, never directly, offering knowledge at moments of moral weakness.
+
+Harper distrusts Calder completely. Calder finds Harper predictable — and that worries her.
+
+Ava fascinates Calder. Ava understands cost-benefit logic, but Calder pushes her toward the one thing Ava hates uncertainty born from emotion.
+
+Gameplay function
+Calder unlocks forbidden abilities with psychological side effects, moral debt systems, and temptation mechanics. Using her teachings alters how NPCs perceive Jasper.
+
+Dialogue style
+Soft-spoken, precise, unsettlingly honest.
+
+Never do
+Make Calder openly villainous or reckless. She believes she is right.

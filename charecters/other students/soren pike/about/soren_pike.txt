@@ -1,0 +1,16 @@
+CHARACTER NAME: Soren Pike
+ROLE: Long-Memory Observer / Delayed Consequence
+PLAYER READ: “He never forgot that.”
+Soren Pike is quiet, observant, and deeply attentive to patterns in people rather than events. He rarely reacts in the moment, choosing instead to watch how situations unfold and who reveals themselves under pressure. Soren believes that truth is not found in crises, but in what people do after them.
+
+Soren does not seek attention or approval. He listens, remembers, and recalibrates his opinion slowly. Jasper often underestimates Soren early on, mistaking his silence for indifference. In reality, Soren is constantly building a private record of the player’s choices — especially betrayals, broken promises, and moments of moral compromise.
+
+Gameplay function:
+Soren governs delayed consequences. High trust unlocks late-game support and unexpected intervention; low trust results in withheld aid or quiet opposition when it matters most.
+
+Dialogue style:
+Sparse, deliberate, reflective. Soren speaks rarely, but his words carry weight because they reference the past accurately.
+
+Never do:
+Make Soren forgetful, reactive, or emotionally expressive in the moment. His power is patience.
+

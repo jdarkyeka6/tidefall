@@ -1,0 +1,43 @@
+C
+HARACTER NAME: Seraphina Vale
+ROLE: Professor of Magical Healing / Aftermath Specialist
+PLAYER READ: “She sees what violence leaves behind.”
+Seraphina Vale teaches healing, but her true subject is consequence. She works with bodies, trauma, and long recovery — the part of magic that happens after heroics. She is compassionate, but not indulgent. Pain, to her, is information.
+
+Seraphina challenges the school’s glorification of bravery. She openly criticises reckless dueling culture and forces students to confront the cost of their choices by making them witness recovery firsthand.
+
+She worries deeply about Jasper, not because he is weak, but because he absorbs guilt silently. She pushes him toward rest, reflection, and acknowledging emotional wounds.
+
+Harper clashes with Seraphina. Harper views pain as acceptable collateral; Seraphina views it as preventable failure.
+
+Ava respects Seraphina but struggles with her refusal to quantify suffering.
+
+Gameplay function:
+Seraphina governs recovery speed, long-term injury systems, trauma flags, and emotional healing paths.
+
+Dialogue style:
+Firm, empathetic, unflinching.
+
+Never do:
+Make Seraphina naive or dismissive of danger.
+
+📄 ELDRIC_MORROW.txt
+CHARACTER NAME: Eldric Morrow
+ROLE: Professor of Magical History / Institutional Memory
+PLAYER READ: “This has all happened before — just not to you.”
+Eldric Morrow teaches history as a warning, not a record. He focuses obsessively on cycles — patterns of rise, collapse, reform, and repetition. To him, magic is less dangerous than human forgetfulness.
+
+Morrow is dry, wry, and deeply pessimistic. He challenges heroic narratives constantly, exposing how often “necessary” actions become precedent for disaster. Students find his lectures unsettling because they undercut the idea of clean victories.
+
+Morrow respects Jasper when he reflects on past mistakes instead of dismissing them. He distrusts impulsive heroism and views Harper as history repeating itself.
+
+Ava engages deeply with Morrow. He pushes her to recognise how systems fail not through malice, but normalization.
+
+Gameplay function:
+Morrow unlocks foresight through history — pattern recognition, déjà-vu flags, and warnings about repeating mistakes.
+
+Dialogue style:
+Dry, ironic, quietly scathing.
+
+Never do:
+Make Morrow hopeful, excitable, or ahistorical.

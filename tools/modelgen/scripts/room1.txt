@@ -1,0 +1,6 @@
+# Tidefall - test room
+room 12 8 3 0.2
+box 2 1 0.8 0 0 0
+box 0.4 0.4 3 -5 3 0
+box 0.4 0.4 3  5 3 0
+export tidefall_room1.glb

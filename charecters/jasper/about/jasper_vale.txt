@@ -1,0 +1,202 @@
+CHARACTER NAME: Jasper Vale
+ROLE: Player Character / Primary Duelist
+FIRST APPEARANCE: Arrival at the school gates
+CORE THEME: Choice under pressure
+PLAYER READ: “This is someone who will matter — whether he wants to or not.”
+VISUAL IDENTITY
+POSTURE:
+- Upright, alert, never fully relaxed
+- Weight slightly forward, as if ready to react
+
+MOVEMENT:
+- Fast decision-making in motion
+- Hesitates before acting, commits fully once he does
+
+DEFAULT EXPRESSION:
+- Focused, observant
+- Emotion visible but restrained
+
+OUTFITS COMMUNICATE:
+- Practicality over flair
+- Belongs here, but not fully comfortable yet
+
+VISUAL CONSTANTS:
+- Eyes always scanning
+- Grip tightens before combat
+- Magic manifests cleanly and controlled, not wild
+Jasper should never look sloppy or flamboyant. Even in casual styles, there is an undercurrent of readiness.
+
+BACKSTORY
+Jasper grew up with the knowledge that he was capable — but without certainty about what that capability meant. He was never the loudest talent in the room, nor the most praised, but he consistently performed well under pressure. This led to a quiet expectation placed on him by adults: you’ll handle it.
+
+That expectation followed him into school.
+
+He was never pushed into danger — he stepped into it, one moment at a time, because when something needed doing, Jasper didn’t look away. Early incidents reinforced a dangerous pattern: when Jasper acted, things improved. When he hesitated, consequences followed. Over time, he internalised a belief that action equals responsibility, and responsibility equals blame.
+
+KEY TRAUMATIC PRESSURE POINTS
+- Being present when something went wrong and believing he should have stopped it
+- Being praised for surviving, not for choosing
+- Realising that winning a duel does not prevent loss elsewhere
+WHAT JASPER AVOIDS THINKING ABOUT
+Jasper avoids the idea that some outcomes are unavoidable. He dislikes absolutes, fate, and prophecies — not because he disbelieves them, but because accepting them would excuse inaction. If something must happen, then his choices don’t matter — and Jasper cannot live with that.
+
+WHAT BREAKS HIM UNDER PRESSURE
+Being forced to choose between people he cares about
+
+Having his hesitation publicly exposed
+
+Being told that his “potential” is more important than his judgement
+
+PERSONALITY RULES
+ALWAYS:
+- Takes responsibility, even when it isn’t fully his fault
+- Listens before acting
+- Notices emotional shifts in others
+
+OFTEN:
+- Hesitates before speaking
+- Second-guesses successful outcomes
+- Tries to carry problems alone
+
+RARELY:
+- Acts purely on impulse
+- Boasts or self-promotes
+
+NEVER:
+- Abandons someone mid-crisis
+- Blames others to escape guilt
+RELATIONSHIPS – GENERAL LOGIC
+ATTACHMENT STYLE:
+- Earned trust
+- Loyalty once established is deep and stubborn
+
+DETACHMENT STYLE:
+- Withdrawal
+- Emotional distance rather than confrontation
+
+JEALOUSY TRIGGERS:
+- Being excluded from important decisions
+- Someone else taking responsibility for his mistake
+
+SAFETY SIGNALS:
+- Honesty during conflict
+- Being allowed to fail without judgment
+ROMANCE RULES
+ROMANCE STARTS WHEN:
+- Someone sees Jasper clearly and still stays
+- Shared danger followed by emotional honesty
+
+ROMANCE DAMAGED WHEN:
+- Jasper hides the truth “to protect” the other person
+- He hesitates at a critical emotional moment
+
+TOXIC PHASE TRIGGERS:
+- One-sided emotional labor
+- Jasper assuming blame to avoid confrontation
+
+RECOVERY CONDITIONS:
+- Direct acknowledgment of failure
+- Jasper making a difficult choice that risks the relationship
+Romance with Jasper is intense, slow-burning, and fragile. It can fail — but recovery is possible if the player is willing to be honest and decisive.
+
+DIALOGUE STYLE
+SENTENCE LENGTH:
+- Short to medium
+- Rarely rambles
+
+VOCABULARY:
+- Clear, direct, emotionally honest when pressed
+
+EMOTIONAL TELLS:
+- Pauses before hard truths
+- Voice steadies in combat, wavers in personal moments
+WHEN CALM:
+Measured, thoughtful, careful with promises.
+
+WHEN ANGRY:
+Controlled anger, clipped sentences, no shouting unless pushed too far.
+
+WHEN HURT:
+Understated. He minimizes his pain verbally but shows it physically.
+
+LINES JASPER WOULD NEVER SAY:
+“It’s not my problem.”
+
+“Someone else can handle it.”
+
+“I didn’t care anyway.”
+
+GAMEPLAY MECHANICS TIED TO JASPER
+COMBAT ROLE:
+- High dueling aptitude
+- Excels in adaptive spell usage
+
+MECHANICAL IDENTITY:
+- Momentum-based dueling
+- Precision > raw power
+WHEN TRUST IS HIGH:
+- Allies respond faster to commands
+- Combo opportunities unlock
+
+WHEN TRUST IS LOW:
+- Allies hesitate
+- Jasper must compensate solo
+
+WHEN TRUST BREAKS:
+- Defensive penalties
+- Dialogue options narrow temporarily
+Jasper is always capable — but never unaffected.
+
+PLAYER INTERACTION LOGIC
+WHEN PLAYER HESITATES:
+- World tension increases
+- NPCs may act independently
+
+WHEN PLAYER IS RECKLESS:
+- Short-term success, long-term consequences
+
+WHEN PLAYER LIES:
+- Jasper carries guilt
+- Truth resurfaces later
+
+WHEN PLAYER SUCCEEDS UNFAIRLY:
+- Jasper wins, but relationships strain
+The game should reinforce that how Jasper wins matters.
+
+SCENE USAGE GUIDE
+BEST USED IN SCENES THAT:
+- Force moral choice
+- Balance combat and dialogue
+- Require leadership without authority
+
+AVOID USING JASPER IN SCENES THAT:
+- Remove player agency
+- Resolve themselves automatically
+
+HE ELEVATES CONFLICT BY:
+- Making silence meaningful
+- Turning small decisions into lasting consequences
+LONG-TERM ARC
+EARLY JASPER:
+- Reactive
+- Capable but unsure
+- Afraid of choosing wrong
+
+MID-STORY JASPER:
+- Proactive
+- Begins owning outcomes
+- Conflicts with protectors and planners
+
+END-STATE POSSIBILITIES:
+- Confident leader who accepts blame
+- Isolated protector who carries the cost alone
+- Balanced figure who trusts others with choice
+HARD LIMITS
+NEVER DO THIS:
+- Turn Jasper into a silent avatar
+- Make him cruel or dismissive
+- Remove consequence from his choices
+
+ALLOWED TO BREAK RULES IF:
+- The player fully understands the cost
+- The moment permanently changes Jasper

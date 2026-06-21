@@ -1,0 +1,275 @@
+📄 STYLE RULES
+Purpose
+
+These rules exist to:
+
+keep characters visually consistent
+
+prevent tone drift
+
+make style choices meaningful, not random
+
+guide future art, writing, and game scenes
+
+If something breaks a rule, it should feel intentional, not accidental.
+
+1️⃣ CORE CONSISTENCY RULES (NON-NEGOTIABLE)
+1. Same character, always
+
+Across all styles:
+
+Same face
+
+Same body type
+
+Same height
+
+Same general age appearance
+
+Styles change context, not identity.
+
+2. Body type lock
+
+Slim athletic build
+
+Lean legs
+
+Narrow ankles
+
+Light, agile silhouette
+
+No style makes her visibly heavier or bulkier.
+
+3. Expression follows style
+
+Sad only when the style calls for it (e.g. Style 8)
+
+Neutral or confident otherwise
+
+No accidental sadness in confident styles
+
+Face emotion must match style meaning.
+
+4. No “fashion drift”
+
+Outfits must feel:
+
+practical for the moment
+
+emotionally appropriate
+
+consistent with personality
+
+No random glamour or trend chasing.
+
+2️⃣ STYLE CATEGORIES (IMPORTANT)
+A. OUTFIT STYLES
+
+Styles that define what she wears:
+
+1–5
+
+8–15
+
+These are selectable looks.
+
+B. STATE STYLES
+
+Styles that define how she acts, not clothes:
+
+6 (Protective)
+
+7 (Action / Crisis)
+
+These override posture, movement, and magic — not outfits.
+
+3️⃣ STYLE-BY-STYLE RULES (SUMMARY FORM)
+1 — Academy Uniform
+
+Neat
+
+Regulated
+
+Suppressed individuality
+
+Rule: never overly expressive.
+
+2 — Modified Uniform
+
+Small personal changes
+
+Still recognisably uniform
+
+Rule: rebellion is subtle, not loud.
+
+3 — Sneaking Out
+
+Comfort + urgency
+
+Not styled
+
+Rule: clothes chosen for speed, not looks.
+
+4 — Dorm / Private Space
+
+Safe
+
+Soft
+
+Cropped allowed
+
+Sleepwear logic
+
+Rule: vulnerability allowed here only.
+
+5 — Casual Day
+
+Normal life
+
+Simple
+
+Australian-appropriate
+
+Rule: should feel “boringly normal”.
+
+6 — Protective (STATE)
+
+Anticipation
+
+Guarding behaviour
+
+Rule: outfit unchanged, posture changes.
+
+7 — Action / Crisis (STATE)
+
+Instinct
+
+Speed
+
+No hesitation
+
+Rule: style chaos is acceptable here.
+
+8 — Mourning / After Loss
+
+Darker tones
+
+Minimal effort
+
+Quiet silhouette
+
+Rule: emotion > appearance.
+
+9 — Structured / Composed
+
+Public facing
+
+Controlled
+
+Holding it together
+
+Rule: never reads as mourning.
+
+10 — Refined / Transitional
+
+Growth phase
+
+Between identities
+
+Rule: looks intentional but unsettled.
+
+11 — Quiet Magic / Memory
+
+Subtle magic only
+
+Reflection
+
+Rule: magic enhances emotion, not spectacle.
+
+12 — Confident / Self-Owned
+
+Feminine, clean, sharp
+
+Calm confidence
+
+Rule: never sad, never defensive.
+
+13 — Formal / Ceremony
+
+Elegant
+
+Composed
+
+Rare usage
+
+Rule: armour is removed here.
+
+14 — Beach / Coastal Casual
+
+Australian identity
+
+Sporty, relaxed
+
+Cropped allowed
+
+Rule: freedom, not fashion.
+
+15 — Beach / In Water
+
+Functional swimwear
+
+Natural movement
+
+Rule: realism over stylisation.
+
+4️⃣ STYLE TRANSITION RULES
+
+Styles change because of:
+
+location
+
+time of day
+
+emotional shift
+
+story event
+
+They do not change randomly.
+
+5️⃣ STYLE CONTRAST RULE
+
+High-impact scenes happen when:
+
+the style does not match the danger
+
+Example:
+
+Style 13 + Style 7
+
+Style 4 + Style 7
+
+Style 15 + bad news
+
+This is intentional tension.
+
+6️⃣ AUSTRALIAN WORLD RULES
+
+Climate matters
+
+Beach matters
+
+Casual wear is culturally normal
+
+Over-formal looks should feel rare
+
+7️⃣ FUTURE MAIN CHARACTER RULE
+
+The main character’s styles must:
+
+contrast this character’s choices
+
+NOT mirror her exactly
+
+reflect their personality differences
+
+(This is why we waited.)

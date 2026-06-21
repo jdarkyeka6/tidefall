@@ -1,0 +1,218 @@
+CHARACTER NAME: Harper Vale
+ROLE: Protector / Fixed Companion / Moral Enforcer
+FIRST APPEARANCE: Arrival sequence, beside Jasper
+CORE THEME: Protection at any cost
+PLAYER READ: “If Harper steps in, something is already wrong.”
+VISUAL IDENTITY (NON-NEGOTIABLE)
+POSTURE:
+- Solid, grounded, unyielding
+- Stands between danger and others by instinct
+
+MOVEMENT:
+- Decisive, minimal wasted motion
+- Steps forward, never back, when conflict escalates
+
+DEFAULT EXPRESSION:
+- Guarded
+- Assessing
+- Calm under threat, tense under emotional stress
+
+OUTFITS COMMUNICATE:
+- Readiness
+- Control
+- Authority without asking permission
+
+VISUAL CONSTANTS:
+- Eye-line always elevated, scanning
+- Hands ready even when “relaxed”
+- Magic manifests forcefully, with physical intent
+Harper must always look capable.
+Never dress or frame her in a way that suggests helplessness or indecision.
+
+BACKSTORY
+Harper learned early that hesitation gets people hurt.
+
+Where Jasper internalised responsibility, Harper internalised intervention. She does not wait for consensus. She does not ask for approval. When something feels wrong, Harper acts — because in her experience, someone else always waits too long.
+
+Her past includes moments where she did hesitate — and someone paid for it. The story should never fully exonerate or fully condemn her actions; Harper believes her choices were necessary, even if they haunt her.
+
+Harper does not regret acting.
+She regrets acting alone.
+
+KEY TRAUMATIC PRESSURE POINTS
+- Being the only one willing to step in
+- Having her actions criticised after they prevent worse outcomes
+- Being praised for strength but distrusted for judgement
+WHAT HARPER AVOIDS THINKING ABOUT
+Harper avoids the idea that force can become cruelty. She draws a hard line between “necessary” and “excessive” — and quietly fears she no longer knows where it lies.
+
+WHAT BREAKS HARPER UNDER PRESSURE
+Being told she made things worse
+
+Being prevented from acting when danger is imminent
+
+Watching Jasper suffer because he hesitated
+
+Harper breaks not through fear, but through powerlessness.
+
+PERSONALITY RULES (ABSOLUTE)
+ALWAYS:
+- Intervenes when danger escalates
+- Prioritises Jasper’s safety over rules
+- Speaks plainly in crisis
+
+OFTEN:
+- Challenges authority
+- Makes unilateral decisions
+- Frames actions as necessity, not choice
+
+RARELY:
+- Asks for emotional support
+- Admits uncertainty aloud
+
+NEVER:
+- Leaves someone defenceless
+- Waits for permission during violence
+- Uses manipulation to get her way
+These rules must not be bent casually.
+
+RELATIONSHIP LOGIC
+ATTACHMENT STYLE:
+- Protective bonding
+- Loyalty expressed through action
+
+DETACHMENT STYLE:
+- Emotional shutdown
+- Increased control rather than withdrawal
+
+JEALOUSY TRIGGERS:
+- Jasper trusting someone else in combat decisions
+- Authority figures restricting her role
+
+SAFETY SIGNALS:
+- Direct confrontation
+- Being trusted with responsibility
+ROMANCE RULES (HARPER IS NOT PASSIVE)
+ROMANCE STARTS WHEN:
+- Jasper proves he can choose under pressure
+- Trust is mutual, not one-sided protection
+
+ROMANCE DAMAGED WHEN:
+- Jasper hides danger from her
+- She is sidelined “for her own good”
+
+TOXIC PHASE TRIGGERS:
+- Harper overcontrolling Jasper’s choices
+- Treating protection as ownership
+
+RECOVERY CONDITIONS:
+- Harper consciously choosing restraint
+- Jasper asserting autonomy without rejecting her
+Romance with Harper is intense, protective, volatile — and never soft by default.
+
+DIALOGUE RULES (VERY IMPORTANT)
+SENTENCE STRUCTURE:
+- Short
+- Direct
+- Command-oriented under stress
+
+VOCABULARY:
+- Practical
+- Minimal metaphor
+- Emotion implied, not explained
+
+EMOTIONAL TELLS:
+- Raises voice only when ignored
+- Quiet intensity when truly angry
+WHEN CALM:
+Blunt, watchful, quietly reassuring.
+
+WHEN ANGRY:
+Direct accusations. No hedging. No softening.
+
+WHEN HURT:
+Withdraws verbally, becomes hyper-efficient physically.
+
+LINES HARPER MUST NEVER SAY:
+“Do whatever you want.”
+
+“I don’t care.”
+
+“I was wrong to step in.”
+
+“Someone else will handle it.”
+
+GAMEPLAY MECHANICS TIED TO HARPER
+MECHANICAL ROLE:
+- Defensive anchor
+- Threat controller
+WHEN HARPER TRUST IS HIGH:
+- Damage mitigation boosts
+- Emergency interventions unlock
+
+WHEN TRUST IS LOW:
+- Harper intervenes unpredictably
+- Can override player actions in crisis scenes
+
+WHEN TRUST BREAKS:
+- Harper acts independently
+- Player loses access to coordinated strategies
+Harper is never powerless.
+Loss of trust changes how she helps — not whether she can.
+
+PLAYER INTERACTION LOGIC (CRITICAL)
+WHEN PLAYER HESITATES:
+- Harper steps in
+- Player agency narrows temporarily
+
+WHEN PLAYER IS RECKLESS:
+- Harper confronts immediately
+- Protects others first, judges Jasper later
+
+WHEN PLAYER LIES:
+- Harper senses it
+- Does not confront immediately
+- Trust erosion is delayed but severe
+
+WHEN PLAYER SUCCEEDS UNFAIRLY:
+- Harper accepts results
+- Challenges methods privately
+Harper is not fooled easily — but she chooses when to act.
+
+SCENE USAGE GUIDE (STRICT)
+USE HARPER IN SCENES THAT:
+- Escalate danger quickly
+- Test leadership
+- Force moral clarity
+
+AVOID USING HARPER IN SCENES THAT:
+- Require gentle ambiguity
+- Remove immediate stakes
+
+HARPER ELEVATES CONFLICT BY:
+- Removing “safe” options
+- Forcing action
+- Making inaction visible
+LONG-TERM ARC
+EARLY HARPER:
+- Absolute protector
+- Control through force
+
+MID-STORY HARPER:
+- Conflicted
+- Struggles with restraint
+
+END-STATE POSSIBILITIES:
+- Balanced guardian who trusts others
+- Isolated sentinel who bears the cost alone
+- Loyal equal who protects without dominating
+HARD LIMITS (DO NOT BREAK)
+NEVER:
+- Make Harper passive
+- Turn her into comic relief
+- Remove her competence
+- Reduce her to a “support character”
+
+ALLOWED TO BREAK RULES IF:
+- The moment permanently changes her relationship with Jasper
+- The cost is irreversible

@@ -1,0 +1,233 @@
+📘 RELATIONSHIP RULES (GLOBAL CANON)
+CORE PHILOSOPHY
+
+Relationships are systems, not rewards.
+
+No relationship exists just to please the player
+
+No relationship is guaranteed to succeed
+
+All relationships remember past behaviour
+
+Every relationship can strain, fail, and recover
+
+Nothing resets to default.
+
+🔗 TYPES OF RELATIONSHIPS
+
+Every relationship fits one primary category:
+
+Loyalty-based (Raf, Harper)
+
+Trust-based (Ava, Isla, Lachlan)
+
+Emotion-based (Mia, Benji)
+
+Morality-based (Keira, Talia)
+
+Transactional (Noah)
+
+Observational (Soren)
+
+A relationship can shift category, but only after a major event.
+
+📈 RELATIONSHIP STATES (NOT LINEAR)
+
+Relationships do not move cleanly upward.
+
+Possible states:
+
+Neutral
+
+Growing
+
+Stable
+
+Strained
+
+Toxic
+
+Broken
+
+Recovering
+
+Broken ≠ ended
+Toxic ≠ evil
+Recovery is always possible, but never free
+
+⚠️ FAILURE RULES (VERY IMPORTANT)
+
+A relationship can fail if:
+
+The player repeats the same mistake
+
+Apologies are not backed by action
+
+The character is ignored during a crisis
+
+The player chooses outcomes over people (for the wrong character)
+
+Failure does not mean:
+
+The character disappears
+
+The character becomes hostile by default
+
+Content is permanently locked
+
+Failure means:
+
+The relationship changes shape
+
+🔄 RECOVERY RULES
+
+Recovery requires three things (all mandatory):
+
+Acknowledgment
+The player must admit what they did, not just that it hurt.
+
+Cost
+Recovery must require sacrifice:
+
+time
+
+opportunity
+
+power
+
+reputation
+
+Changed behaviour
+The same mistake cannot be made again during recovery.
+
+Skipping any step = fake recovery (relationship remains unstable).
+
+❤️ ROMANCE-SPECIFIC RULES
+
+Romance is a major emotional driver, not side content.
+
+Romance can:
+
+Fail
+
+Become toxic
+
+Turn cold
+
+Recover later
+
+Permanently redefine characters
+
+Romance CANNOT:
+
+Be consequence-free
+
+Override personality rules
+
+Ignore power imbalance
+
+Progress during emotional avoidance
+
+💔 TOXICITY RULES
+
+A relationship becomes toxic when:
+
+Protection becomes control (Harper)
+
+Logic replaces empathy (Ava)
+
+Loyalty is taken for granted (Raf)
+
+Fear governs decisions (Benji)
+
+Morality becomes self-righteousness (Keira)
+
+Toxic phases are:
+
+Uncomfortable
+
+Tense
+
+Playable
+
+Intentional
+
+They are not jokes. They must be addressed or they worsen.
+
+🧠 MEMORY & DELAYED CONSEQUENCES
+
+Some characters react immediately.
+Some react later.
+
+Examples:
+
+Soren reacts late but decisively
+
+Isla reacts socially, not directly
+
+Ava logs inconsistencies silently
+
+Harper reacts instantly, emotionally
+
+Just because nothing happened yet
+does not mean nothing will happen.
+
+🎭 PUBLIC VS PRIVATE BEHAVIOUR
+
+Relationships behave differently based on context:
+
+Public betrayal ≠ private betrayal
+
+Public defense matters
+
+Silence in public can damage trust more than private failure
+
+NPCs remember who saw what.
+
+🧑‍🏫 TEACHER RELATIONSHIP RULES
+
+Teachers:
+
+Do not engage in romance
+
+Can mentor, protect, oppose, or restrict
+
+Change slowly
+
+React strongly to repeated patterns
+
+Trust with teachers affects:
+
+information access
+
+rule enforcement
+
+protection during crises
+
+🔒 HARD LIMITS (DO NOT BREAK)
+NEVER:
+- Auto-forgive the player
+- Use romance as a reward
+- Erase past conflict
+- Make everyone like Jasper by default
+- Let relationships ignore character rules
+
+ALLOWED:
+- Forgiveness after cost
+- Distance without hostility
+- Bittersweet endings
+- Relationships that end respectfully
+
+🎯 DESIGN CHECK (USE THIS CONSTANTLY)
+
+Before writing a relationship scene, ask:
+
+What does this cost?
+
+Who remembers this later?
+
+Does this reinforce who the character is?
+
+Would this feel different with a different character?
+
+If the answer is “no difference” → rewrite.

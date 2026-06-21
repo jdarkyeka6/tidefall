@@ -1,0 +1,15 @@
+CHARACTER NAME: Lachlan Vale
+ROLE: Threat Assessor / Silent Protector
+PLAYER READ: “He notices danger before anyone else does.”
+Lachlan Vale is defined by vigilance. He watches exits, tracks movement, and measures risk constantly. He is not loud or confrontational; his authority comes from being consistently right about when something is about to go wrong. Lachlan believes preparation is the highest form of loyalty.
+
+He responds strongly to Jasper’s decisiveness. When Jasper acts with clarity, Lachlan becomes an anchor — quietly covering weaknesses and stepping in only when necessary. When Jasper hesitates or ignores warning signs, Lachlan withdraws trust and begins acting independently to protect others.
+
+Gameplay function:
+Lachlan provides early threat indicators and defensive positioning bonuses. Ignoring his warnings increases ambush risk later.
+
+Dialogue style:
+Minimal, precise, often observational. Speaks up only when necessary.
+
+Never do:
+Turn Lachlan into a loud enforcer or make him reckless in combat.

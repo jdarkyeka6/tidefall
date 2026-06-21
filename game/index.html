@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tidefall 3D – Walkaround</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div id="hud">
+      <div class="title">Tidefall – 3D Walkaround</div>
+      <div class="hint">WASD • Mouse look • Shift sprint • Space jump • E near gate</div>
+      <div id="status" class="status">Status: not locked</div>
+      <div id="msg" class="msg"></div>
+      <div class="note">Trio Order: <b>Calyx</b></div>
+    </div>
+
+    <div id="overlay">
+      <div class="panel">
+        <h1>Enter Tidefall</h1>
+        <p>Click <b>Start</b> (or press <b>Enter</b>). If needed, click the game screen once more.</p>
+        <button id="startBtn" type="button">Start</button>
+        <p class="tiny">
+          Must be opened on <b>http://localhost</b> (not file://). Use the server command below.
+        </p>
+      </div>
+    </div>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

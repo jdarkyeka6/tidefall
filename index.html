@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Character Design Notes</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#121926;
+      --panel2:#0f1520;
+      --text:#e8eef7;
+      --muted:#a9b6c8;
+      --border:#223045;
+      --accent:#7aa8ff;
+      --danger:#ff5b6a;
+      --ok:#36d17c;
+      --chip:#1b2638;
+      --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --radius:16px;
+    }
+    *{ box-sizing:border-box; }
+    body{
+      margin:18px;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg), #070a10);
+      color:var(--text);
+      line-height:1.35;
+    }
+    h1{ margin:0 0 10px; font-size: 24px; }
+    .small{ font-size:12px; color:var(--muted); }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; margin: 12px 0; align-items:flex-end; }
+    label{ display:block; font-size:12px; color:var(--muted); margin-bottom:6px; }
+    input, textarea, button, select{
+      font: inherit;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #0c121c;
+      color: var(--text);
+      outline: none;
+    }
+    input::placeholder, textarea::placeholder{ color:#6f7f98; }
+    textarea{ width:100%; min-height: 100px; resize: vertical; }
+    button{
+      cursor:pointer;
+      background: linear-gradient(180deg, #1a2640, #121b2e);
+      border-color: #2a3b58;
+      box-shadow: var(--shadow);
+    }
+    button:hover{ border-color:#3b557f; }
+    button:active{ transform: translateY(1px); }
+    button.danger{ border-color:#5a2030; background: linear-gradient(180deg, #2a141c, #1b0d12); }
+    button.danger:hover{ border-color:#7a2b3f; }
+    button.ghost{
+      background: transparent;
+      box-shadow:none;
+    }
+    .card{
+      background: linear-gradient(180deg, var(--panel), var(--panel2));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      box-shadow: var(--shadow);
+      margin: 12px 0;
+    }
+    .pill{
+      display:inline-block;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--chip);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-size: 12px;
+    }
+    .warn{ color: var(--danger); font-weight: 700; }
+    .ok{ color: var(--ok); font-weight: 700; }
+    .grid2{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .ratingBox{
+      display:flex; gap:10px; align-items:center;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background:#0c121c;
+    }
+    .ratingBox input[type="range"]{
+      width: 100%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      accent-color: var(--accent);
+    }
+    .ratingNum{
+      min-width: 52px;
+      text-align:center;
+      font-weight: 800;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 6px 8px;
+      background: #0b1220;
+    }
+    .topActions{ display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end; }
+    .divider{ height:1px; background: var(--border); margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>🌙 Character Design Notes (Dark Mode)</h1>
+  <div class="small">
+    Style can be a number <b>or</b> a word. Ratings are sliders (0–10). Export to TXT anytime.
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div style="min-width:260px; flex:1;">
+        <label>Person</label>
+        <input id="personName" placeholder="e.g., Harper" />
+      </div>
+
+      <div style="min-width:260px; flex:1;">
+        <label>Switch person</label>
+        <select id="personSelect">
+          <option value="">(none yet)</option>
+        </select>
+      </div>
+
+      <div class="topActions">
+        <button id="savePersonBtn" type="button">Save / Select</button>
+        <button id="deletePersonBtn" type="button" class="danger">Delete Person</button>
+        <button id="clearAllBtn" type="button" class="danger">Clear ALL</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="grid2">
+      <div>
+        <label>Style (number or word)</label>
+        <input id="styleInput" placeholder="e.g., 4 or Beach / Ceremony" />
+      </div>
+
+      <div>
+        <label>Abby’s rating (0–10)</label>
+        <div class="ratingBox">
+          <input id="abbyRange" type="range" min="0" max="10" step="1" value="5" />
+          <div id="abbyNum" class="ratingNum">5/10</div>
+        </div>
+      </div>
+
+      <div>
+        <label>Hudson’s rating (0–10)</label>
+        <div class="ratingBox">
+          <input id="hudsonRange" type="range" min="0" max="10" step="1" value="5" />
+          <div id="hudsonNum" class="ratingNum">5/10</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:12px;">
+      <label>Extra comments</label>
+      <textarea id="commentsInput" placeholder="What did they say? What needs changing?"></textarea>
+    </div>
+
+    <div class="row">
+      <button id="addNoteBtn" type="button">➕ Add Note</button>
+      <button id="resetFormBtn" type="button" class="ghost">Reset</button>
+      <div id="limitMsg" class="small"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between; align-items:center;">
+      <div>
+        <div><b>Current person:</b> <span id="currentPersonLabel" class="pill">(none)</span></div>
+        <div class="small">Saved in your browser automatically.</div>
+      </div>
+      <div class="topActions">
+        <button id="exportCurrentBtn" type="button">⬇️ Export THIS Person</button>
+        <button id="exportAllBtn" type="button">⬇️ Export ALL People</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between; align-items:center;">
+      <div><b>Notes</b> <span class="small">(latest first)</span></div>
+      <div class="topActions">
+        <button id="undoBtn" type="button">Undo Last</button>
+        <button id="clearPersonBtn" type="button" class="danger">Clear This Person</button>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div id="notesList"></div>
+  </div>
+
+<script>
+(() => {
+  const MAX_STYLES_PER_PERSON = 999;
+  const STORAGE_KEY = "tidefall_character_notes_v2_dark_slider";
+
+  const el = (id) => document.getElementById(id);
+
+  const personName = el("personName");
+  const personSelect = el("personSelect");
+  const savePersonBtn = el("savePersonBtn");
+  const deletePersonBtn = el("deletePersonBtn");
+  const clearAllBtn = el("clearAllBtn");
+
+  const styleInput = el("styleInput");
+  const abbyRange = el("abbyRange");
+  const hudsonRange = el("hudsonRange");
+  const abbyNum = el("abbyNum");
+  const hudsonNum = el("hudsonNum");
+  const commentsInput = el("commentsInput");
+
+  const addNoteBtn = el("addNoteBtn");
+  const resetFormBtn = el("resetFormBtn");
+  const limitMsg = el("limitMsg");
+
+  const currentPersonLabel = el("currentPersonLabel");
+  const exportCurrentBtn = el("exportCurrentBtn");
+  const exportAllBtn = el("exportAllBtn");
+
+  const notesList = el("notesList");
+  const undoBtn = el("undoBtn");
+  const clearPersonBtn = el("clearPersonBtn");
+
+  let state = loadState();
+
+  function defaultState() {
+    return { currentPerson: "", people: {} };
+  }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      const parsed = JSON.parse(raw);
+      if (!parsed || typeof parsed !== "object") return defaultState();
+      if (!parsed.people || typeof parsed.people !== "object") parsed.people = {};
+      if (typeof parsed.currentPerson !== "string") parsed.currentPerson = "";
+      return parsed;
+    } catch {
+      return defaultState();
+    }
+  }
+
+  function saveState() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function ensurePersonExists(name) {
+    if (!state.people[name]) state.people[name] = [];
+  }
+
+  function setCurrentPerson(name) {
+    state.currentPerson = name;
+    saveState();
+    render();
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function safeFileName(name) {
+    return (name || "person")
+      .replace(/[^a-z0-9_\- ]/gi, "")
+      .trim()
+      .replace(/\s+/g, "_")
+      .slice(0, 50) || "person";
+  }
+
+  function setLimitMsg(count) {
+    if (count == null) { limitMsg.textContent = ""; limitMsg.className = "small"; return; }
+    if (count >= MAX_STYLES_PER_PERSON) {
+      limitMsg.textContent = `⚠️ ${count}/${MAX_STYLES_PER_PERSON} notes used (limit reached).`;
+      limitMsg.className = "warn";
+    } else {
+      limitMsg.textContent = `✅ ${count}/${MAX_STYLES_PER_PERSON} notes used.`;
+      limitMsg.className = "ok";
+    }
+  }
+
+  function renderPersonDropdown() {
+    const names = Object.keys(state.people).sort((a,b) => a.localeCompare(b));
+    personSelect.innerHTML =
+      `<option value="">(none yet)</option>` +
+      names.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join("");
+
+    personSelect.value = (state.currentPerson && names.includes(state.currentPerson)) ? state.currentPerson : "";
+  }
+
+  function renderNotes() {
+    const p = state.currentPerson;
+    currentPersonLabel.textContent = p || "(none)";
+    notesList.innerHTML = "";
+
+    if (!p) {
+      notesList.innerHTML = `<div class="small">Pick / create a person first.</div>`;
+      setLimitMsg(null);
+      return;
+    }
+
+    ensurePersonExists(p);
+    const notes = state.people[p];
+    setLimitMsg(notes.length);
+
+    if (notes.length === 0) {
+      notesList.innerHTML = `<div class="small">No notes yet for <b>${escapeHtml(p)}</b>.</div>`;
+      return;
+    }
+
+    // Latest first
+    [...notes].reverse().forEach((n, idxFromEnd) => {
+      const actualIndex = notes.length - 1 - idxFromEnd;
+      const when = new Date(n.ts).toLocaleString();
+
+      const div = document.createElement("div");
+      div.className = "card";
+      div.innerHTML = `
+        <div class="row" style="justify-content:space-between; align-items:center;">
+          <div><b>Style:</b> ${escapeHtml(n.style)}</div>
+          <div class="small">${escapeHtml(when)}</div>
+        </div>
+        <div class="row">
+          <div class="pill"><b>Abby:</b> ${escapeHtml(n.abby)}</div>
+          <div class="pill"><b>Hudson:</b> ${escapeHtml(n.hudson)}</div>
+        </div>
+        <div style="margin-top:6px;"><b>Comments:</b><br>${escapeHtml(n.comments).replace(/\n/g, "<br>")}</div>
+        <div class="row" style="margin-top:10px;">
+          <button type="button" data-del="${actualIndex}" class="danger">Delete Note</button>
+        </div>
+      `;
+      notesList.appendChild(div);
+    });
+
+    notesList.querySelectorAll("button[data-del]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const i = Number(btn.getAttribute("data-del"));
+        state.people[p].splice(i, 1);
+        saveState();
+        render();
+      });
+    });
+  }
+
+  function render() {
+    renderPersonDropdown();
+    renderNotes();
+  }
+
+  function updateRatingLabels() {
+    abbyNum.textContent = `${abbyRange.value}/10`;
+    hudsonNum.textContent = `${hudsonRange.value}/10`;
+  }
+
+  function resetForm() {
+    styleInput.value = "";
+    abbyRange.value = "5";
+    hudsonRange.value = "5";
+    commentsInput.value = "";
+    updateRatingLabels();
+    styleInput.focus();
+  }
+
+  function addNote() {
+    const p = state.currentPerson;
+    if (!p) return alert("Pick / create a person first 🙂");
+    ensurePersonExists(p);
+
+    const notes = state.people[p];
+    if (notes.length >= MAX_STYLES_PER_PERSON) {
+      return alert(`Limit reached: ${MAX_STYLES_PER_PERSON} notes per person.`);
+    }
+
+    const style = styleInput.value.trim();
+    const abby = `${abbyRange.value}/10`;
+    const hudson = `${hudsonRange.value}/10`;
+    const comments = commentsInput.value.trim();
+
+    if (!style) return alert("Type the Style (number or word) first 🙂");
+
+    notes.push({ style, abby, hudson, comments, ts: Date.now() });
+    saveState();
+    render();
+    resetForm();
+  }
+
+  function exportTxt(filename, text) {
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function buildPersonTxt(person) {
+    const notes = state.people[person] || [];
+    const lines = [];
+    lines.push(`Person: ${person}`);
+    lines.push(`Notes: ${notes.length}/${MAX_STYLES_PER_PERSON}`);
+    lines.push("=".repeat(46));
+    notes.forEach((n, i) => {
+      lines.push(`NOTE ${i + 1}`);
+      lines.push(`Style: ${n.style}`);
+      lines.push(`Abby rating: ${n.abby}`);
+      lines.push(`Hudson rating: ${n.hudson}`);
+      lines.push(`Extra comments:\n${n.comments || ""}`);
+      lines.push(`Time: ${new Date(n.ts).toLocaleString()}`);
+      lines.push("-".repeat(46));
+    });
+    return lines.join("\n");
+  }
+
+  function exportCurrent() {
+    const p = state.currentPerson;
+    if (!p) return alert("No person selected.");
+    exportTxt(`${safeFileName(p)}_notes.txt`, buildPersonTxt(p));
+  }
+
+  function exportAll() {
+    const names = Object.keys(state.people);
+    if (names.length === 0) return alert("No data to export.");
+    const parts = [];
+    names.sort((a,b)=>a.localeCompare(b)).forEach(name => {
+      parts.push(buildPersonTxt(name));
+      parts.push("\n\n");
+    });
+    exportTxt(`ALL_people_notes.txt`, parts.join(""));
+  }
+
+  // Events
+  savePersonBtn.addEventListener("click", () => {
+    const typed = personName.value.trim();
+    const selected = personSelect.value.trim();
+    const name = typed || selected;
+    if (!name) return alert("Type a person name or select one.");
+    ensurePersonExists(name);
+    setCurrentPerson(name);
+    personName.value = "";
+  });
+
+  personSelect.addEventListener("change", () => {
+    const name = personSelect.value.trim();
+    if (!name) return;
+    setCurrentPerson(name);
+  });
+
+  deletePersonBtn.addEventListener("click", () => {
+    const p = state.currentPerson;
+    if (!p) return alert("No person selected.");
+    if (!confirm(`Delete person "${p}" and all their notes?`)) return;
+    delete state.people[p];
+    state.currentPerson = "";
+    saveState();
+    render();
+  });
+
+  clearPersonBtn.addEventListener("click", () => {
+    const p = state.currentPerson;
+    if (!p) return alert("No person selected.");
+    if (!confirm(`Clear ALL notes for "${p}"?`)) return;
+    state.people[p] = [];
+    saveState();
+    render();
+  });
+
+  undoBtn.addEventListener("click", () => {
+    const p = state.currentPerson;
+    if (!p) return alert("No person selected.");
+    ensurePersonExists(p);
+    if (state.people[p].length === 0) return alert("No notes to undo.");
+    state.people[p].pop();
+    saveState();
+    render();
+  });
+
+  clearAllBtn.addEventListener("click", () => {
+    if (!confirm("Clear ALL people and ALL notes?")) return;
+    state = defaultState();
+    saveState();
+    render();
+  });
+
+  addNoteBtn.addEventListener("click", addNote);
+  resetFormBtn.addEventListener("click", resetForm);
+
+  exportCurrentBtn.addEventListener("click", exportCurrent);
+  exportAllBtn.addEventListener("click", exportAll);
+
+  abbyRange.addEventListener("input", updateRatingLabels);
+  hudsonRange.addEventListener("input", updateRatingLabels);
+
+  // Enter = add note (Ctrl+Enter in comments)
+  styleInput.addEventListener("keydown", (e) => { if (e.key === "Enter") addNote(); });
+  commentsInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) addNote();
+  });
+
+  // Init
+  updateRatingLabels();
+  render();
+})();
+</script>
+</body>
+</html>
