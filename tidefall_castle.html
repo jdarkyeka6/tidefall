@@ -384,7 +384,7 @@ function groundHeightAt(x,z,feet){ let best=-Infinity; const consider=h=>{ if(h<
   for(const f of floorRects){ if(x>=f.x1&&x<=f.x2&&z>=f.z1&&z<=f.z2)consider(f.y); }
   return best===-Infinity?0:best; }
 function collide(pos){ const feet=pos.y-EYE,head=pos.y;
-  for(const c of colliders){ if(c.yMin>head||c.yMax<feet+0.1)continue; /* +0.1: floor-below walls end exactly at this floor height; without the epsilon their tops overlap the player feet and leak as invisible barriers on the floor above */
+  for(const c of colliders){ if(c.yMin>head||c.yMax<feet)continue;
     if(c.circle){ const dx=pos.x-c.x,dz=pos.z-c.z,d=Math.hypot(dx,dz);
       if(d<c.r+RAD){const p=c.r+RAD-d; pos.x+=dx/(d||1)*p; pos.z+=dz/(d||1)*p;} }
     else{ const cx=Math.max(c.minX,Math.min(pos.x,c.maxX)),cz=Math.max(c.minZ,Math.min(pos.z,c.maxZ));
