@@ -369,6 +369,97 @@ tower(-IN,-IN,M.roofN,"Nocten Wing",0x4a489a); tower(IN,-IN,M.roofA,"Astrae Wing
 tower(-IN,IN,M.roofC,"Calyx Wing",0x46a05c); tower(IN,IN,M.roofB,"Brannor Wing",0xc6552f);
 
 /* ====================================================================
+   INTERIOR FURNISHINGS  (all decorative: non-colliding, mostly no shadow)
+   ==================================================================== */
+const fab={ red:new THREE.MeshStandardMaterial({color:0x7d2b2b,roughness:.9}),
+  blue:new THREE.MeshStandardMaterial({color:0x274472,roughness:.9}),
+  green:new THREE.MeshStandardMaterial({color:0x2f5d3a,roughness:.9}),
+  gold:new THREE.MeshStandardMaterial({color:0xb8862f,roughness:.85}),
+  purple:new THREE.MeshStandardMaterial({color:0x4a2f63,roughness:.9}) };
+const MF={ woodDark:new THREE.MeshStandardMaterial({color:0x4a3320,roughness:.7}),
+  iron:new THREE.MeshStandardMaterial({color:0x2b2b30,roughness:.5,metalness:.6}),
+  linen:new THREE.MeshStandardMaterial({color:0xece4d0,roughness:.9}),
+  slate:new THREE.MeshStandardMaterial({color:0x232826,roughness:.95}),
+  candle:new THREE.MeshStandardMaterial({color:0xffd98a,emissive:0xffb347,emissiveIntensity:1.1,roughness:.4}),
+  glassC:new THREE.MeshStandardMaterial({color:0x39d6e6,emissive:0x1f9fb0,emissiveIntensity:.8,roughness:.3,transparent:true,opacity:.82}),
+  glassG:new THREE.MeshStandardMaterial({color:0x6fe07a,emissive:0x2f9f43,emissiveIntensity:.8,roughness:.3,transparent:true,opacity:.82}),
+  glassA:new THREE.MeshStandardMaterial({color:0xf0c061,emissive:0xc88a20,emissiveIntensity:.7,roughness:.3,transparent:true,opacity:.85}) };
+const bookMats=[0x7d2b2b,0x274472,0x2f5d3a,0x6b4a2a,0x4a2f63,0x355b6b,0x8a6a2f].map(c=>new THREE.MeshStandardMaterial({color:c,roughness:.8}));
+const cyl=(rt,rb,h,s=10)=>new THREE.CylinderGeometry(rt,rb,h,s);
+const sph=(r,s=8)=>new THREE.SphereGeometry(r,s,s);
+function piece(geo,mat,x,y,z){ const m=new THREE.Mesh(geo,mat); m.position.set(x,y,z); m.receiveShadow=true; world.add(m); return m; }
+function tableF(cx,cz,y,w,d){ box(cx,cz,w,d,0.16,y+0.82,M.wood,false,false); const lx=w/2-0.2,lz=d/2-0.2;
+  for(const sx of [-1,1])for(const sz of [-1,1]) box(cx+sx*lx,cz+sz*lz,0.18,0.18,0.82,y,MF.woodDark,false,false); }
+function chairF(cx,cz,y,face){ box(cx,cz,0.55,0.55,0.1,y+0.46,M.wood,false,false);
+  let bx=cx,bz=cz; if(face==='N')bz=cz+0.23; else if(face==='S')bz=cz-0.23; else if(face==='W')bx=cx+0.23; else bx=cx-0.23;
+  const h=(face==='N'||face==='S'); box(bx,bz,h?0.55:0.09,h?0.09:0.55,0.6,y+0.56,M.wood,false,false); }
+function rugF(cx,cz,w,d,y,mat){ box(cx,cz,w,d,0.05,y+0.02,mat,false,false); }
+function bannerF(x,z,y,wall,len,mat){ const h=(wall==='N'||wall==='S');
+  box(x,z,h?len:0.16,h?0.16:len,3.4,y+2.0,mat,false,false);
+  box(x,z,h?len+0.4:0.24,h?0.24:len+0.4,0.2,y+3.8,MF.woodDark,false,false); }
+function chandelierF(x,z,y,light){ const cy=y+5.0;
+  piece(cyl(0.9,0.9,0.12,12),MF.iron,x,cy,z); piece(cyl(0.05,0.05,1.6,6),MF.iron,x,cy+0.9,z);
+  for(let i=0;i<6;i++){ const a=i/6*Math.PI*2; piece(sph(0.13,6),MF.candle,x+Math.cos(a)*0.78,cy+0.18,z+Math.sin(a)*0.78); }
+  if(light){ const l=new THREE.PointLight(0xffcf8c,0.8,20,2); l.position.set(x,cy,z); world.add(l); } }
+function brazierF(x,z,y,light){ piece(cyl(0.12,0.16,1.3,8),MF.iron,x,y+0.65,z); piece(cyl(0.55,0.32,0.4,12),MF.iron,x,y+1.4,z);
+  piece(sph(0.4,8),MF.candle,x,y+1.62,z); if(light){ const l=new THREE.PointLight(0xffb060,1.0,18,2); l.position.set(x,y+2,z); world.add(l); } }
+function flasksF(cx,cz,y){ box(cx,cz,2.2,1.0,0.7,y,M.wood,false,false); const gs=[MF.glassC,MF.glassG,MF.glassA];
+  for(let i=0;i<3;i++){ const gx=cx-0.7+i*0.7; piece(cyl(0.12,0.16,0.4,8),gs[i],gx,y+0.9,cz); piece(sph(0.16,8),gs[i],gx,y+1.18,cz); } }
+function cauldronF(cx,cz,y){ piece(cyl(0.55,0.38,0.7,12),MF.iron,cx,y+0.45,cz); piece(cyl(0.5,0.5,0.08,16),MF.glassG,cx,y+0.78,cz);
+  for(const s of [-1,1]) piece(cyl(0.06,0.06,0.5,6),MF.iron,cx+s*0.45,y+0.25,cz); }
+function chalkboardF(x,z,y,wall){ const h=(wall==='N'||wall==='S');
+  box(x,z,h?4:0.16,h?0.16:4,2.0,y+1.1,MF.woodDark,false,false);
+  const ox=wall==='W'?0.1:wall==='E'?-0.1:0, oz=wall==='N'?0.1:wall==='S'?-0.1:0;
+  box(x+ox,z+oz,h?3.5:0.08,h?0.08:3.5,1.6,y+1.25,MF.slate,false,false); }
+function booksF(cx,cz,horiz,len,y,levels){ const sp=0.7,n=Math.max(1,Math.floor(len/sp));
+  for(let lvl=0;lvl<levels;lvl++){ const yy=y+0.6+lvl*1.0;
+    for(let i=0;i<n;i++){ const t=-len/2+sp/2+i*sp, m=bookMats[(i+lvl)%bookMats.length], hh=0.6+(i%3)*0.06;
+      if(horiz) box(cx+t,cz,0.42,0.5,hh,yy,m,false,false); else box(cx,cz+t,0.5,0.42,hh,yy,m,false,false); } } }
+const rugCol={public:fab.red,academic:fab.gold,service:fab.green,faculty:fab.blue,magic:fab.purple,practice:fab.purple,library:fab.green};
+/* auto pass: rug + banners everywhere indoors; chandelier on floors 1–2 */
+for(const r of rooms){
+  if(r.cat==='circulation'||r.name==="Founders' Courtyard") continue;
+  const y=FY(r.floor), cx=(r.x1+r.x2)/2, cz=(r.z1+r.z2)/2, w=Math.abs(r.x2-r.x1), d=Math.abs(r.z2-r.z1);
+  const bm=rugCol[r.cat]||fab.gold;
+  rugF(cx,cz,Math.min(w*0.5,11),Math.min(d*0.5,11),y,bm);
+  if(r.floor<3) chandelierF(cx,cz,y,false);
+  if(w>=d){ bannerF(r.x1+w*0.28,r.z1+0.4,y,'N',3,bm); bannerF(r.x2-w*0.28,r.z2-0.4,y,'S',3,bm); }
+  else { bannerF(r.x1+0.4,r.z1+d*0.28,y,'W',3,bm); bannerF(r.x2-0.4,r.z2-d*0.28,y,'E',3,bm); }
+}
+/* ---- hero details ---- */
+/* Great Hall */
+for(const cz of [-44,-36,-28]){ tableF(-23,cz,0,5,5); chairF(-26,cz,0,'E'); chairF(-20,cz,0,'W'); }
+chandelierF(-30,-36,0,true); chandelierF(-14,-36,0,true);
+brazierF(-31,-49,0,false); brazierF(-15,-49,0,false);
+chalkboardF(-44,-36,0,'W');
+/* Dining Hall — chairs around the 9 tables */
+for(let c=0;c<3;c++)for(let r2=0;r2<3;r2++){ const x=2+c*9,z=-46+r2*9; chairF(x,z-3.4,0,'S'); chairF(x,z+3.4,0,'N'); }
+/* Kitchens */
+cauldronF(31,-44,0); cauldronF(40,-46,0);
+/* Library of Tides — books on the tall shelves + reading tables */
+for(const sx of [-46,-34])for(const sz of [-38,-27,-16,-5]) booksF(sx,sz,false,7,0,2);
+tableF(-28,-30,0,4,3); chairF(-28,-27,0,'N'); tableF(-28,-12,0,4,3); chairF(-28,-9,0,'N');
+/* Administration */
+tableF(-37,25,0,6,3); chairF(-37,28,0,'N');
+/* Infirmary — pillows + blankets on the 8 beds */
+for(const bx of [28,46])for(const bz of [-4,8,20,32]){ box(bx,bz-1.6,2.4,1.0,0.18,0.8,MF.linen,false,false); box(bx,bz+0.8,2.6,2.6,0.12,0.85,fab.blue,false,false); }
+/* F2 academic — chalkboards + a couple chairs in the reading level */
+chalkboardF(0,-52,7,'N');
+for(const z of [-34,-18,-2,14]){ chairF(-46,z,7,'E'); chairF(-38,z,7,'E'); }
+flasksF(37,-44,7);
+/* F3 magic labs */
+flasksF(-44,-10,14); cauldronF(-34,-8,14); brazierF(-40,-30,14,false);
+cauldronF(-44,20,14); flasksF(-36,32,14);
+flasksF(40,10,14); cauldronF(34,32,14);
+for(let c=0;c<2;c++)for(let r2=0;r2<2;r2++) piece(sph(0.5,8),M.rune,34+c*12,14+2.4,-32+r2*18); /* practice chamber orbs */
+/* Hale's Dueling Classroom — braziers + floating rune orbs */
+for(const a of [Math.PI*0.25,Math.PI*0.75,Math.PI*1.25,Math.PI*1.75]) brazierF(-3+Math.cos(a)*8.5,-38+Math.sin(a)*8.5,14, a<Math.PI);
+for(let i=0;i<3;i++){ const a=i/3*Math.PI*2; piece(sph(0.28,10),M.rune,-3+Math.cos(a)*2.2,14+2.8,-38+Math.sin(a)*2.2); }
+/* F3 libraries / offices */
+for(const sx of [-6,2,10]) booksF(sx,36,false,9,14,2);
+tableF(3,42,14,5,3); chairF(3,45,14,'N');
+
+/* ====================================================================
    PLAYER
    ==================================================================== */
 const EYE=1.7,RAD=0.6,STEP=1.7;
