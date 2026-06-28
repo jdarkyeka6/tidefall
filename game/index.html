@@ -490,6 +490,47 @@ for(let i=0;i<26;i++){ const a=i/26*Math.PI*2, rr=86+(i%4)*7+Math.sin(i*2.3)*5, 
 treeF(-26,70,1.2,false); treeF(26,70,1.2,false); treeF(-34,86,1.0,false); treeF(34,86,1.0,false);
 
 /* ====================================================================
+   ATMOSPHERE & EXTERIOR POLISH  (decorative; adds no colliders)
+   ==================================================================== */
+/* gradient sky dome */
+{ const c=document.createElement('canvas'); c.width=8; c.height=256; const g=c.getContext('2d');
+  const gr=g.createLinearGradient(0,0,0,256); gr.addColorStop(0,'#34659b'); gr.addColorStop(.55,'#7aa8cc'); gr.addColorStop(1,'#9fc2d4');
+  g.fillStyle=gr; g.fillRect(0,0,8,256); const t=new THREE.CanvasTexture(c);
+  const sky=new THREE.Mesh(new THREE.SphereGeometry(900,32,16),new THREE.MeshBasicMaterial({map:t,side:THREE.BackSide,fog:false,depthWrite:false})); scene.add(sky); }
+/* sun glow */
+{ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d');
+  const gr=g.createRadialGradient(64,64,2,64,64,64); gr.addColorStop(0,'rgba(255,251,228,1)'); gr.addColorStop(.3,'rgba(255,236,170,.85)'); gr.addColorStop(1,'rgba(255,236,170,0)');
+  g.fillStyle=gr; g.fillRect(0,0,128,128);
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false,fog:false}));
+  sp.position.copy(new THREE.Vector3(-130,210,100).normalize().multiplyScalar(560)); sp.scale.set(110,110,1); scene.add(sp); }
+/* clouds */
+{ const c=document.createElement('canvas'); c.width=128; c.height=64; const g=c.getContext('2d');
+  for(let i=0;i<16;i++){ const x=Math.random()*128,y=34+Math.sin(i)*9,r=10+Math.random()*16; const gr=g.createRadialGradient(x,y,1,x,y,r);
+    gr.addColorStop(0,'rgba(255,255,255,.9)'); gr.addColorStop(1,'rgba(255,255,255,0)'); g.fillStyle=gr; g.beginPath(); g.arc(x,y,r,0,7); g.fill(); }
+  const tex=new THREE.CanvasTexture(c);
+  for(let i=0;i<8;i++){ const a=i/8*Math.PI*2,sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,opacity:.85,depthWrite:false,fog:false}));
+    sp.position.set(Math.cos(a)*430,150+Math.sin(i*1.7)*45,Math.sin(a)*430-110); sp.scale.set(190,95,1); scene.add(sp); } }
+/* glowing tower windows */
+const winMat=new THREE.MeshStandardMaterial({color:0xffe6a8,emissive:0xffb84d,emissiveIntensity:.9,roughness:.5});
+function towerWindows(x,z){ for(const wy of [10,17,24]) for(let i=0;i<8;i++){ const a=i/8*Math.PI*2;
+  const m=new THREE.Mesh(new THREE.BoxGeometry(0.8,1.7,0.3),winMat); m.position.set(x+Math.cos(a)*10.05,wy,z+Math.sin(a)*10.05); m.rotation.y=-a; world.add(m); } }
+towerWindows(-IN,-IN); towerWindows(IN,-IN); towerWindows(-IN,IN); towerWindows(IN,IN);
+/* landscaping: stone road, hedges, flower beds, lamps, gate braziers */
+const hedgeMat=new THREE.MeshStandardMaterial({color:0x2c5a34,roughness:.95});
+const petalMats=[0xd64545,0xe8c24a,0xefe6d2,0xc46aa0].map(c=>new THREE.MeshStandardMaterial({color:c,roughness:.8}));
+function flowerBed(cx,cz,w,d,y){ box(cx,cz,w,d,0.22,y,M.trim,false,false);
+  const n=Math.max(4,Math.floor(w*d)); for(let i=0;i<n;i++){ const fx=cx-w/2+0.4+Math.random()*(w-0.8),fz=cz-d/2+0.4+Math.random()*(d-0.8);
+    piece(cyl(0.04,0.04,0.5,4),hedgeMat,fx,y+0.45,fz); piece(sph(0.15,6),petalMats[i%petalMats.length],fx,y+0.72,fz); } }
+function lampPost(x,z,light){ piece(cyl(0.12,0.16,3.2,6),MF.iron,x,1.6,z); piece(sph(0.28,8),MF.candle,x,3.4,z);
+  if(light){ const l=new THREE.PointLight(0xffca80,0.9,18,2); l.position.set(x,3.4,z); world.add(l); } }
+box(0,74,7,40,0.08,0,M.cobble,false,false); box(0,40,9,30,0.08,0,M.cobble,false,false);   /* approach road + gatehouse runner */
+box(-5,74,1,40,1.2,0,hedgeMat,false,false); box(5,74,1,40,1.2,0,hedgeMat,false,false);     /* roadside hedges */
+flowerBed(-9,60,4,3,0); flowerBed(9,60,4,3,0); flowerBed(-9,88,4,3,0); flowerBed(9,88,4,3,0);
+lampPost(-7,62,true); lampPost(7,62,true); lampPost(-7,86,false); lampPost(7,86,false);
+brazierF(-11,57,0,true); brazierF(11,57,0,true);
+flowerBed(-17,-15,3,3,0.5); flowerBed(17,-15,3,3,0.5); flowerBed(-17,19,3,3,0.5); flowerBed(17,19,3,3,0.5);
+
+/* ====================================================================
    PLAYER
    ==================================================================== */
 const EYE=1.7,RAD=0.6,STEP=1.7;
