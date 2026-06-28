@@ -66,7 +66,8 @@
 {
   "imports": {
     "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+    "@pixiv/three-vrm": "https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@2.1.4/lib/three-vrm.module.js"
   }
 }
 </script>
@@ -550,8 +551,9 @@ function person(x,z,y,o){ const sk=colMat(o.skin||0xeec6a0),hr=colMat(o.hair||0x
   if(o.name){ label(o.name,x,z,hy+1.0,o.labelCol||"#efe6d2",18); npcs.push({name:o.name,line:LINES[o.name]||"",x,z,fl:(y>13?3:y>6?2:1)}); } }
 /* the trio — courtyard (colours from the character art) */
 person(-3,15,0,{name:"Jasper Vale",skin:0xf0c8a0,hair:0xf0c34a,top:0x1d1d22,under:0xeaeaea,bottom:0x26262b,bag:true,wand:true,wandTip:0x8fe0ff,labelCol:"#f0d49a"});
-person(-7,16.5,0,{name:"Harper",skin:0xf0c8a0,hair:0xa83a1e,top:0x474d56,under:0x2f7d3a,bottom:0x2c2e33,longHair:true,wand:true,wandTip:0x6fe07a,labelCol:"#e8a07a"});
-person(3,16,0,{name:"Ava Monroe",skin:0xeec6a0,hair:0x6b4a2e,top:0x2b3450,under:0xcabfa0,bottom:0x232327,longHair:true,bag:true,wand:true,wandTip:0x6f9fff,labelCol:"#9fc6e0"});
+/* Harper & Ava use real VRM avatars (loaded in the PLAYER section); labels + dialogue kept here */
+label("Harper",-7,16.5,2.9,"#e8a07a",18); npcs.push({name:"Harper",line:LINES["Harper"],x:-7,z:16.5,fl:1});
+label("Ava Monroe",3,16,2.9,"#9fc6e0",18); npcs.push({name:"Ava Monroe",line:LINES["Ava Monroe"],x:3,z:16,fl:1});
 /* students through the halls */
 person(11,-30,0,{name:"Lachlan Reed",hair:0x3a2a1a,top:0x6a3535,bottom:0x2a2a30,wand:true,wandTip:0xff6a8a});
 person(-30,-18,0,{name:"Cole Vesper",hair:0x202024,top:0x2a4a3a,bottom:0x242428,wand:true,wandTip:0x6fe07a});
@@ -668,6 +670,27 @@ function castSpell(){ if(!controls.isLocked)return; const dir=new THREE.Vector3(
   boltIdx=(boltIdx+1)%boltPool.length; const b=boltPool[boltIdx]; b.mesh.position.set(o.x+dir.x,o.y+dir.y,o.z+dir.z); b.mesh.visible=true; b.mesh.scale.setScalar(1); b.vel.copy(dir).multiplyScalar(42); b.life=1.5; }
 addEventListener('mousedown',e=>{ if(e.button===0)castSpell(); });
 addEventListener('keydown',e=>{ if(e.code==='KeyF')castSpell(); });
+/* real VRM avatars for characters that have models (Ava, Harper); procedural fallback on any failure */
+const vrmList=[];
+const VRM_CHARS=[
+  {url:"../charecters/ava/3d_model/ava.vrm",x:3,z:16,y:0.5,rot:Math.PI,fb:{skin:0xeec6a0,hair:0x6b4a2e,top:0x2b3450,under:0xcabfa0,bottom:0x232327,longHair:true,bag:true}},
+  {url:"../charecters/harper/3d_model/harper.vrm",x:-7,z:16.5,y:0.5,rot:Math.PI,fb:{skin:0xf0c8a0,hair:0xa83a1e,top:0x474d56,under:0x2f7d3a,bottom:0x2c2e33,longHair:true}}
+];
+(async()=>{
+  try{
+    const {GLTFLoader}=await import("three/addons/loaders/GLTFLoader.js");
+    const {VRMLoaderPlugin,VRMUtils}=await import("@pixiv/three-vrm");
+    const loader=new GLTFLoader(); loader.register(p=>new VRMLoaderPlugin(p));
+    for(const c of VRM_CHARS){
+      loader.load(c.url, gltf=>{ const vrm=gltf.userData.vrm; if(!vrm){ person(c.x,c.z,0,c.fb); return; }
+        try{ VRMUtils.removeUnnecessaryVertices&&VRMUtils.removeUnnecessaryVertices(gltf.scene); VRMUtils.removeUnnecessaryJoints&&VRMUtils.removeUnnecessaryJoints(gltf.scene); }catch(e){}
+        if(VRMUtils.rotateVRM0)VRMUtils.rotateVRM0(vrm);
+        const hh=vrm.humanoid; if(hh){ const set=(n,x,y,z)=>{ const b=hh.getNormalizedBoneNode?hh.getNormalizedBoneNode(n):null; if(b)b.rotation.set(x,y,z); }; set('leftUpperArm',0,0,1.15); set('rightUpperArm',0,0,-1.15); }
+        const s=vrm.scene; s.position.set(c.x,c.y,c.z); s.rotation.y=c.rot; s.traverse(o=>{ o.castShadow=true; o.frustumCulled=false; }); world.add(s); vrmList.push(vrm);
+      }, undefined, err=>{ console.warn("VRM load failed",c.url,err); person(c.x,c.z,0,c.fb); });
+    }
+  }catch(e){ console.warn("three-vrm unavailable; using procedural figures",e); for(const c of VRM_CHARS) person(c.x,c.z,0,c.fb); }
+})();
 let vy=0,onGround=true; const vel=new THREE.Vector3(),fwd=new THREE.Vector3(),right=new THREE.Vector3();
 function rampHeight(r,x,z){ const c=r.axis==='x'?x:z; const f=Math.max(0,Math.min(1,(c-r.lo)/(r.hi-r.lo))); return r.from+(r.to-r.from)*f; }
 function groundHeightAt(x,z,feet){ let best=-Infinity; const consider=h=>{ if(h<=feet+STEP&&h>best)best=h; };
@@ -758,6 +781,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
   for(const r of castRings){ const f=(t*r.spd+r.ph)%1; r.mesh.scale.set(0.3+f*2.4,1,0.3+f*2.4); r.mat.opacity=0.65*(1-f); }
   for(const b of boltPool){ if(b.life>0){ b.life-=dt; b.mesh.position.addScaledVector(b.vel,dt); emitTrail(b.mesh.position.x,b.mesh.position.y,b.mesh.position.z); if(b.life<=0)b.mesh.visible=false; } }
   for(const p of trailPool){ if(p.life>0){ p.life-=dt; const s=Math.max(0,p.life/0.35); p.mesh.scale.setScalar(s*0.85+0.05); if(p.life<=0)p.mesh.visible=false; } }
+  for(const v of vrmList){ if(v.update)v.update(dt); }
   renderer.render(scene,camera);
 }
 animate();
