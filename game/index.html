@@ -144,6 +144,10 @@ function wall(x1,z1,x2,z2,h,y,t=1.2,door=null){
   const seg=(s,e)=>{ if(e-s<0.3)return; const c=(s+e)/2,l=e-s; if(horiz)box(c,cz,l,t,h,y,M.stone); else box(cx,c,t,l,h,y,M.stone); };
   seg(lo,ds); seg(de,hi);
   if(horiz)box(door.at,cz,door.w,t,1.2,y+h-1.2,M.stone,false); else box(cx,door.at,t,door.w,1.2,y+h-1.2,M.stone,false);
+  /* open wooden door leaves resting flat beside the opening (decorative, opening stays clear) */
+  const lh=h-1.4, lw=Math.max(0.4,door.w/2-0.05);
+  if(horiz){ const zf=cz-(t/2+0.08); box(ds-door.w/4,zf,lw,0.14,lh,y,M.wood,false,false); box(de+door.w/4,zf,lw,0.14,lh,y,M.wood,false,false); }
+  else { const xf=cx-(t/2+0.08); box(xf,ds-door.w/4,0.14,lw,lh,y,M.wood,false,false); box(xf,de+door.w/4,0.14,lw,lh,y,M.wood,false,false); }
 }
 function slab(x1,z1,x2,z2,y,mat=M.floor2){
   const m=new THREE.Mesh(new THREE.BoxGeometry(Math.abs(x2-x1),0.6,Math.abs(z2-z1)),mat);
@@ -391,9 +395,17 @@ function piece(geo,mat,x,y,z){ const m=new THREE.Mesh(geo,mat); m.position.set(x
 function tableF(cx,cz,y,w,d){ box(cx,cz,w,d,0.16,y+0.82,M.wood,false,false); const lx=w/2-0.2,lz=d/2-0.2;
   for(const sx of [-1,1])for(const sz of [-1,1]) box(cx+sx*lx,cz+sz*lz,0.18,0.18,0.82,y,MF.woodDark,false,false); }
 function chairF(cx,cz,y,face){ box(cx,cz,0.55,0.55,0.1,y+0.46,M.wood,false,false);
+  for(const sx of [-1,1])for(const sz of [-1,1]) box(cx+sx*0.22,cz+sz*0.22,0.08,0.08,0.46,y,MF.woodDark,false,false);
   let bx=cx,bz=cz; if(face==='N')bz=cz+0.23; else if(face==='S')bz=cz-0.23; else if(face==='W')bx=cx+0.23; else bx=cx-0.23;
   const h=(face==='N'||face==='S'); box(bx,bz,h?0.55:0.09,h?0.09:0.55,0.6,y+0.56,M.wood,false,false); }
 function rugF(cx,cz,w,d,y,mat){ box(cx,cz,w,d,0.05,y+0.02,mat,false,false); }
+function candelabra(cx,cz,y){ piece(cyl(0.2,0.24,0.1,8),MF.iron,cx,y+0.05,cz); piece(cyl(0.05,0.05,0.5,6),MF.iron,cx,y+0.3,cz);
+  for(let i=0;i<3;i++){ const a=i/3*Math.PI*2,ax=cx+Math.cos(a)*0.22,az=cz+Math.sin(a)*0.22;
+    piece(cyl(0.04,0.04,0.3,6),MF.iron,ax,y+0.45,az); piece(sph(0.08,6),MF.candle,ax,y+0.63,az); } piece(sph(0.08,6),MF.candle,cx,y+0.6,cz); }
+function barrel(cx,cz,y){ piece(cyl(0.45,0.4,1.1,12),M.wood,cx,y+0.55,cz); piece(cyl(0.47,0.47,0.12,12),MF.iron,cx,y+0.3,cz); piece(cyl(0.47,0.47,0.12,12),MF.iron,cx,y+0.8,cz); }
+function crate(cx,cz,y,s){ s=s||1; box(cx,cz,s,s,s,y,M.wood,false,false); for(const e of [-1,1]) box(cx,cz,s*1.02,s*0.12,s*0.12,y+s*0.5-0.06+e*(s*0.34),M.trim,false,false); }
+function sconce(x,z,y,wall){ const ox=wall==='W'?0.2:wall==='E'?-0.2:0, oz=wall==='N'?0.2:wall==='S'?-0.2:0;
+  piece(cyl(0.1,0.14,0.5,6),MF.iron,x+ox,y+2.4,z+oz); piece(sph(0.18,8),MF.candle,x+ox,y+2.78,z+oz); }
 function bannerF(x,z,y,wall,len,mat){ const h=(wall==='N'||wall==='S');
   box(x,z,h?len:0.16,h?0.16:len,3.4,y+2.0,mat,false,false);
   box(x,z,h?len+0.4:0.24,h?0.24:len+0.4,0.2,y+3.8,MF.woodDark,false,false); }
@@ -481,6 +493,15 @@ for(const sx of [-6,2,10]) booksF(sx,36,false,9,14,2);
 tableF(3,42,14,5,3); chairF(3,45,14,'N');
 /* ---- Great Hall benches flanking the central tables ---- */
 for(const cz of [-44,-36,-28]){ benchF(-28,cz,0,3.2,false,true); benchF(-18,cz,0,3.2,false,true); }
+/* candelabra on hall/dining/meeting tables */
+for(const cz of [-44,-36,-28]) candelabra(-23,cz,0.85);
+for(let c=0;c<3;c++)for(let r2=0;r2<3;r2++) candelabra(2+c*9,-46+r2*9,1.0);
+candelabra(22,38,7.85);
+/* kitchen stores: barrels + crates */
+barrel(41,-49,0); barrel(43,-49,0); crate(38,-49,0,1); crate(38,-47.2,0,0.8); crate(38.4,-48.2,1.0,0.7);
+/* wall sconces for warmth in the main halls */
+sconce(-44,-30,0,'W'); sconce(-44,-44,0,'W'); sconce(-2,-30,0,'E'); sconce(28,-30,0,'W'); sconce(44,-30,0,'E');
+sconce(-52,-20,0,'W'); sconce(-52,30,0,'W'); sconce(52,16,0,'E');
 /* ---- Courtyard: garden benches around the fountain + trees on the lawns ---- */
 benchF(0,-7,0,5,true,true); benchF(0,11,0,5,true,true); benchF(-9,2,0,5,false,true); benchF(9,2,0,5,false,true);
 treeF(-12,-8,1.1,true); treeF(12,-8,1.1,true); treeF(-12,14,1.1,true); treeF(12,14,1.1,true);
@@ -576,15 +597,38 @@ const fhint={2:"Floor 2 — the academic level. The walkway rings the courtyard;
 const catCol={public:"#caa15a",academic:"#5b7fb0",service:"#9a6fae",faculty:"#5e9d70",circulation:"#b9a06a",magic:"#3f8f7a",practice:"#9a6fae",library:"#a98f55"};
 function drawMap(p){ const fl=currentFloor(p); const W=mapCv.width,H=mapCv.height; mg.clearRect(0,0,W,H);
   const scl=W/((IN+14)*2); const tx=x=>W/2+x*scl,tz=z=>H/2+z*scl;
-  mg.fillStyle="rgba(20,40,52,.7)"; mg.fillRect(0,0,W,H);
-  for(const r of rooms){ if(r.floor!==fl)continue; mg.fillStyle=catCol[r.cat]||"#888"; mg.globalAlpha=.55;
+  mg.fillStyle="#0c1c25"; mg.fillRect(0,0,W,H);
+  /* faint grid */
+  mg.strokeStyle="rgba(217,164,65,.08)"; mg.lineWidth=1;
+  for(let g=-IN;g<=IN;g+=26){ mg.beginPath(); mg.moveTo(tx(g),tz(-IN-12)); mg.lineTo(tx(g),tz(IN+12)); mg.stroke();
+    mg.beginPath(); mg.moveTo(tx(-IN-12),tz(g)); mg.lineTo(tx(IN+12),tz(g)); mg.stroke(); }
+  if(fl===1){ mg.fillStyle="rgba(124,116,104,.55)"; mg.fillRect(tx(CY.x1),tz(CY.z1),(CY.x2-CY.x1)*scl,(CY.z2-CY.z1)*scl); }
+  /* rooms (highlight the one you're in) */
+  const cur=currentRoom(p);
+  for(const r of rooms){ if(r.floor!==fl)continue; const isCur=(r===cur);
+    mg.fillStyle=catCol[r.cat]||"#888"; mg.globalAlpha=isCur?.95:.5;
     mg.fillRect(tx(r.x1),tz(r.z1),(r.x2-r.x1)*scl,(r.z2-r.z1)*scl); mg.globalAlpha=1;
-    mg.strokeStyle="rgba(0,0,0,.4)"; mg.strokeRect(tx(r.x1),tz(r.z1),(r.x2-r.x1)*scl,(r.z2-r.z1)*scl); }
+    mg.strokeStyle=isCur?"#fff":"rgba(0,0,0,.4)"; mg.lineWidth=isCur?1.5:1;
+    mg.strokeRect(tx(r.x1),tz(r.z1),(r.x2-r.x1)*scl,(r.z2-r.z1)*scl); }
+  /* open courtyard well on upper floors */
+  if(fl>1){ const o=4; mg.fillStyle="rgba(6,12,18,.9)"; mg.fillRect(tx(CY.x1+o),tz(CY.z1+o),((CY.x2-CY.x1)-2*o)*scl,((CY.z2-CY.z1)-2*o)*scl);
+    mg.strokeStyle="rgba(217,164,65,.45)"; mg.lineWidth=1; mg.strokeRect(tx(CY.x1+o),tz(CY.z1+o),((CY.x2-CY.x1)-2*o)*scl,((CY.z2-CY.z1)-2*o)*scl); }
+  /* staircases on this floor (striped gold) */
+  for(const rp of ramps){ if(FY(fl)<rp.from-0.1||FY(fl)>rp.to+0.1)continue;
+    const x=tx(Math.min(rp.x1,rp.x2)),z=tz(Math.min(rp.z1,rp.z2)),w=Math.abs(rp.x2-rp.x1)*scl,hh=Math.abs(rp.z2-rp.z1)*scl;
+    mg.fillStyle="rgba(217,164,65,.85)"; mg.fillRect(x,z,w,hh);
+    mg.strokeStyle="rgba(40,24,8,.7)"; mg.lineWidth=1; const along=Math.max(w,hh),hr=w>hh;
+    for(let s=4;s<along;s+=4){ mg.beginPath(); if(hr){mg.moveTo(x+s,z);mg.lineTo(x+s,z+hh);}else{mg.moveTo(x,z+s);mg.lineTo(x+w,z+s);} mg.stroke(); } }
+  /* corner towers */
   const T=[[-IN,-IN,"#4a489a"],[IN,-IN,"#d9b13a"],[-IN,IN,"#46a05c"],[IN,IN,"#c6552f"]];
-  for(const t of T){ mg.fillStyle=t[2]; mg.beginPath(); mg.arc(tx(t[0]),tz(t[1]),10*scl,0,7); mg.fill(); }
+  for(const t of T){ mg.fillStyle=t[2]; mg.beginPath(); mg.arc(tx(t[0]),tz(t[1]),10*scl,0,7); mg.fill(); mg.strokeStyle="rgba(0,0,0,.5)"; mg.lineWidth=1; mg.stroke(); }
   mg.strokeStyle="#d9a441"; mg.lineWidth=1.5; mg.strokeRect(tx(-IN),tz(-IN),IN*2*scl,IN*2*scl);
+  if(fl===1){ mg.fillStyle="#3aa0c8"; mg.beginPath(); mg.arc(tx(0),tz(2),4.4*scl,0,7); mg.fill(); }
+  /* player */
   mg.save(); mg.translate(tx(p.x),tz(p.z)); mg.rotate(-camera.rotation.y);
-  mg.fillStyle="#fff"; mg.beginPath(); mg.moveTo(0,-5); mg.lineTo(3.5,4); mg.lineTo(-3.5,4); mg.closePath(); mg.fill(); mg.restore(); }
+  mg.fillStyle="#fff"; mg.strokeStyle="#0c1c25"; mg.lineWidth=1; mg.beginPath(); mg.moveTo(0,-6); mg.lineTo(4,5); mg.lineTo(0,2.5); mg.lineTo(-4,5); mg.closePath(); mg.fill(); mg.stroke(); mg.restore();
+  /* compass */
+  mg.fillStyle="#d9a441"; mg.font="bold 11px Georgia"; mg.textAlign="center"; mg.textBaseline="middle"; mg.fillText("N",W/2,8); }
 
 const clock=new THREE.Clock(); let shownFloor=1; const hinted={};
 function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getDelta(),0.05);
