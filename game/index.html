@@ -240,7 +240,7 @@ label("Founders' Courtyard",0,7.6,8,"#f0e4c4",34);
 
 reg("Great Hall",-44,-52,-2,CY.z1,"public",1);
 wall(-44,-52,-2,-52,WH,0); wall(-44,-52,-44,CY.z1,WH,0); wall(-2,-52,-2,CY.z1,WH,0,1.2,{at:-36,w:5});
-for(let r=0;r<6;r++)for(let s=-1;s<=1;s+=2)box(-23+s*9,-46+r*4,7,0.8,0.9,0,M.wood,false);
+/* Great Hall benches → furnished via benchF below */
 box(-23,-50,16,3,0.6,0,M.red,false); label("Great Hall",-23,5.4,-36,"#f0e4c4",38); torch(-43,-22); torch(-3,-50);
 reg("Dining Hall",-2,-52,28,CY.z1,"public",1);
 wall(-2,-52,28,-52,WH,0); wall(28,-52,28,CY.z1,WH,0,1.2,{at:-36,w:4});
@@ -258,7 +258,7 @@ wall(-52,44,-22,44,WH,0); wall(-22,6,-22,44,WH,0,1.2,{at:25,w:4});
 box(-44,12,12,2,1.1,0,M.wood,false); box(-46,30,3,8,2.4,0,M.wood,false); label("Administration",-37,5.2,25,"#cfe0ef",28); torch(-50,42);
 reg("Infirmary",CY.x2,-12,52,44,"public",1);
 wall(22,-12,52,-12,WH,0,1.2,{at:40,w:4}); wall(22,44,52,44,WH,0); wall(22,-20,22,-12,WH,0);
-for(let r=0;r<4;r++){box(28,-4+r*12,3,5,0.8,0,M.wood,false); box(46,-4+r*12,3,5,0.8,0,M.wood,false);}
+/* Infirmary beds → furnished via bedF below */
 label("Infirmary",37,5.4,16,"#cfe0ef",34); torch(24,-10); torch(50,42);
 reg("Grand Gatehouse",-14,CY.z2,14,54,"public",1);
 wall(-14,CY.z2,-14,54,WH,0,1.4,{at:40,w:5}); wall(14,CY.z2,14,54,WH,0,1.4,{at:40,w:5});
@@ -415,6 +415,27 @@ function booksF(cx,cz,horiz,len,y,levels){ const sp=0.7,n=Math.max(1,Math.floor(
   for(let lvl=0;lvl<levels;lvl++){ const yy=y+0.6+lvl*1.0;
     for(let i=0;i<n;i++){ const t=-len/2+sp/2+i*sp, m=bookMats[(i+lvl)%bookMats.length], hh=0.6+(i%3)*0.06;
       if(horiz) box(cx+t,cz,0.42,0.5,hh,yy,m,false,false); else box(cx,cz+t,0.5,0.42,hh,yy,m,false,false); } } }
+const barkMat=new THREE.MeshStandardMaterial({color:0x5a4326,roughness:.95});
+const leafMats=[0x3f7d4e,0x2f6b41,0x57924f].map(c=>new THREE.MeshStandardMaterial({color:c,roughness:.9}));
+function benchF(cx,cz,y,len,horiz,back){
+  if(horiz){ box(cx,cz,len,0.55,0.14,y+0.44,M.wood,false,false);
+    for(const s of [-1,1]) box(cx+s*(len/2-0.35),cz,0.16,0.45,0.44,y,MF.woodDark,false,false);
+    if(back) box(cx,cz-0.24,len,0.1,0.55,y+0.58,M.wood,false,false);
+  } else { box(cx,cz,0.55,len,0.14,y+0.44,M.wood,false,false);
+    for(const s of [-1,1]) box(cx,cz+s*(len/2-0.35),0.45,0.16,0.44,y,MF.woodDark,false,false);
+    if(back) box(cx-0.24,cz,0.1,len,0.55,y+0.58,M.wood,false,false); } }
+function bedF(cx,cz,y,head){ const hz=head==='N'?-1:1;
+  box(cx,cz,2.4,5.0,0.4,y,MF.woodDark,false,false);              /* frame */
+  box(cx,cz,2.1,4.6,0.3,y+0.4,MF.linen,false,false);            /* mattress */
+  box(cx,cz-hz*0.9,2.2,2.6,0.18,y+0.62,fab.blue,false,false);   /* blanket */
+  box(cx,cz+hz*1.75,1.8,0.9,0.24,y+0.56,MF.linen,false,false);  /* pillow */
+  box(cx,cz+hz*2.45,2.4,0.22,1.5,y,MF.woodDark,false,false);    /* headboard */
+  for(const s of [-1,1]) box(cx+s*1.1,cz+hz*2.45,0.24,0.24,1.7,y,MF.woodDark,false,false); }
+function treeF(x,z,s,solid){ s=s||1; const th=3.4*s;
+  const tk=new THREE.Mesh(cyl(0.3*s,0.5*s,th,7),barkMat); tk.position.set(x,th/2,z); tk.castShadow=true; tk.receiveShadow=true; world.add(tk);
+  const cl=[[0,0,0,2.0],[-1.1,-0.6,0.5,1.5],[1.1,-0.5,-0.5,1.5],[0.2,1.2,0.2,1.45]];
+  for(let i=0;i<cl.length;i++){ const c=cl[i],m=new THREE.Mesh(sph(c[3]*s,8),leafMats[i%3]); m.position.set(x+c[0]*s,th+c[1]*s,z+c[2]*s); m.castShadow=true; m.receiveShadow=true; world.add(m); }
+  if(solid) colliders.push({circle:true,x,z,r:0.62*s,yMin:0,yMax:th}); }
 const rugCol={public:fab.red,academic:fab.gold,service:fab.green,faculty:fab.blue,magic:fab.purple,practice:fab.purple,library:fab.green};
 /* auto pass: rug + banners everywhere indoors; chandelier on floors 1–2 */
 for(const r of rooms){
@@ -441,8 +462,8 @@ for(const sx of [-46,-34])for(const sz of [-38,-27,-16,-5]) booksF(sx,sz,false,7
 tableF(-28,-30,0,4,3); chairF(-28,-27,0,'N'); tableF(-28,-12,0,4,3); chairF(-28,-9,0,'N');
 /* Administration */
 tableF(-37,25,0,6,3); chairF(-37,28,0,'N');
-/* Infirmary — pillows + blankets on the 8 beds */
-for(const bx of [28,46])for(const bz of [-4,8,20,32]){ box(bx,bz-1.6,2.4,1.0,0.18,0.8,MF.linen,false,false); box(bx,bz+0.8,2.6,2.6,0.12,0.85,fab.blue,false,false); }
+/* Infirmary — proper beds */
+for(const bx of [28,46])for(const bz of [-4,8,20,32]) bedF(bx,bz,0,'N');
 /* F2 academic — chalkboards + a couple chairs in the reading level */
 chalkboardF(0,-52,7,'N');
 for(const z of [-34,-18,-2,14]){ chairF(-46,z,7,'E'); chairF(-38,z,7,'E'); }
@@ -458,6 +479,15 @@ for(let i=0;i<3;i++){ const a=i/3*Math.PI*2; piece(sph(0.28,10),M.rune,-3+Math.c
 /* F3 libraries / offices */
 for(const sx of [-6,2,10]) booksF(sx,36,false,9,14,2);
 tableF(3,42,14,5,3); chairF(3,45,14,'N');
+/* ---- Great Hall benches flanking the central tables ---- */
+for(const cz of [-44,-36,-28]){ benchF(-28,cz,0,3.2,false,true); benchF(-18,cz,0,3.2,false,true); }
+/* ---- Courtyard: garden benches around the fountain + trees on the lawns ---- */
+benchF(0,-7,0,5,true,true); benchF(0,11,0,5,true,true); benchF(-9,2,0,5,false,true); benchF(9,2,0,5,false,true);
+treeF(-12,-8,1.1,true); treeF(12,-8,1.1,true); treeF(-12,14,1.1,true); treeF(12,14,1.1,true);
+/* ---- Grounds: a tree line outside the curtain walls, entrance kept clear ---- */
+for(let i=0;i<26;i++){ const a=i/26*Math.PI*2, rr=86+(i%4)*7+Math.sin(i*2.3)*5, tx=Math.cos(a)*rr, tz=Math.sin(a)*rr;
+  if(tz>52 && Math.abs(tx)<18) continue; treeF(tx,tz,1.0+(i%3)*0.25,false); }
+treeF(-26,70,1.2,false); treeF(26,70,1.2,false); treeF(-34,86,1.0,false); treeF(34,86,1.0,false);
 
 /* ====================================================================
    PLAYER
