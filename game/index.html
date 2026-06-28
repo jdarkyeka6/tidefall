@@ -52,7 +52,7 @@
     <div id="title"><div class="name">Tidefall Castle</div><div class="floor" id="floorLabel">Floor 1 · Ground</div></div>
     <div id="cross"></div><div id="room"></div><div id="toast"></div>
     <div id="mapWrap"><div class="cap" id="mapCap">Floor 1</div><canvas id="map" width="184" height="164"></canvas></div>
-    <div id="help"><b>WASD</b> move · <b>Mouse</b> look<br/><b>Shift</b> sprint · <b>Space</b> jump<br/>
+    <div id="help"><b>WASD</b> move · <b>Mouse</b> look<br/><b>Shift</b> sprint · <b>Space</b> jump · <b>Click/F</b> cast<br/>
       <b>Stairs</b> climb the courtyard edges · <b>M</b> map · <b>Esc</b> release</div>
   </div>
   <div id="overlay"><div class="card">
@@ -133,6 +133,7 @@ const torches=[];
 const spellOrbs=[];
 const spellBolts=[];
 const castRings=[];
+const npcs=[];
 
 function box(cx,cz,w,d,h,y,mat,collide=true,cast=true){
   const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
@@ -519,6 +520,22 @@ treeF(-26,70,1.2,false); treeF(26,70,1.2,false); treeF(-34,86,1.0,false); treeF(
 const _matCache={};
 function colMat(c){ return _matCache[c]||(_matCache[c]=new THREE.MeshStandardMaterial({color:c,roughness:.8})); }
 function glowMat(c){ const k='g'+c; return _matCache[k]||(_matCache[k]=new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:1.1,roughness:.4})); }
+const LINES={
+"Jasper Vale":"If something needs doing, I'm not going to look away.",
+"Harper":"Stay behind me — I'll handle it.",
+"Ava Monroe":"I already know what this will cost.",
+"Lachlan Reed":"You here for the duel trials too?",
+"Cole Vesper":"Keep your voice down — the librarian hears everything.",
+"Theo Kim":"Did you finish the warding essay? ...Me neither.",
+"Isla Monroe":"My sister thinks she's always right. She usually is. Annoying.",
+"Talia Burns":"Careful — Mord's been watching the courtyard all week.",
+"Mordecai “Mord”":"Enjoy the view. It won't last.",
+"Prof. Rowan Hale":"Wand up. A duel is a conversation you can't afford to lose.",
+"Seraphina Vale":"Bravery fills these halls. I tend what it leaves behind.",
+"Eldric Morrow":"This has all happened before — just not to you.",
+"Benji Rowan":"Watch this — I've almost got the deflection!",
+"Keria O’Connell":"“Almost,” he says. Every single term."
+};
 function person(x,z,y,o){ const sk=colMat(o.skin||0xeec6a0),hr=colMat(o.hair||0x3a2a1a),tp=colMat(o.top||0x39415a),bt=colMat(o.bottom||0x2a2a30),un=colMat(o.under||0xd8d2c0);
   if(o.robe){ piece(cyl(0.5,0.34,1.2,10),colMat(o.robe),x,y+0.6,z); }
   else { box(x-0.15,z,0.26,0.26,0.82,y,bt,false,false); box(x+0.15,z,0.26,0.26,0.82,y,bt,false,false); }
@@ -530,7 +547,7 @@ function person(x,z,y,o){ const sk=colMat(o.skin||0xeec6a0),hr=colMat(o.hair||0x
   if(o.longHair) box(x,z+0.17,0.34,0.12,0.5,hy-0.25,hr,false,false);
   if(o.bag) piece(cyl(0.2,0.2,0.32,8),colMat(0x6e4a2a),x+0.36,ty+0.18,z+0.16);
   if(o.wand){ piece(cyl(0.025,0.045,0.95,6),colMat(0x2a1d12),x+0.46,ty+0.55,z+0.08); piece(sph(0.07,8),glowMat(o.wandTip||0x8fe0ff),x+0.46,ty+1.05,z+0.08); }
-  if(o.name) label(o.name,x,z,hy+1.0,o.labelCol||"#efe6d2",18); }
+  if(o.name){ label(o.name,x,z,hy+1.0,o.labelCol||"#efe6d2",18); npcs.push({name:o.name,line:LINES[o.name]||"",x,z,fl:(y>13?3:y>6?2:1)}); } }
 /* the trio — courtyard (colours from the character art) */
 person(-3,15,0,{name:"Jasper Vale",skin:0xf0c8a0,hair:0xf0c34a,top:0x1d1d22,under:0xeaeaea,bottom:0x26262b,bag:true,wand:true,wandTip:0x8fe0ff,labelCol:"#f0d49a"});
 person(-7,16.5,0,{name:"Harper",skin:0xf0c8a0,hair:0xa83a1e,top:0x474d56,under:0x2f7d3a,bottom:0x2c2e33,longHair:true,wand:true,wandTip:0x6fe07a,labelCol:"#e8a07a"});
@@ -634,6 +651,7 @@ const overlay=document.getElementById('overlay'),hud=document.getElementById('hu
 const roomEl=document.getElementById('room'),toastEl=document.getElementById('toast');
 const mapWrap=document.getElementById('mapWrap'),mapCv=document.getElementById('map'),mg=mapCv.getContext('2d');
 const floorLabel=document.getElementById('floorLabel'),mapCap=document.getElementById('mapCap');
+const npcEl=document.createElement('div'); npcEl.style.cssText="position:absolute;left:50%;bottom:84px;transform:translateX(-50%);max-width:520px;text-align:center;font:15px/1.45 'Iowan Old Style',Georgia,serif;color:#efe6d2;background:rgba(8,22,30,.82);border:1px solid rgba(217,164,65,.35);padding:10px 18px;border-radius:12px;opacity:0;transition:opacity .25s ease;pointer-events:none"; hud.appendChild(npcEl);
 function start(){ controls.lock(); }
 startBtn.addEventListener('click',start);
 addEventListener('keydown',e=>{ if(e.code==='Enter'&&overlay.style.display!=='none')start(); });
@@ -641,6 +659,15 @@ controls.addEventListener('lock',()=>{ overlay.style.display='none'; hud.classLi
 controls.addEventListener('unlock',()=>{ overlay.style.display='grid'; });
 const keys={}; addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyM')mapWrap.classList.toggle('hidden'); });
 addEventListener('keyup',e=>{ keys[e.code]=false; });
+/* player spellcasting (left-click or F) */
+const boltPool=[],trailPool=[]; let boltIdx=0,trailIdx=0;
+for(let i=0;i<8;i++){ const m=new THREE.Mesh(new THREE.SphereGeometry(0.18,10,10),glowMat(0x9fd0ff)); m.visible=false; world.add(m); boltPool.push({mesh:m,vel:new THREE.Vector3(),life:0}); }
+for(let i=0;i<48;i++){ const m=new THREE.Mesh(new THREE.SphereGeometry(0.12,8,8),glowMat(0x9fd0ff)); m.visible=false; world.add(m); trailPool.push({mesh:m,life:0}); }
+function emitTrail(x,y,z){ trailIdx=(trailIdx+1)%trailPool.length; const p=trailPool[trailIdx]; p.mesh.position.set(x,y,z); p.mesh.visible=true; p.life=0.35; p.mesh.scale.setScalar(1); }
+function castSpell(){ if(!controls.isLocked)return; const dir=new THREE.Vector3(); camera.getWorldDirection(dir); const o=controls.getObject().position;
+  boltIdx=(boltIdx+1)%boltPool.length; const b=boltPool[boltIdx]; b.mesh.position.set(o.x+dir.x,o.y+dir.y,o.z+dir.z); b.mesh.visible=true; b.mesh.scale.setScalar(1); b.vel.copy(dir).multiplyScalar(42); b.life=1.5; }
+addEventListener('mousedown',e=>{ if(e.button===0)castSpell(); });
+addEventListener('keydown',e=>{ if(e.code==='KeyF')castSpell(); });
 let vy=0,onGround=true; const vel=new THREE.Vector3(),fwd=new THREE.Vector3(),right=new THREE.Vector3();
 function rampHeight(r,x,z){ const c=r.axis==='x'?x:z; const f=Math.max(0,Math.min(1,(c-r.lo)/(r.hi-r.lo))); return r.from+(r.to-r.from)*f; }
 function groundHeightAt(x,z,feet){ let best=-Infinity; const consider=h=>{ if(h<=feet+STEP&&h>best)best=h; };
@@ -721,12 +748,16 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     if(fl!==shownFloor){ shownFloor=fl; floorLabel.textContent=fname[fl]; mapCap.textContent="Floor "+fl;
       if(fhint[fl]&&!hinted[fl]){ toast(fhint[fl]); hinted[fl]=true; } }
     drawMap(pos);
+    let near=null,nd=3.6; for(const n of npcs){ if(n.fl!==fl)continue; const d=Math.hypot(pos.x-n.x,pos.z-n.z); if(d<nd){nd=d;near=n;} }
+    npcEl.innerHTML=near?("<b>"+near.name+"</b> · "+near.line):""; npcEl.style.opacity=near?1:0;
   }
   const t=clock.elapsedTime;
   for(const o of torches){ const f=0.7+Math.sin(t*12+o.l.position.x)*0.18+Math.random()*0.12; o.l.intensity=o.base*f; o.flame.scale.setScalar(0.9+f*0.25); }
   for(const o of spellOrbs){ o.mesh.position.y=o.baseY+Math.sin(t*o.spd+o.ph)*o.amp; o.mesh.scale.setScalar(1+Math.sin(t*o.spd*1.7+o.ph)*0.18); }
   for(const s of spellBolts){ const f=Math.sin(t*s.spd+s.ph)*0.5+0.5; s.mesh.position.set(s.ax+(s.bx-s.ax)*f,s.ay+(s.by-s.ay)*f+Math.sin(f*Math.PI)*1.0,s.az+(s.bz-s.az)*f); s.mesh.scale.setScalar(0.8+Math.sin(t*10+s.ph)*0.2); }
   for(const r of castRings){ const f=(t*r.spd+r.ph)%1; r.mesh.scale.set(0.3+f*2.4,1,0.3+f*2.4); r.mat.opacity=0.65*(1-f); }
+  for(const b of boltPool){ if(b.life>0){ b.life-=dt; b.mesh.position.addScaledVector(b.vel,dt); emitTrail(b.mesh.position.x,b.mesh.position.y,b.mesh.position.z); if(b.life<=0)b.mesh.visible=false; } }
+  for(const p of trailPool){ if(p.life>0){ p.life-=dt; const s=Math.max(0,p.life/0.35); p.mesh.scale.setScalar(s*0.85+0.05); if(p.life<=0)p.mesh.visible=false; } }
   renderer.render(scene,camera);
 }
 animate();
