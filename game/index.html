@@ -130,6 +130,7 @@ const colliders=[];
 const floorRects=[];
 const ramps=[];
 const torches=[];
+const spellOrbs=[];
 
 function box(cx,cz,w,d,h,y,mat,collide=true,cast=true){
   const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
@@ -515,6 +516,7 @@ treeF(-26,70,1.2,false); treeF(26,70,1.2,false); treeF(-34,86,1.0,false); treeF(
    ==================================================================== */
 const _matCache={};
 function colMat(c){ return _matCache[c]||(_matCache[c]=new THREE.MeshStandardMaterial({color:c,roughness:.8})); }
+function glowMat(c){ const k='g'+c; return _matCache[k]||(_matCache[k]=new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:1.1,roughness:.4})); }
 function person(x,z,y,o){ const sk=colMat(o.skin||0xeec6a0),hr=colMat(o.hair||0x3a2a1a),tp=colMat(o.top||0x39415a),bt=colMat(o.bottom||0x2a2a30),un=colMat(o.under||0xd8d2c0);
   if(o.robe){ piece(cyl(0.5,0.34,1.2,10),colMat(o.robe),x,y+0.6,z); }
   else { box(x-0.15,z,0.26,0.26,0.82,y,bt,false,false); box(x+0.15,z,0.26,0.26,0.82,y,bt,false,false); }
@@ -525,23 +527,43 @@ function person(x,z,y,o){ const sk=colMat(o.skin||0xeec6a0),hr=colMat(o.hair||0x
   const hy=ty+0.72; piece(sph(0.2,10),sk,x,hy+0.18,z); piece(sph(0.23,10),hr,x,hy+0.3,z-0.02);
   if(o.longHair) box(x,z+0.17,0.34,0.12,0.5,hy-0.25,hr,false,false);
   if(o.bag) piece(cyl(0.2,0.2,0.32,8),colMat(0x6e4a2a),x+0.36,ty+0.18,z+0.16);
+  if(o.wand){ piece(cyl(0.025,0.045,0.95,6),colMat(0x2a1d12),x+0.46,ty+0.55,z+0.08); piece(sph(0.07,8),glowMat(o.wandTip||0x8fe0ff),x+0.46,ty+1.05,z+0.08); }
   if(o.name) label(o.name,x,z,hy+1.0,o.labelCol||"#efe6d2",18); }
 /* the trio — courtyard (colours from the character art) */
-person(-3,15,0,{name:"Jasper Vale",skin:0xf0c8a0,hair:0xf0c34a,top:0x1d1d22,under:0xeaeaea,bottom:0x26262b,bag:true,labelCol:"#f0d49a"});
-person(-7,16.5,0,{name:"Harper",skin:0xf0c8a0,hair:0xa83a1e,top:0x474d56,under:0x2f7d3a,bottom:0x2c2e33,longHair:true,labelCol:"#e8a07a"});
-person(3,16,0,{name:"Ava Monroe",skin:0xeec6a0,hair:0x6b4a2e,top:0x2b3450,under:0xcabfa0,bottom:0x232327,longHair:true,bag:true,labelCol:"#9fc6e0"});
+person(-3,15,0,{name:"Jasper Vale",skin:0xf0c8a0,hair:0xf0c34a,top:0x1d1d22,under:0xeaeaea,bottom:0x26262b,bag:true,wand:true,wandTip:0x8fe0ff,labelCol:"#f0d49a"});
+person(-7,16.5,0,{name:"Harper",skin:0xf0c8a0,hair:0xa83a1e,top:0x474d56,under:0x2f7d3a,bottom:0x2c2e33,longHair:true,wand:true,wandTip:0x6fe07a,labelCol:"#e8a07a"});
+person(3,16,0,{name:"Ava Monroe",skin:0xeec6a0,hair:0x6b4a2e,top:0x2b3450,under:0xcabfa0,bottom:0x232327,longHair:true,bag:true,wand:true,wandTip:0x6f9fff,labelCol:"#9fc6e0"});
 /* students through the halls */
-person(11,-30,0,{name:"Lachlan Reed",hair:0x3a2a1a,top:0x6a3535,bottom:0x2a2a30});
-person(-30,-18,0,{name:"Cole Vesper",hair:0x202024,top:0x2a4a3a,bottom:0x242428});
+person(11,-30,0,{name:"Lachlan Reed",hair:0x3a2a1a,top:0x6a3535,bottom:0x2a2a30,wand:true,wandTip:0xff6a8a});
+person(-30,-18,0,{name:"Cole Vesper",hair:0x202024,top:0x2a4a3a,bottom:0x242428,wand:true,wandTip:0x6fe07a});
 person(20,-42,0,{name:"Theo Kim",hair:0x161618,top:0x394a6a,bottom:0x26262b});
-person(-6,-42,7,{name:"Isla Monroe",hair:0x4a3320,top:0x6a4a6a,bottom:0x2c2c34,longHair:true});
+person(-6,-42,7,{name:"Isla Monroe",hair:0x4a3320,top:0x6a4a6a,bottom:0x2c2c34,longHair:true,wand:true,wandTip:0x9f7bff});
 person(9,16,0,{name:"Talia Burns",hair:0x7a3a1e,top:0x7a5a2a,bottom:0x2a2a30,longHair:true});
 /* antagonist — brooding on the east balcony over the courtyard */
-person(24,12,7,{name:"Mordecai “Mord”",robe:0x1a1822,top:0x241f2e,hair:0x2a2a30,skin:0xd8c4b0,labelCol:"#c06a6a"});
+person(24,12,7,{name:"Mordecai “Mord”",robe:0x1a1822,top:0x241f2e,hair:0x2a2a30,skin:0xd8c4b0,wand:true,wandTip:0xc060ff,labelCol:"#c06a6a"});
 /* professors */
-person(-3,-35,14,{name:"Prof. Rowan Hale",robe:0x2f6f7a,top:0x274f5a,hair:0x9a958c,skin:0xe8c49c,labelCol:"#bfe3f0"});
-person(37,18,0,{name:"Seraphina Vale",robe:0x4f7d5e,top:0x3f6a4e,hair:0x6b4a2e,under:0xdfe6da,labelCol:"#bfe0c8"});
-person(-28,40,14,{name:"Eldric Morrow",robe:0x3a3550,top:0x2a2840,hair:0x8a8580,labelCol:"#cfc6e0"});
+person(-3,-35,14,{name:"Prof. Rowan Hale",robe:0x2f6f7a,top:0x274f5a,hair:0x9a958c,skin:0xe8c49c,wand:true,wandTip:0x3aa0c8,labelCol:"#bfe3f0"});
+person(37,18,0,{name:"Seraphina Vale",robe:0x4f7d5e,top:0x3f6a4e,hair:0x6b4a2e,under:0xdfe6da,wand:true,wandTip:0x8fe0a0,labelCol:"#bfe0c8"});
+person(-28,40,14,{name:"Eldric Morrow",robe:0x3a3550,top:0x2a2840,hair:0x8a8580,wand:true,wandTip:0xffb84d,labelCol:"#cfc6e0"});
+
+/* ====================================================================
+   MAGIC PROPS  (wand rack, animated spell orbs, runes, crystals, spellbooks)
+   ==================================================================== */
+function orb(x,y,z,c,amp,spd){ const m=piece(sph(0.18,10),glowMat(c),x,y,z); spellOrbs.push({mesh:m,baseY:y,amp:amp||0.4,spd:spd||1.4,ph:(x*0.7+z*0.3)}); return m; }
+function crystal(x,z,y,c){ piece(cyl(0.55,0.65,0.8,8),M.stone,x,y+0.4,z); piece(new THREE.ConeGeometry(0.26,0.8,6),glowMat(c),x,y+1.25,z); }
+function wandRack(x,z,y){ box(x,z,2.0,0.45,0.12,y+1.0,M.wood,false,false); box(x,z,2.0,0.45,0.12,y+1.7,M.wood,false,false);
+  const tips=[0x8fe0ff,0x6fe07a,0x9f7bff,0xffb84d,0xff6a8a]; for(let i=0;i<5;i++){ const wx=x-0.8+i*0.4; piece(cyl(0.03,0.05,0.7,6),colMat(0x2a1d12),wx,y+1.4,z); piece(sph(0.05,6),glowMat(tips[i]),wx,y+1.78,z); } }
+function spellbook(x,z,y,c){ box(x,z,0.6,0.8,0.16,y,colMat(0x5a3a2a),false,false); box(x,z,0.46,0.66,0.05,y+0.16,glowMat(c),false,false); }
+/* dueling room: glowing magic circle on the floor + floating orbs + a spellbook on the dais */
+for(let i=0;i<28;i++){ const a=i/28*Math.PI*2; box(-3+Math.cos(a)*6.2,-38+Math.sin(a)*6.2,0.32,0.32,0.05,14.07,glowMat(0x3aa0c8),false,false); }
+orb(-7,16.6,-38,0x8fe0ff); orb(1,16.9,-41,0x9f7bff); orb(-2,17.3,-34,0x6fe07a);
+spellbook(-3,-34,14.62,0x6fe0ff);
+/* magic labs: orbs, crystals, spellbooks */
+orb(-40,16.2,-22,0x6fe0ff,0.3); orb(-44,16.6,20,0x6fe07a,0.35); orb(40,16.4,22,0x9f7bff,0.35); orb(39,16.0,-22,0xffb84d,0.3);
+crystal(-44,12,14,0x6fe07a); crystal(40,18,14,0x9f7bff);
+spellbook(-40,-22,14.45,0x8fe0ff); spellbook(40,22,14.45,0x9f7bff); spellbook(-44,10,15.0,0x6fe07a);
+/* beginner-magic classroom (F2): a wand display rack */
+wandRack(37,-50,7);
 
 /* ====================================================================
    ATMOSPHERE & EXTERIOR POLISH  (decorative; adds no colliders)
@@ -684,6 +706,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
   }
   const t=clock.elapsedTime;
   for(const o of torches){ const f=0.7+Math.sin(t*12+o.l.position.x)*0.18+Math.random()*0.12; o.l.intensity=o.base*f; o.flame.scale.setScalar(0.9+f*0.25); }
+  for(const o of spellOrbs){ o.mesh.position.y=o.baseY+Math.sin(t*o.spd+o.ph)*o.amp; o.mesh.scale.setScalar(1+Math.sin(t*o.spd*1.7+o.ph)*0.18); }
   renderer.render(scene,camera);
 }
 animate();
