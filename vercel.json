@@ -1,4 +1,7 @@
 {
+  "redirects": [
+    { "source": "/", "destination": "/game/", "permanent": false }
+  ],
   "headers": [
     {
       "source": "/charecters/(.*)\\.(vrm|glb|gltf)",
