@@ -645,6 +645,22 @@ brazierF(-11,57,0,true); brazierF(11,57,0,true);
 flowerBed(-17,-15,3,3,0.5); flowerBed(17,-15,3,3,0.5); flowerBed(-17,19,3,3,0.5); flowerBed(17,19,3,3,0.5);
 
 /* ====================================================================
+   THE UNDERCROFT (floor 0) — cellar stair south of the gate, outside the keep
+   ==================================================================== */
+const U=-7;
+box(-2.9,71,0.8,15,8,U,M.stone); box(2.9,71,0.8,15,8,U,M.stone);        /* stairwell side walls */
+ramps.push({x1:-2.5,x2:2.5,z1:64,z2:78,axis:'z',lo:64,hi:78,from:0,to:U});
+for(let i=0;i<14;i++){ const f=i/13; box(0,64+14*f,5,1.2,0.5,(U*f)-0.25,M.stone,false,false); }
+slab(-16,78,16,104,U);                                                  /* chamber floor */
+wall(-16,78,-2.5,78,6,U); wall(2.5,78,16,78,6,U); wall(-16,104,16,104,6,U); wall(-16,78,-16,104,6,U); wall(16,78,16,104,6,U);
+box(0,91,34,28,0.5,U+6,M.stone,false,false);                           /* ceiling */
+reg("The Undercroft",-16,78,16,104,"service",0);
+label("The Undercroft",0,U+4.5,91,"#bfa0d0",30);
+torch(-12,82,U); torch(12,82,U); torch(-12,100,U); torch(12,100,U);
+for(const tz of [86,94])for(const tx of [-10,10]){ box(tx,tz,3,1.6,1.1,U,M.stone,false,false); box(tx,tz,3.2,1.8,0.16,U+1.1,M.trim,false,false); }
+crystal(0,90,U,0x9f7bff); orb(-6,U+2.4,88,0x8fe0ff,0.3); orb(6,U+2.6,94,0x6fe07a,0.3); spellbook(-11,90,U+1.06,0x6fe0ff);
+
+/* ====================================================================
    PLAYER
    ==================================================================== */
 let EYE=1.7; const RAD=0.6,STEP=1.7;
@@ -715,7 +731,7 @@ function collide(pos){ const feet=pos.y-EYE,head=pos.y;
         else{ const tR=c.maxX-pos.x,tL=pos.x-c.minX,tU=c.maxZ-pos.z,tD=pos.z-c.minZ,mn=Math.min(tR,tL,tU,tD);
           if(mn===tR)pos.x=c.maxX+RAD; else if(mn===tL)pos.x=c.minX-RAD; else if(mn===tU)pos.z=c.maxZ+RAD; else pos.z=c.minZ-RAD; } } } }
 }
-function currentFloor(p){ if(p.y>FY(3)-2)return 3; if(p.y>FY(2)-2)return 2; return 1; }
+function currentFloor(p){ if(p.y>FY(3)-2)return 3; if(p.y>FY(2)-2)return 2; if(p.y<-2)return 0; return 1; }
 function currentRoom(p){ const fl=currentFloor(p);
   for(const r of rooms){ if(r.floor===fl&&p.x>=r.x1&&p.x<=r.x2&&p.z>=r.z1&&p.z<=r.z2)return r; }
   const T=[["Nocten Wing",-IN,-IN],["Astrae Wing",IN,-IN],["Calyx Wing",-IN,IN],["Brannor Wing",IN,IN]];
@@ -723,8 +739,8 @@ function currentRoom(p){ const fl=currentFloor(p);
   if(p.z>54&&fl===1)return {name:"Castle Approach"}; return null; }
 let lastRoom=""; function setRoom(n){ if(n===lastRoom)return; lastRoom=n; if(n){roomEl.textContent=n; roomEl.style.opacity=1;} else roomEl.style.opacity=0; }
 function toast(m){ toastEl.textContent=m; toastEl.style.opacity=1; clearTimeout(toast._t); toast._t=setTimeout(()=>toastEl.style.opacity=0,2600); }
-const fname={1:"Floor 1 · Ground",2:"Floor 2 · Academic",3:"Floor 3 · Magic Labs"};
-const fhint={2:"Floor 2 — the academic level. The walkway rings the courtyard; the N & S stairs climb to the labs.",3:"Floor 3 — the magic labs. The round room north is Prof. Hale's dueling classroom."};
+const fname={0:"Undercroft · Catacombs",1:"Floor 1 · Ground",2:"Floor 2 · Academic",3:"Floor 3 · Magic Labs"};
+const fhint={0:"The Undercroft — the old catacombs beneath the grounds. Something down here still hums with magic.",2:"Floor 2 — the academic level. The walkway rings the courtyard; the N & S stairs climb to the labs.",3:"Floor 3 — the magic labs. The round room north is Prof. Hale's dueling classroom."};
 const catCol={public:"#caa15a",academic:"#5b7fb0",service:"#9a6fae",faculty:"#5e9d70",circulation:"#b9a06a",magic:"#3f8f7a",practice:"#9a6fae",library:"#a98f55"};
 function drawMap(p){ const fl=currentFloor(p); const W=mapCv.width,H=mapCv.height; mg.clearRect(0,0,W,H);
   const scl=W/((IN+14)*2); const tx=x=>W/2+x*scl,tz=z=>H/2+z*scl;
@@ -797,7 +813,7 @@ const MOREL={
 "Mordecai “Mord”":["Enjoy the view. It won't last.","Every wall in this castle remembers something.","You think the stairs only go up?"]
 };
 /* objectives */
-const OBJ=[{t:"Cast your first spell",done:false},{t:"Hit a training dummy",done:false},{t:"Climb to Floor 3",done:false},{t:"Meet Prof. Hale",done:false},{t:"Talk to the trio (E)",done:false}];
+const OBJ=[{t:"Cast your first spell",done:false},{t:"Hit a training dummy",done:false},{t:"Climb to Floor 3",done:false},{t:"Meet Prof. Hale",done:false},{t:"Talk to the trio (E)",done:false},{t:"Descend to the Undercroft",done:false}];
 /* HUD elements */
 function mkEl(css){ const e=document.createElement('div'); e.style.cssText=css; hud.appendChild(e); return e; }
 const statEl=mkEl("position:absolute;right:16px;bottom:16px;width:196px;background:rgba(8,22,30,.82);border:1px solid rgba(217,164,65,.35);border-radius:12px;padding:10px 12px;font:12px/1.4 ui-monospace,monospace;color:#efe6d2");
@@ -895,7 +911,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     else if(pl){ npcEl.innerHTML="📜 <b>"+pl.title+"</b> <span style='color:#7c8a92'>[E to read]</span>"; npcEl.style.opacity=1; }
     else npcEl.style.opacity=0;
     if(loreOpen&&loreTarget&&loreTarget.fl===fl&&Math.hypot(pos.x-loreTarget.x,pos.z-loreTarget.z)<4.2){ loreEl.innerHTML="<div style='color:#d9a441;letter-spacing:.1em;margin-bottom:8px'>"+loreTarget.title.toUpperCase()+"</div>"+loreTarget.text+"<div style='color:#7c8a92;margin-top:12px;font-size:12px'>press E to close</div>"; loreEl.style.opacity=1; } else { loreOpen=false; loreEl.style.opacity=0; }
-    if(castedOnce)OBJ[0].done=true; if(fl===3)OBJ[2].done=true; if(near&&near.name==="Prof. Rowan Hale")OBJ[3].done=true;
+    if(castedOnce)OBJ[0].done=true; if(fl===3)OBJ[2].done=true; if(fl===0)OBJ[5].done=true; if(near&&near.name==="Prof. Rowan Hale")OBJ[3].done=true;
     renderStats(); renderObj();
   }
   const t=clock.elapsedTime;
