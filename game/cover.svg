@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#34659b"/><stop offset="0.6" stop-color="#7aa8cc"/><stop offset="1" stop-color="#9fc2d4"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#sky)"/>
+  <circle cx="930" cy="140" r="70" fill="#fff5d6" opacity="0.85"/>
+  <rect y="470" width="1200" height="160" fill="#1f6f96" opacity="0.85"/>
+  <g fill="#0b1f2a" opacity="0.92">
+    <rect x="360" y="250" width="480" height="230"/>
+    <rect x="320" y="210" width="90" height="270"/><rect x="790" y="210" width="90" height="270"/>
+    <polygon points="320,210 365,150 410,210"/><polygon points="790,210 835,150 880,210"/>
+    <rect x="560" y="330" width="80" height="150"/>
+  </g>
+  <g fill="#d9a441">
+    <rect x="585" y="360" width="30" height="60" rx="14"/>
+    <circle cx="600" cy="300" r="10"/>
+  </g>
+  <text x="600" y="120" text-anchor="middle" font-family="Georgia, serif" font-size="84" font-weight="700" fill="#efe6d2" letter-spacing="2">Tidefall Castle</text>
+  <text x="600" y="560" text-anchor="middle" font-family="Georgia, serif" font-size="30" fill="#efe6d2" opacity="0.92">A walkable 3D magic-academy keep — climb · cast · explore</text>
+</svg>

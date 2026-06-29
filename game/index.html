@@ -3,7 +3,15 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Tidefall Castle — Floors 1–3</title>
+<title>Tidefall Castle — A Tidefall Academy Adventure</title>
+<meta name="description" content="Explore Tidefall Castle, a walkable 3D magic academy. Climb four floors, cast spells, meet the cast, and gather the tide shards." />
+<meta name="theme-color" content="#0b1f2a" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="Tidefall Castle" />
+<meta property="og:description" content="A walkable 3D magic-academy keep — climb, cast, explore." />
+<meta property="og:image" content="cover.svg" />
+<meta name="twitter:card" content="summary_large_image" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230b1f2a'/><path d='M5 25V12l3 2 3-4 5 4 5-4 3 4 3-2v13z' fill='%23d9a441'/></svg>" />
 <style>
   :root{ --sea:#0b1f2a; --parchment:#efe6d2; --parchment-dim:#c7bfa9; --bronze:#d9a441;
     --line:rgba(217,164,65,.35); --panel:rgba(8,22,30,.82); }
@@ -57,9 +65,16 @@
   </div>
   <div id="overlay"><div class="card">
     <div class="crest">Tidefall Academy</div><h1>Tidefall Castle</h1>
-    <div class="sub">Floors 1–3 · ground · academic · magic labs — climb the keep</div>
-    <div class="keys"><span>WASD move</span><span>Mouse look</span><span>Shift sprint</span><span>Space jump</span><span>M map</span></div>
-    <button id="startBtn">Enter the Castle</button>
+    <div class="sub" id="cardSub">Climb the keep · cast spells · meet the cast · gather the tide shards</div>
+    <div class="keys"><span>WASD move</span><span>Mouse look</span><span>Click cast</span><span>1–4 spells</span><span>E talk</span></div>
+    <div id="loadWrap" style="margin:2px 0 16px"><div style="height:7px;background:rgba(255,255,255,.12);border-radius:5px;overflow:hidden"><div id="loadBar" style="height:100%;width:10%;background:linear-gradient(90deg,#f0c061,#d9a441);transition:width .3s ease"></div></div><div id="loadTxt" style="font-size:12px;color:var(--parchment-dim);margin-top:6px">Preparing the castle…</div></div>
+    <button id="startBtn" disabled>Loading…</button>
+    <div id="settings" style="margin-top:18px;font-size:12px;color:var(--parchment-dim);text-align:left;display:grid;gap:7px;max-width:300px;margin-left:auto;margin-right:auto">
+      <label style="display:flex;justify-content:space-between;align-items:center;gap:10px">Volume<input id="setVol" type="range" min="0" max="100" value="50" style="width:150px"></label>
+      <label style="display:flex;justify-content:space-between;align-items:center;gap:10px">Look sensitivity<input id="setSens" type="range" min="30" max="250" value="100" style="width:150px"></label>
+      <label style="display:flex;justify-content:space-between;align-items:center;gap:10px">Field of view<input id="setFov" type="range" min="60" max="95" value="72" style="width:150px"></label>
+    </div>
+    <div class="credits" style="font-size:11px;color:var(--parchment-dim);margin-top:16px;line-height:1.6">Built with three.js &amp; @pixiv/three-vrm · World &amp; characters © Jake — Tidefall<br/>Esc to pause · P for low-spec mode</div>
   </div></div>
 
 <script type="importmap">
@@ -76,6 +91,7 @@ import * as THREE from "three";
 import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
 
 /* +X=East -X=West  +Z=South(road)  -Z=North(sea) */
+(function(){ try{ const c=document.createElement('canvas'); if(!(c.getContext('webgl')||c.getContext('experimental-webgl')))throw 0; }catch(e){ const ov=document.getElementById('overlay'); if(ov)ov.innerHTML="<div class='card'><div class='crest'>Tidefall Academy</div><h1>Tidefall Castle</h1><div class='sub'>This game needs WebGL. Please use a desktop browser (Chrome, Edge, or Firefox) with hardware acceleration enabled.</div></div>"; throw new Error('WebGL unavailable'); } })();
 const scene=new THREE.Scene();
 scene.background=new THREE.Color(0x9fc2d4); scene.fog=new THREE.Fog(0x9fc2d4,80,560);
 const camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,0.1,2000);
@@ -672,11 +688,28 @@ const roomEl=document.getElementById('room'),toastEl=document.getElementById('to
 const mapWrap=document.getElementById('mapWrap'),mapCv=document.getElementById('map'),mg=mapCv.getContext('2d');
 const floorLabel=document.getElementById('floorLabel'),mapCap=document.getElementById('mapCap');
 const npcEl=document.createElement('div'); npcEl.style.cssText="position:absolute;left:50%;bottom:84px;transform:translateX(-50%);max-width:520px;text-align:center;font:15px/1.45 'Iowan Old Style',Georgia,serif;color:#efe6d2;background:rgba(8,22,30,.82);border:1px solid rgba(217,164,65,.35);padding:10px 18px;border-radius:12px;opacity:0;transition:opacity .25s ease;pointer-events:none"; hud.appendChild(npcEl);
-function start(){ controls.lock(); }
+const cardSub=document.getElementById('cardSub'),loadBar=document.getElementById('loadBar'),loadTxt=document.getElementById('loadTxt'),loadWrap=document.getElementById('loadWrap');
+let started=false,won=false,ready=false,baseFov=72,baseVol=0.5;
+const SUB_DEFAULT="Climb the keep · cast spells · meet the cast · gather the tide shards";
+controls.pointerSpeed=1;
+function applySaved(){ let s={}; try{ s=JSON.parse(localStorage.getItem('tidefall')||'{}'); }catch(e){}
+  if(s.vol!=null)baseVol=s.vol; if(s.sens!=null)controls.pointerSpeed=s.sens; if(s.fov!=null){ baseFov=s.fov; camera.fov=s.fov; camera.updateProjectionMatrix(); }
+  const v=document.getElementById('setVol'),se=document.getElementById('setSens'),fo=document.getElementById('setFov');
+  if(v)v.value=Math.round(baseVol*100); if(se)se.value=Math.round((controls.pointerSpeed||1)*100); if(fo)fo.value=baseFov; }
+function saveSettings(){ try{ localStorage.setItem('tidefall',JSON.stringify({vol:baseVol,sens:controls.pointerSpeed,fov:baseFov})); }catch(e){} }
+applySaved();
+{ const v=document.getElementById('setVol'),se=document.getElementById('setSens'),fo=document.getElementById('setFov');
+  if(v)v.addEventListener('input',()=>{ baseVol=v.value/100; if(master)master.gain.value=baseVol; saveSettings(); });
+  if(se)se.addEventListener('input',()=>{ controls.pointerSpeed=se.value/100; saveSettings(); });
+  if(fo)fo.addEventListener('input',()=>{ baseFov=+fo.value; camera.fov=baseFov; camera.updateProjectionMatrix(); saveSettings(); }); }
+function setReady(){ if(ready)return; ready=true; startBtn.disabled=false; startBtn.textContent=won?"Keep exploring":"Enter the Castle"; }
+setTimeout(setReady,6000);
+function start(){ if(ready)controls.lock(); }
 startBtn.addEventListener('click',start);
 addEventListener('keydown',e=>{ if(e.code==='Enter'&&overlay.style.display!=='none')start(); });
-controls.addEventListener('lock',()=>{ overlay.style.display='none'; hud.classList.remove('hidden'); initAudio(); if(actx)actx.resume(); });
-controls.addEventListener('unlock',()=>{ overlay.style.display='grid'; });
+controls.addEventListener('lock',()=>{ overlay.style.display='none'; hud.classList.remove('hidden'); started=true; cardSub.textContent=SUB_DEFAULT; initAudio(); if(actx){ actx.resume(); master.gain.value=baseVol; } });
+controls.addEventListener('unlock',()=>{ overlay.style.display='grid'; if(!won&&started)cardSub.textContent="Paused — press Enter or click to resume."; });
+function showWin(){ if(won)return; won=true; cardSub.innerHTML="🏰 <b>You've mastered Tidefall Castle.</b><br>All objectives complete · "+score+" hits · "+shardCount+"/"+SHARD_TOTAL+" shards gathered"; startBtn.textContent="Keep exploring"; controls.unlock(); }
 const keys={}; addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyM')mapWrap.classList.toggle('hidden'); });
 addEventListener('keyup',e=>{ keys[e.code]=false; });
 /* player spellcasting (left-click or F) */
@@ -706,15 +739,22 @@ const VRM_CHARS=[
     const {GLTFLoader}=await import("three/addons/loaders/GLTFLoader.js");
     const {VRMLoaderPlugin,VRMUtils}=await import("@pixiv/three-vrm");
     const loader=new GLTFLoader(); loader.register(p=>new VRMLoaderPlugin(p));
-    for(const c of VRM_CHARS){
-      loader.load(c.url, gltf=>{ const vrm=gltf.userData.vrm; if(!vrm){ person(c.x,c.z,0,c.fb); return; }
-        try{ VRMUtils.removeUnnecessaryVertices&&VRMUtils.removeUnnecessaryVertices(gltf.scene); VRMUtils.removeUnnecessaryJoints&&VRMUtils.removeUnnecessaryJoints(gltf.scene); }catch(e){}
-        if(VRMUtils.rotateVRM0)VRMUtils.rotateVRM0(vrm);
-        const hh=vrm.humanoid; if(hh){ const set=(n,x,y,z)=>{ const b=hh.getNormalizedBoneNode?hh.getNormalizedBoneNode(n):null; if(b)b.rotation.set(x,y,z); }; set('leftUpperArm',0,0,1.15); set('rightUpperArm',0,0,-1.15); }
-        const s=vrm.scene; s.position.set(c.x,c.y,c.z); s.rotation.y=c.rot; s.traverse(o=>{ o.castShadow=true; o.frustumCulled=false; }); world.add(s); vrmList.push(vrm);
-      }, undefined, err=>{ console.warn("VRM load failed",c.url,err); person(c.x,c.z,0,c.fb); });
-    }
-  }catch(e){ console.warn("three-vrm unavailable; using procedural figures",e); for(const c of VRM_CHARS) person(c.x,c.z,0,c.fb); }
+    if(loadTxt)loadTxt.textContent="Summoning avatars…";
+    let vrmDone=0; const vrmFrac=VRM_CHARS.map(()=>0);
+    const updBar=()=>{ if(loadBar)loadBar.style.width=(10+(vrmFrac.reduce((a,b)=>a+b,0)/VRM_CHARS.length)*90)+"%"; };
+    const finishVrm=()=>{ updBar(); if(vrmDone>=VRM_CHARS.length){ if(loadTxt)loadTxt.textContent="Ready"; if(loadBar)loadBar.style.width="100%"; setTimeout(()=>{ if(loadWrap)loadWrap.style.display='none'; },900); } };
+    VRM_CHARS.forEach((c,ci)=>{
+      loader.load(c.url, gltf=>{ const vrm=gltf.userData.vrm; if(vrm){
+          try{ VRMUtils.removeUnnecessaryVertices&&VRMUtils.removeUnnecessaryVertices(gltf.scene); VRMUtils.removeUnnecessaryJoints&&VRMUtils.removeUnnecessaryJoints(gltf.scene); }catch(e){}
+          if(VRMUtils.rotateVRM0)VRMUtils.rotateVRM0(vrm);
+          const hh=vrm.humanoid; if(hh){ const set=(n,x,y,z)=>{ const b=hh.getNormalizedBoneNode?hh.getNormalizedBoneNode(n):null; if(b)b.rotation.set(x,y,z); }; set('leftUpperArm',0,0,1.15); set('rightUpperArm',0,0,-1.15); }
+          const s=vrm.scene; s.position.set(c.x,c.y,c.z); s.rotation.y=c.rot; s.traverse(o=>{ o.castShadow=true; o.frustumCulled=false; }); world.add(s); vrmList.push(vrm);
+        } else person(c.x,c.z,0,c.fb);
+        vrmFrac[ci]=1; vrmDone++; finishVrm();
+      }, ev=>{ if(ev&&ev.total){ vrmFrac[ci]=ev.loaded/ev.total; updBar(); } },
+         err=>{ console.warn("VRM load failed",c.url,err); person(c.x,c.z,0,c.fb); vrmFrac[ci]=1; vrmDone++; finishVrm(); });
+    });
+  }catch(e){ console.warn("three-vrm unavailable; using procedural figures",e); for(const c of VRM_CHARS) person(c.x,c.z,0,c.fb); if(loadTxt)loadTxt.textContent="Ready"; if(loadBar)loadBar.style.width="100%"; setTimeout(()=>{ if(loadWrap)loadWrap.style.display='none'; },900); }
 })();
 let vy=0,onGround=true; const vel=new THREE.Vector3(),fwd=new THREE.Vector3(),right=new THREE.Vector3();
 function rampHeight(r,x,z){ const c=r.axis==='x'?x:z; const f=Math.max(0,Math.min(1,(c-r.lo)/(r.hi-r.lo))); return r.from+(r.to-r.from)*f; }
@@ -858,7 +898,7 @@ function applyTime(i){ timeIdx=(i+TIMES.length)%TIMES.length; const T=TIMES[time
   sun.intensity=T.sun; sun.color.setHex(T.sc); amb.intensity=T.amb; hemi.intensity=T.hemi;
   if(scene.fog)scene.fog.color.setHex(T.fog); if(scene.background&&scene.background.setHex)scene.background.setHex(T.fog);
   renderer.toneMappingExposure=T.exp; if(skyMat)skyMat.color.setHex(T.sky); for(const mt of motes)mt.mesh.visible=T.mote; toast("Time: "+T.n); }
-addEventListener('keydown',e=>{ if(e.code==='KeyT')applyTime(timeIdx+1); else if(e.code==='KeyR')rainOn=!rainOn; else if(e.code==='KeyO'){ if(master)master.gain.value=master.gain.value>0?0:0.5; } });
+addEventListener('keydown',e=>{ if(e.code==='KeyT')applyTime(timeIdx+1); else if(e.code==='KeyR')rainOn=!rainOn; else if(e.code==='KeyO'){ if(master)master.gain.value=master.gain.value>0?0:baseVol; } });
 /* crest banners */
 function crestTex(){ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d');
   g.fillStyle='#7d2b2b'; g.fillRect(0,0,128,128); g.strokeStyle='#d9a441'; g.lineWidth=6; g.strokeRect(8,8,112,112);
@@ -888,7 +928,7 @@ addWanderer({name:"Tidefall Student",line:"Mind the wet cobbles by the fountain.
    ==================================================================== */
 let actx=null,master=null,stepTimer=0,wasGround=true;
 function initAudio(){ if(actx)return; try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
-  master=actx.createGain(); master.gain.value=0.5; master.connect(actx.destination);
+  master=actx.createGain(); master.gain.value=baseVol; master.connect(actx.destination);
   const pad=actx.createGain(); pad.gain.value=0.05; pad.connect(master);
   [110,164.81,220].forEach((f,i)=>{ const o=actx.createOscillator(); o.type='sine'; o.frequency.value=f; const g=actx.createGain(); g.gain.value=0.5/(i+1); o.connect(g); g.connect(pad); o.start(); });
   const lfo=actx.createOscillator(); lfo.frequency.value=0.07; const lg=actx.createGain(); lg.gain.value=0.025; lfo.connect(lg); lg.connect(pad.gain); lfo.start();
@@ -921,7 +961,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     EYE+=((crouch?1.05:1.7)-EYE)*Math.min(1,dt*10);
     if(wantSprint)stamina=Math.max(0,stamina-dt*30); else stamina=Math.min(100,stamina+dt*20);
     mana=Math.min(100,mana+dt*16); if(castCD>0)castCD-=dt;
-    const tf=wantSprint?78:72; if(Math.abs(camera.fov-tf)>0.1){ camera.fov+=(tf-camera.fov)*Math.min(1,dt*6); camera.updateProjectionMatrix(); }
+    const tf=wantSprint?baseFov+6:baseFov; if(Math.abs(camera.fov-tf)>0.1){ camera.fov+=(tf-camera.fov)*Math.min(1,dt*6); camera.updateProjectionMatrix(); }
     camera.getWorldDirection(fwd); fwd.y=0; fwd.normalize(); right.crossVectors(fwd,camera.up).normalize();
     vel.set(0,0,0);
     if(keys['KeyW'])vel.add(fwd); if(keys['KeyS'])vel.sub(fwd); if(keys['KeyD'])vel.add(right); if(keys['KeyA'])vel.sub(right);
@@ -949,6 +989,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     for(const sh of shards){ if(!sh.got&&sh.fl===fl&&Math.hypot(pos.x-sh.x,pos.z-sh.z)<1.8){ sh.got=true; sh.mesh.visible=false; shardCount++; if(shardCount>=8)OBJ[6].done=true; sfxCollect(); } }
     let sb=null,sd=1e9; for(const sh of shards){ if(sh.got||sh.fl!==fl)continue; const d=Math.hypot(pos.x-sh.x,pos.z-sh.z); if(d<sd){sd=d;sb=sh;} }
     if(sb){ const ang=Math.atan2(sb.x-pos.x,sb.z-pos.z)-Math.atan2(fwd.x,fwd.z); arrowEl.style.transform="translateX(-50%) rotate("+(ang*180/Math.PI)+"deg)"; arrowEl.style.opacity=.85; } else arrowEl.style.opacity=0;
+    if(!won&&OBJ.every(o=>o.done))showWin();
     renderStats(); renderObj();
   }
   const t=clock.elapsedTime;
@@ -977,7 +1018,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     const x=A[0]+dx*w.tt,z=A[1]+dz*w.tt; w.obj.position.set(x,w.y+Math.abs(Math.sin(t*6+w.ph))*0.07,z); w.obj.rotation.y=Math.atan2(dx,dz); w.x=x; w.z=z; }
   renderer.render(scene,camera);
 }
-animate();
+animate(); setReady();
 addEventListener('resize',()=>{ camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth,innerHeight); });
 </script>
 </body>
