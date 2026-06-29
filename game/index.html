@@ -52,7 +52,7 @@
     <div id="title"><div class="name">Tidefall Castle</div><div class="floor" id="floorLabel">Floor 1 · Ground</div></div>
     <div id="cross"></div><div id="room"></div><div id="toast"></div>
     <div id="mapWrap"><div class="cap" id="mapCap">Floor 1</div><canvas id="map" width="184" height="164"></canvas></div>
-    <div id="help"><b>WASD</b> move · <b>Mouse</b> look<br/><b>Shift</b> sprint · <b>Space</b> jump · <b>C</b> crouch<br/><b>Click/F</b> cast · <b>1-4</b> spell · <b>E</b> talk/read<br/><b>T</b> time of day · <b>R</b> rain · <b>P</b> perf · <b>M</b> map<br/>
+    <div id="help"><b>WASD</b> move · <b>Mouse</b> look<br/><b>Shift</b> sprint · <b>Space</b> jump · <b>C</b> crouch<br/><b>Click/F</b> cast · <b>1-4</b> spell · <b>E</b> talk/read<br/><b>T</b> time · <b>R</b> rain · <b>P</b> perf · <b>O</b> mute · <b>M</b> map<br/>
       <b>Stairs</b> climb the courtyard edges · <b>M</b> map · <b>Esc</b> release</div>
   </div>
   <div id="overlay"><div class="card">
@@ -674,7 +674,7 @@ const npcEl=document.createElement('div'); npcEl.style.cssText="position:absolut
 function start(){ controls.lock(); }
 startBtn.addEventListener('click',start);
 addEventListener('keydown',e=>{ if(e.code==='Enter'&&overlay.style.display!=='none')start(); });
-controls.addEventListener('lock',()=>{ overlay.style.display='none'; hud.classList.remove('hidden'); });
+controls.addEventListener('lock',()=>{ overlay.style.display='none'; hud.classList.remove('hidden'); initAudio(); if(actx)actx.resume(); });
 controls.addEventListener('unlock',()=>{ overlay.style.display='grid'; });
 const keys={}; addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyM')mapWrap.classList.toggle('hidden'); });
 addEventListener('keyup',e=>{ keys[e.code]=false; });
@@ -685,7 +685,7 @@ for(let i=0;i<48;i++){ const m=new THREE.Mesh(new THREE.SphereGeometry(0.12,8,8)
 function emitTrail(x,y,z,c){ trailIdx=(trailIdx+1)%trailPool.length; const p=trailPool[trailIdx]; if(c)p.mesh.material=glowMat(c); p.mesh.position.set(x,y,z); p.mesh.visible=true; p.life=0.35; p.mesh.scale.setScalar(1); }
 function castSpell(){ if(!controls.isLocked)return; const s=SPELLS[curSpell]; if(mana<s.cost||castCD>0)return; mana-=s.cost; castCD=s.cd; castedOnce=true;
   const dir=new THREE.Vector3(); camera.getWorldDirection(dir); const o=controls.getObject().position;
-  boltIdx=(boltIdx+1)%boltPool.length; const b=boltPool[boltIdx]; b.mesh.material=glowMat(s.c); b.col=s.c; b.mesh.position.set(o.x+dir.x,o.y+dir.y,o.z+dir.z); b.mesh.visible=true; b.mesh.scale.setScalar(1); b.vel.copy(dir).multiplyScalar(s.sp); b.life=1.6; }
+  boltIdx=(boltIdx+1)%boltPool.length; const b=boltPool[boltIdx]; b.mesh.material=glowMat(s.c); b.col=s.c; b.mesh.position.set(o.x+dir.x,o.y+dir.y,o.z+dir.z); b.mesh.visible=true; b.mesh.scale.setScalar(1); b.vel.copy(dir).multiplyScalar(s.sp); b.life=1.6; sfxCast(); }
 addEventListener('mousedown',e=>{ if(e.button===0)castSpell(); });
 addEventListener('keydown',e=>{
   if(e.code==='KeyF')castSpell();
@@ -855,7 +855,7 @@ function applyTime(i){ timeIdx=(i+TIMES.length)%TIMES.length; const T=TIMES[time
   sun.intensity=T.sun; sun.color.setHex(T.sc); amb.intensity=T.amb; hemi.intensity=T.hemi;
   if(scene.fog)scene.fog.color.setHex(T.fog); if(scene.background&&scene.background.setHex)scene.background.setHex(T.fog);
   renderer.toneMappingExposure=T.exp; if(skyMat)skyMat.color.setHex(T.sky); for(const mt of motes)mt.mesh.visible=T.mote; toast("Time: "+T.n); }
-addEventListener('keydown',e=>{ if(e.code==='KeyT')applyTime(timeIdx+1); else if(e.code==='KeyR')rainOn=!rainOn; });
+addEventListener('keydown',e=>{ if(e.code==='KeyT')applyTime(timeIdx+1); else if(e.code==='KeyR')rainOn=!rainOn; else if(e.code==='KeyO'){ if(master)master.gain.value=master.gain.value>0?0:0.5; } });
 /* crest banners */
 function crestTex(){ const c=document.createElement('canvas'); c.width=c.height=128; const g=c.getContext('2d');
   g.fillStyle='#7d2b2b'; g.fillRect(0,0,128,128); g.strokeStyle='#d9a441'; g.lineWidth=6; g.strokeRect(8,8,112,112);
@@ -880,6 +880,22 @@ function addWanderer(o,path){ const y=o.y||0; const g=groupFigure(o); g.position
   wanderers.push(rec); npcs.push(rec); }
 addWanderer({name:"Noah Price",line:"Late again — Hale's going to have my head.",hair:0x2a1d12,top:0x3a5a4a,bottom:0x2a2a30,sp:2.4,ph:1}, [[-14,10],[14,10],[14,20],[-14,20]]);
 addWanderer({name:"Tidefall Student",line:"Mind the wet cobbles by the fountain.",hair:0x6a4a2a,top:0x5a3a5a,bottom:0x2c2c34,longHair:true,sp:1.9,ph:3}, [[18,-14],[18,18],[8,18],[8,-14]]);
+/* ====================================================================
+   AUDIO (synthesised via WebAudio, no asset files) — starts on first lock
+   ==================================================================== */
+let actx=null,master=null,stepTimer=0;
+function initAudio(){ if(actx)return; try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
+  master=actx.createGain(); master.gain.value=0.5; master.connect(actx.destination);
+  const pad=actx.createGain(); pad.gain.value=0.05; pad.connect(master);
+  [110,164.81,220].forEach((f,i)=>{ const o=actx.createOscillator(); o.type='sine'; o.frequency.value=f; const g=actx.createGain(); g.gain.value=0.5/(i+1); o.connect(g); g.connect(pad); o.start(); });
+  const lfo=actx.createOscillator(); lfo.frequency.value=0.07; const lg=actx.createGain(); lg.gain.value=0.025; lfo.connect(lg); lg.connect(pad.gain); lfo.start();
+  const buf=actx.createBuffer(1,actx.sampleRate*2,actx.sampleRate),d=buf.getChannelData(0); for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+  const noise=actx.createBufferSource(); noise.buffer=buf; noise.loop=true; const bp=actx.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=480; bp.Q.value=0.7; const ng=actx.createGain(); ng.gain.value=0.035; noise.connect(bp); bp.connect(ng); ng.connect(master); noise.start();
+  const w=actx.createOscillator(); w.frequency.value=0.13; const wg=actx.createGain(); wg.gain.value=0.028; w.connect(wg); wg.connect(ng.gain); w.start(); }
+function sfxCast(){ if(!actx)return; const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain(),bp=actx.createBiquadFilter(); o.type='sawtooth'; bp.type='bandpass'; bp.Q.value=6;
+  o.frequency.setValueAtTime(880,t); o.frequency.exponentialRampToValueAtTime(170,t+0.25); bp.frequency.setValueAtTime(1300,t); bp.frequency.exponentialRampToValueAtTime(320,t+0.25);
+  g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.16,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+0.32); o.connect(bp); bp.connect(g); g.connect(master); o.start(t); o.stop(t+0.34); }
+function sfxStep(){ if(!actx)return; const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain(); o.type='sine'; o.frequency.setValueAtTime(125,t); o.frequency.exponentialRampToValueAtTime(58,t+0.08); g.gain.setValueAtTime(0.1,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.12); o.connect(g); g.connect(master); o.start(t); o.stop(t+0.13); }
 const clock=new THREE.Clock(); let shownFloor=1; const hinted={};
 function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getDelta(),0.05);
   if(controls.isLocked){
@@ -899,6 +915,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     if(keys['Space']&&onGround){ vy=7.8; onGround=false; }
     vy-=22*dt; pos.y+=vy*dt;
     if(pos.y<gh+EYE){ pos.y=gh+EYE; vy=0; onGround=true; } else onGround=false;
+    if(moving&&onGround){ stepTimer-=dt; if(stepTimer<=0){ sfxStep(); stepTimer=speed>8?0.32:0.46; } } else stepTimer=0;
     const r=currentRoom(pos); setRoom(r?r.name:"");
     const fl=currentFloor(pos);
     if(fl!==shownFloor){ shownFloor=fl; floorLabel.textContent=fname[fl]; mapCap.textContent="Floor "+fl;
