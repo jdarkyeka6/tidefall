@@ -847,6 +847,23 @@ function crestTex(){ const c=document.createElement('canvas'); c.width=c.height=
 const crestMat=new THREE.MeshStandardMaterial({map:crestTex(),roughness:.85,side:THREE.DoubleSide});
 function crestBanner(x,z,wall,y){ const hz=(wall==='N'||wall==='S'); box(x,z,hz?2.2:0.16,hz?0.16:2.2,3.4,y,crestMat,false,false); box(x,z,hz?2.6:0.24,hz?0.24:2.6,0.2,y+3.4,MF.woodDark,false,false); }
 crestBanner(-12,53.7,'N',2.4); crestBanner(12,53.7,'N',2.4); crestBanner(-30,-51.6,'N',2.0);
+/* ====================================================================
+   LIVING NPCs: wandering students (rotatable groups)
+   ==================================================================== */
+function groupFigure(o){ const g=new THREE.Group();
+  const bt=colMat(o.bottom||0x2a2a30),tp=colMat(o.top||0x39415a),sk=colMat(o.skin||0xeec6a0),hr=colMat(o.hair||0x3a2a1a),un=colMat(o.under||0xd8d2c0);
+  const addB=(lx,lz,w,d,h,ly,mat)=>{ const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat); m.position.set(lx,ly+h/2,lz); m.receiveShadow=true; g.add(m); };
+  const addM=(geo,mat,lx,ly,lz)=>{ const m=new THREE.Mesh(geo,mat); m.position.set(lx,ly,lz); g.add(m); };
+  addB(-0.15,0,0.26,0.26,0.82,0,bt); addB(0.15,0,0.26,0.26,0.82,0,bt);
+  addB(0,0,0.6,0.38,0.6,0.82,tp); addB(-0.39,0,0.16,0.2,0.62,0.82,tp); addB(0.39,0,0.16,0.2,0.62,0.82,tp);
+  addB(0,0,0.36,0.36,0.12,1.42,un); addM(sph(0.2,10),sk,0,1.72,0); addM(sph(0.23,10),hr,0,1.84,-0.02);
+  if(o.longHair)addB(0,0.17,0.34,0.12,0.5,1.29,hr); return g; }
+const wanderers=[];
+function addWanderer(o,path){ const y=o.y||0; const g=groupFigure(o); g.position.set(path[0][0],y,path[0][1]); world.add(g);
+  const rec={obj:g,name:o.name,line:o.line||"",x:path[0][0],z:path[0][1],fl:(y>13?3:y>6?2:1),path,seg:0,tt:0,sp:o.sp||1.6,ph:o.ph||0,y};
+  wanderers.push(rec); npcs.push(rec); }
+addWanderer({name:"Noah Price",line:"Late again — Hale's going to have my head.",hair:0x2a1d12,top:0x3a5a4a,bottom:0x2a2a30,sp:2.4,ph:1}, [[-14,10],[14,10],[14,20],[-14,20]]);
+addWanderer({name:"Tidefall Student",line:"Mind the wet cobbles by the fountain.",hair:0x6a4a2a,top:0x5a3a5a,bottom:0x2c2c34,longHair:true,sp:1.9,ph:3}, [[18,-14],[18,18],[8,18],[8,-14]]);
 const clock=new THREE.Clock(); let shownFloor=1; const hinted={};
 function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getDelta(),0.05);
   if(controls.isLocked){
@@ -892,7 +909,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
   for(const tg of targets){ if(tg.hitT>0){ tg.hitT-=dt; tg.ring.scale.setScalar(1+Math.max(0,tg.hitT)*2.2); } }
   for(const p of impactPool){ if(p.life>0){ p.life-=dt; const f=Math.max(0,p.life/0.26); p.mesh.scale.setScalar((1-f)*1.6+0.3); if(p.life<=0)p.mesh.visible=false; } }
   for(const p of trailPool){ if(p.life>0){ p.life-=dt; const s=Math.max(0,p.life/0.35); p.mesh.scale.setScalar(s*0.85+0.05); if(p.life<=0)p.mesh.visible=false; } }
-  for(const v of vrmList){ if(v.update)v.update(dt); }
+  for(const v of vrmList){ if(v.scene){ const pp=controls.getObject().position; const a=Math.atan2(pp.x-v.scene.position.x,pp.z-v.scene.position.z); v.scene.rotation.y+=(a-v.scene.rotation.y)*Math.min(1,dt*2.5); const sp=(v.humanoid&&v.humanoid.getNormalizedBoneNode)?v.humanoid.getNormalizedBoneNode('spine'):null; if(sp)sp.rotation.x=Math.sin(t*1.4)*0.04; } if(v.update)v.update(dt); }
   fpsAcc+=dt; fpsFrames++; if(fpsAcc>=0.5){ fpsVal=Math.round(fpsFrames/fpsAcc); fpsAcc=0; fpsFrames=0; fpsEl.textContent=fpsVal+" fps"; }
   if(fw)fw.position.y=1.2+Math.sin(t*1.5)*0.04;
   for(const w of waterFx)w.mesh.scale.y=1+Math.sin(t*3)*0.14;
@@ -901,6 +918,9 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
   for(const mt of motes){ if(mt.mesh.visible){ mt.mesh.position.y=mt.by+Math.sin(t*mt.sp+mt.ph)*0.6; mt.mesh.position.x=mt.x+Math.sin(t*0.3+mt.ph)*0.8; } }
   if(rainOn){ for(const d of rain){ if(!d.mesh.visible){ d.mesh.visible=true; resetDrop(d); } d.y-=d.sp*dt; if(d.y<0.2)resetDrop(d); d.mesh.position.set(d.x,d.y,d.z); } }
   else for(const d of rain) if(d.mesh.visible)d.mesh.visible=false;
+  for(const w of wanderers){ const A=w.path[w.seg],B=w.path[(w.seg+1)%w.path.length],dx=B[0]-A[0],dz=B[1]-A[1],len=Math.hypot(dx,dz)||1;
+    w.tt+=w.sp*dt/len; if(w.tt>=1){ w.tt=0; w.seg=(w.seg+1)%w.path.length; }
+    const x=A[0]+dx*w.tt,z=A[1]+dz*w.tt; w.obj.position.set(x,w.y+Math.abs(Math.sin(t*6+w.ph))*0.07,z); w.obj.rotation.y=Math.atan2(dx,dz); w.x=x; w.z=z; }
   renderer.render(scene,camera);
 }
 animate();
