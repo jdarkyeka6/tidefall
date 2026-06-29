@@ -136,6 +136,7 @@ const spellBolts=[];
 const castRings=[];
 const npcs=[];
 let skyMat=null;
+const shards=[]; let shardCount=0; const SHARD_TOTAL=12;
 
 function box(cx,cz,w,d,h,y,mat,collide=true,cast=true){
   const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);
@@ -689,7 +690,7 @@ function castSpell(){ if(!controls.isLocked)return; const s=SPELLS[curSpell]; if
 addEventListener('mousedown',e=>{ if(e.button===0)castSpell(); });
 addEventListener('keydown',e=>{
   if(e.code==='KeyF')castSpell();
-  else if(e.code==='Digit1')curSpell=0; else if(e.code==='Digit2')curSpell=1; else if(e.code==='Digit3')curSpell=2; else if(e.code==='Digit4')curSpell=3;
+  else if(e.code==='Digit1'){curSpell=0;sfxBlip();} else if(e.code==='Digit2'){curSpell=1;sfxBlip();} else if(e.code==='Digit3'){curSpell=2;sfxBlip();} else if(e.code==='Digit4'){curSpell=3;sfxBlip();}
   else if(e.code==='KeyE')interact();
   else if(e.code==='KeyP'){ lowSpec=!lowSpec; renderer.shadowMap.enabled=!lowSpec; renderer.setPixelRatio(lowSpec?1:dpr0);
     scene.traverse(o=>{ if(o.material){ (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{m.needsUpdate=true;}); } }); }
@@ -771,6 +772,8 @@ function drawMap(p){ const fl=currentFloor(p); const W=mapCv.width,H=mapCv.heigh
   for(const t of T){ mg.fillStyle=t[2]; mg.beginPath(); mg.arc(tx(t[0]),tz(t[1]),10*scl,0,7); mg.fill(); mg.strokeStyle="rgba(0,0,0,.5)"; mg.lineWidth=1; mg.stroke(); }
   mg.strokeStyle="#d9a441"; mg.lineWidth=1.5; mg.strokeRect(tx(-IN),tz(-IN),IN*2*scl,IN*2*scl);
   if(fl===1){ mg.fillStyle="#3aa0c8"; mg.beginPath(); mg.arc(tx(0),tz(2),4.4*scl,0,7); mg.fill(); }
+  for(const n of npcs){ if(n.fl!==fl)continue; mg.fillStyle="#ffe6a0"; mg.beginPath(); mg.arc(tx(n.x),tz(n.z),2,0,7); mg.fill(); }
+  for(const sh of shards){ if(sh.got||sh.fl!==fl)continue; mg.fillStyle="#4fe0d0"; mg.beginPath(); mg.arc(tx(sh.x),tz(sh.z),2.4,0,7); mg.fill(); }
   /* player */
   mg.save(); mg.translate(tx(p.x),tz(p.z)); mg.rotate(-camera.rotation.y);
   mg.fillStyle="#fff"; mg.strokeStyle="#0c1c25"; mg.lineWidth=1; mg.beginPath(); mg.moveTo(0,-6); mg.lineTo(4,5); mg.lineTo(0,2.5); mg.lineTo(-4,5); mg.closePath(); mg.fill(); mg.stroke(); mg.restore();
@@ -813,7 +816,7 @@ const MOREL={
 "Mordecai “Mord”":["Enjoy the view. It won't last.","Every wall in this castle remembers something.","You think the stairs only go up?"]
 };
 /* objectives */
-const OBJ=[{t:"Cast your first spell",done:false},{t:"Hit a training dummy",done:false},{t:"Climb to Floor 3",done:false},{t:"Meet Prof. Hale",done:false},{t:"Talk to the trio (E)",done:false},{t:"Descend to the Undercroft",done:false}];
+const OBJ=[{t:"Cast your first spell",done:false},{t:"Hit a training dummy",done:false},{t:"Climb to Floor 3",done:false},{t:"Meet Prof. Hale",done:false},{t:"Talk to the trio (E)",done:false},{t:"Descend to the Undercroft",done:false},{t:"Gather 8 Tide Shards",done:false}];
 /* HUD elements */
 function mkEl(css){ const e=document.createElement('div'); e.style.cssText=css; hud.appendChild(e); return e; }
 const statEl=mkEl("position:absolute;right:16px;bottom:16px;width:196px;background:rgba(8,22,30,.82);border:1px solid rgba(217,164,65,.35);border-radius:12px;padding:10px 12px;font:12px/1.4 ui-monospace,monospace;color:#efe6d2");
@@ -822,7 +825,7 @@ const objEl=mkEl("position:absolute;top:66px;left:20px;font:12px/1.7 'Iowan Old 
 const loreEl=mkEl("position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,86vw);background:rgba(8,22,30,.92);border:1px solid rgba(217,164,65,.45);border-radius:14px;padding:20px 24px;font:15px/1.6 'Iowan Old Style',Georgia,serif;color:#efe6d2;opacity:0;transition:opacity .25s ease;pointer-events:none");
 function bar(label,val,col){ return "<div style='display:flex;justify-content:space-between'><span>"+label+"</span><span>"+Math.round(val)+"</span></div><div style='height:6px;background:rgba(255,255,255,.12);border-radius:4px;margin:2px 0 7px'><div style='height:100%;width:"+Math.max(0,val)+"%;background:"+col+";border-radius:4px'></div></div>"; }
 function renderStats(){ const s=SPELLS[curSpell];
-  statEl.innerHTML="<div style='color:#d9a441;letter-spacing:.12em;margin-bottom:6px'>"+s.n.toUpperCase()+" <span style='color:#7c8a92'>[1-4]</span></div>"+bar("Mana",mana,"#6fb6ff")+bar("Stamina",stamina,"#7ad07a")+"<div style='display:flex;justify-content:space-between'><span>Hits</span><span style='color:#ffce6a'>"+score+"</span></div>"; }
+  statEl.innerHTML="<div style='color:#d9a441;letter-spacing:.12em;margin-bottom:6px'>"+s.n.toUpperCase()+" <span style='color:#7c8a92'>[1-4]</span></div>"+bar("Mana",mana,"#6fb6ff")+bar("Stamina",stamina,"#7ad07a")+"<div style='display:flex;justify-content:space-between'><span>Hits</span><span style='color:#ffce6a'>"+score+"</span></div><div style='display:flex;justify-content:space-between'><span>Shards</span><span style='color:#4fe0d0'>"+shardCount+"/"+SHARD_TOTAL+"</span></div>"; }
 function renderObj(){ objEl.innerHTML="<div style='color:#d9a441;letter-spacing:.1em;margin-bottom:3px'>OBJECTIVES</div>"+OBJ.map(o=>(o.done?"<span style='color:#7ad07a'>✓ </span><s>":"<span style='color:#caa15a'>○ </span>")+o.t+(o.done?"</s>":"")).join("<br>"); }
 renderStats(); renderObj();
 function interact(){ if(!controls.isLocked)return; const pos=controls.getObject().position,fl=currentFloor(pos);
@@ -883,7 +886,7 @@ addWanderer({name:"Tidefall Student",line:"Mind the wet cobbles by the fountain.
 /* ====================================================================
    AUDIO (synthesised via WebAudio, no asset files) — starts on first lock
    ==================================================================== */
-let actx=null,master=null,stepTimer=0;
+let actx=null,master=null,stepTimer=0,wasGround=true;
 function initAudio(){ if(actx)return; try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
   master=actx.createGain(); master.gain.value=0.5; master.connect(actx.destination);
   const pad=actx.createGain(); pad.gain.value=0.05; pad.connect(master);
@@ -896,6 +899,18 @@ function sfxCast(){ if(!actx)return; const t=actx.currentTime,o=actx.createOscil
   o.frequency.setValueAtTime(880,t); o.frequency.exponentialRampToValueAtTime(170,t+0.25); bp.frequency.setValueAtTime(1300,t); bp.frequency.exponentialRampToValueAtTime(320,t+0.25);
   g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.16,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+0.32); o.connect(bp); bp.connect(g); g.connect(master); o.start(t); o.stop(t+0.34); }
 function sfxStep(){ if(!actx)return; const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain(); o.type='sine'; o.frequency.setValueAtTime(125,t); o.frequency.exponentialRampToValueAtTime(58,t+0.08); g.gain.setValueAtTime(0.1,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.12); o.connect(g); g.connect(master); o.start(t); o.stop(t+0.13); }
+function blip(freq,dur,type,vol){ if(!actx)return; const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain(); o.type=type||'triangle'; o.frequency.setValueAtTime(freq,t); g.gain.setValueAtTime(vol||0.1,t); g.gain.exponentialRampToValueAtTime(0.0001,t+(dur||0.15)); o.connect(g); g.connect(master); o.start(t); o.stop(t+(dur||0.15)+0.02); }
+function sfxHit(){ if(!actx)return; const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain(); o.type='square'; o.frequency.setValueAtTime(320,t); o.frequency.exponentialRampToValueAtTime(90,t+0.12); g.gain.setValueAtTime(0.13,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.14); o.connect(g); g.connect(master); o.start(t); o.stop(t+0.15); }
+function sfxThud(){ if(!actx)return; const t=actx.currentTime,o=actx.createOscillator(),g=actx.createGain(); o.type='sine'; o.frequency.setValueAtTime(90,t); o.frequency.exponentialRampToValueAtTime(40,t+0.12); g.gain.setValueAtTime(0.15,t); g.gain.exponentialRampToValueAtTime(0.0001,t+0.16); o.connect(g); g.connect(master); o.start(t); o.stop(t+0.17); }
+function sfxCollect(){ blip(880,0.12,'sine',0.12); setTimeout(()=>blip(1320,0.16,'sine',0.11),70); }
+function sfxBlip(){ blip(660,0.07,'square',0.06); }
+/* ====================================================================
+   COLLECTIBLES: tide shards + treasure compass
+   ==================================================================== */
+function flOf(y){ return y>13?3:y>6?2:(y<-2?0:1); }
+function shard(x,z,y){ const m=new THREE.Mesh(sph(0.22,8),glowMat(0x4fe0d0)); m.position.set(x,y,z); world.add(m); shards.push({mesh:m,x,z,y,fl:flOf(y),got:false}); }
+[[10,8,0.9],[-23,-40,0.9],[15,-44,0.9],[-40,-10,0.9],[8,16,0.9],[0,-44,7.9],[-24,38,7.9],[40,0,7.9],[-40,20,14.9],[40,20,14.9],[-3,-44,14.9],[0,96,-5.4]].forEach(s=>shard(s[0],s[1],s[2]));
+const arrowEl=mkEl("position:absolute;left:50%;top:52px;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:16px solid #4fe0d0;transform-origin:50% 70%;opacity:0;filter:drop-shadow(0 0 5px #4fe0d0)");
 const clock=new THREE.Clock(); let shownFloor=1; const hinted={};
 function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getDelta(),0.05);
   if(controls.isLocked){
@@ -906,6 +921,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     EYE+=((crouch?1.05:1.7)-EYE)*Math.min(1,dt*10);
     if(wantSprint)stamina=Math.max(0,stamina-dt*30); else stamina=Math.min(100,stamina+dt*20);
     mana=Math.min(100,mana+dt*16); if(castCD>0)castCD-=dt;
+    const tf=wantSprint?78:72; if(Math.abs(camera.fov-tf)>0.1){ camera.fov+=(tf-camera.fov)*Math.min(1,dt*6); camera.updateProjectionMatrix(); }
     camera.getWorldDirection(fwd); fwd.y=0; fwd.normalize(); right.crossVectors(fwd,camera.up).normalize();
     vel.set(0,0,0);
     if(keys['KeyW'])vel.add(fwd); if(keys['KeyS'])vel.sub(fwd); if(keys['KeyD'])vel.add(right); if(keys['KeyA'])vel.sub(right);
@@ -916,6 +932,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     vy-=22*dt; pos.y+=vy*dt;
     if(pos.y<gh+EYE){ pos.y=gh+EYE; vy=0; onGround=true; } else onGround=false;
     if(moving&&onGround){ stepTimer-=dt; if(stepTimer<=0){ sfxStep(); stepTimer=speed>8?0.32:0.46; } } else stepTimer=0;
+    if(onGround&&!wasGround)sfxThud(); wasGround=onGround;
     const r=currentRoom(pos); setRoom(r?r.name:"");
     const fl=currentFloor(pos);
     if(fl!==shownFloor){ shownFloor=fl; floorLabel.textContent=fname[fl]; mapCap.textContent="Floor "+fl;
@@ -929,6 +946,9 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     else npcEl.style.opacity=0;
     if(loreOpen&&loreTarget&&loreTarget.fl===fl&&Math.hypot(pos.x-loreTarget.x,pos.z-loreTarget.z)<4.2){ loreEl.innerHTML="<div style='color:#d9a441;letter-spacing:.1em;margin-bottom:8px'>"+loreTarget.title.toUpperCase()+"</div>"+loreTarget.text+"<div style='color:#7c8a92;margin-top:12px;font-size:12px'>press E to close</div>"; loreEl.style.opacity=1; } else { loreOpen=false; loreEl.style.opacity=0; }
     if(castedOnce)OBJ[0].done=true; if(fl===3)OBJ[2].done=true; if(fl===0)OBJ[5].done=true; if(near&&near.name==="Prof. Rowan Hale")OBJ[3].done=true;
+    for(const sh of shards){ if(!sh.got&&sh.fl===fl&&Math.hypot(pos.x-sh.x,pos.z-sh.z)<1.8){ sh.got=true; sh.mesh.visible=false; shardCount++; if(shardCount>=8)OBJ[6].done=true; sfxCollect(); } }
+    let sb=null,sd=1e9; for(const sh of shards){ if(sh.got||sh.fl!==fl)continue; const d=Math.hypot(pos.x-sh.x,pos.z-sh.z); if(d<sd){sd=d;sb=sh;} }
+    if(sb){ const ang=Math.atan2(sb.x-pos.x,sb.z-pos.z)-Math.atan2(fwd.x,fwd.z); arrowEl.style.transform="translateX(-50%) rotate("+(ang*180/Math.PI)+"deg)"; arrowEl.style.opacity=.85; } else arrowEl.style.opacity=0;
     renderStats(); renderObj();
   }
   const t=clock.elapsedTime;
@@ -937,7 +957,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
   for(const s of spellBolts){ const f=Math.sin(t*s.spd+s.ph)*0.5+0.5; s.mesh.position.set(s.ax+(s.bx-s.ax)*f,s.ay+(s.by-s.ay)*f+Math.sin(f*Math.PI)*1.0,s.az+(s.bz-s.az)*f); s.mesh.scale.setScalar(0.8+Math.sin(t*10+s.ph)*0.2); }
   for(const r of castRings){ const f=(t*r.spd+r.ph)%1; r.mesh.scale.set(0.3+f*2.4,1,0.3+f*2.4); r.mat.opacity=0.65*(1-f); }
   for(const b of boltPool){ if(b.life>0){ b.life-=dt; const bp=b.mesh.position; bp.addScaledVector(b.vel,dt); emitTrail(bp.x,bp.y,bp.z,b.col);
-    for(const tg of targets){ if(Math.abs(bp.y-tg.y)<1.3&&Math.hypot(bp.x-tg.x,bp.z-tg.z)<tg.r){ emitImpact(bp.x,bp.y,bp.z,b.col||0xffffff); tg.hitT=0.3; score++; OBJ[1].done=true; b.life=0; break; } }
+    for(const tg of targets){ if(Math.abs(bp.y-tg.y)<1.3&&Math.hypot(bp.x-tg.x,bp.z-tg.z)<tg.r){ emitImpact(bp.x,bp.y,bp.z,b.col||0xffffff); tg.hitT=0.3; score++; OBJ[1].done=true; sfxHit(); b.life=0; break; } }
     if(b.life<=0)b.mesh.visible=false; } }
   for(const tg of targets){ if(tg.hitT>0){ tg.hitT-=dt; tg.ring.scale.setScalar(1+Math.max(0,tg.hitT)*2.2); } }
   for(const p of impactPool){ if(p.life>0){ p.life-=dt; const f=Math.max(0,p.life/0.26); p.mesh.scale.setScalar((1-f)*1.6+0.3); if(p.life<=0)p.mesh.visible=false; } }
@@ -951,6 +971,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
   for(const mt of motes){ if(mt.mesh.visible){ mt.mesh.position.y=mt.by+Math.sin(t*mt.sp+mt.ph)*0.6; mt.mesh.position.x=mt.x+Math.sin(t*0.3+mt.ph)*0.8; } }
   if(rainOn){ for(const d of rain){ if(!d.mesh.visible){ d.mesh.visible=true; resetDrop(d); } d.y-=d.sp*dt; if(d.y<0.2)resetDrop(d); d.mesh.position.set(d.x,d.y,d.z); } }
   else for(const d of rain) if(d.mesh.visible)d.mesh.visible=false;
+  for(const sh of shards){ if(!sh.got){ sh.mesh.rotation.y=t*1.5; sh.mesh.position.y=sh.y+Math.sin(t*2+sh.x)*0.12; } }
   for(const w of wanderers){ const A=w.path[w.seg],B=w.path[(w.seg+1)%w.path.length],dx=B[0]-A[0],dz=B[1]-A[1],len=Math.hypot(dx,dz)||1;
     w.tt+=w.sp*dt/len; if(w.tt>=1){ w.tt=0; w.seg=(w.seg+1)%w.path.length; }
     const x=A[0]+dx*w.tt,z=A[1]+dz*w.tt; w.obj.position.set(x,w.y+Math.abs(Math.sin(t*6+w.ph))*0.07,z); w.obj.rotation.y=Math.atan2(dx,dz); w.x=x; w.z=z; }
