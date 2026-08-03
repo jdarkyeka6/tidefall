@@ -1,0 +1,2194 @@
+TIDEFALL CANON
+SOURCE-DERIVED MASTER REFERENCE
+Version: 0.1
+Generated from the uploaded tidefall-main repository on 3 August 2026
+
+======================================================================
+HOW TO USE THIS FILE
+======================================================================
+
+This file combines the useful lore, character, visual, relationship, academy,
+map, and game-design information found across the repository.
+
+STATUS LABELS
+
+LOCKED
+Directly described as canon, fixed, non-negotiable, absolute, or repeatedly
+supported by multiple files.
+
+ESTABLISHED
+Clearly present in a dedicated source file, but not explicitly labelled locked.
+
+IMPLEMENTED
+Present in the current playable web prototype. This may represent intended
+canon, but implementation alone does not make it permanent story canon.
+
+OPTIONAL / ROUTE DESIGN
+A possible romance, ending, player route, or dramatic setup. It is valid design
+material, not a confirmed event in the story.
+
+DRAFT / NEEDS CONFIRMATION
+Present only in an older prototype, concept image, inconsistent file, or
+conflicting source.
+
+UNKNOWN
+Not established by the repository.
+
+IMPORTANT COVERAGE NOTE
+
+The repository contains character bibles, relationship systems, Orders,
+visual references, a fantasy-Australia concept map, web-game prototypes,
+3D character assets, and a starter Unity project.
+
+The ZIP does not contain the full Tidefall book manuscripts or a complete
+book-by-book plot outline. This file therefore records the canon available in
+the library, but it cannot reconstruct plot events that are not stored there.
+
+======================================================================
+1. CORE IDENTITY
+======================================================================
+
+TITLE / WORLD NAME
+Tidefall
+
+PRIMARY SETTING
+Tidefall Academy and Tidefall Castle, a coastal Australian magic academy.
+
+CORE CULTURAL ANCHOR
+Australia is not decorative background. Climate, beaches, coastal life,
+casual clothing, and the contrast between normal Australian life and magical
+danger are part of Tidefall's identity.
+
+CURRENT CENTRAL CAST
+LOCKED: The main trio is Jasper Vale, Harper Vale, and Ava Monroe.
+
+DEVELOPMENT NOTE OUTSIDE THE REPOSITORY
+Lily is a possible fourth main character who may be introduced in Book 4.
+She is not currently an established member of the trio and is not present in
+the uploaded repository.
+
+CENTRAL NARRATIVE ENGINE
+The trio embodies three different responses to pressure:
+
+Jasper chooses.
+Harper forces action by making the immediate danger impossible to ignore.
+Ava exposes the delayed cost and long-term consequences.
+
+The story works best when none of them has a perfect answer.
+
+======================================================================
+2. THE MAIN TRIO
+======================================================================
+
+----------------------------------------------------------------------
+JASPER VALE
+----------------------------------------------------------------------
+
+STATUS
+LOCKED main character.
+Player character and narrative centre in the game design.
+Primary duelist.
+First appears at the school gates.
+
+CORE THEME
+Choice under pressure.
+The cost of choosing.
+He matters whether he wants to or not.
+
+CORE FUNCTION
+Jasper is the decision axis of the trio. He carries moral weight, receives
+incomplete information, and must choose between outcomes that all have costs.
+When the trio disagrees, Jasper chooses. He must not hand responsibility to
+someone else merely to avoid blame.
+
+PERSONALITY
+Thoughtful, cautious but not cowardly, empathetic, observant, self-questioning,
+and capable under pressure. He listens before acting. He notices emotional
+changes in other people. He often hesitates before speaking or choosing, but
+once committed he follows through completely.
+
+Jasper takes responsibility even when an event is not entirely his fault.
+He second-guesses successful outcomes and tends to carry problems alone.
+He rarely boasts and is not an action-first show-off.
+
+He never abandons someone during a crisis, blames others to escape guilt, says
+that a crisis is not his problem, or casually assumes someone else will handle
+it.
+
+BACKSTORY PRESSURE
+Jasper grew up knowing he was capable without understanding what that capability
+meant. Adults quietly expected him to handle difficult situations. Early events
+reinforced a dangerous belief: when he acted, things improved; when he
+hesitated, consequences followed.
+
+Another design document describes the unseen event that broke him:
+he made a careful, morally right choice and harm still followed. This proved
+that thinking carefully does not guarantee safety. He internalised
+responsibility for consequences.
+
+TRAUMATIC PRESSURE POINTS
+- Being present when something went wrong and believing he should have stopped it.
+- Being praised for surviving rather than for choosing.
+- Realising that winning a duel does not prevent loss elsewhere.
+- Being forced to choose between people he cares about.
+- Having his hesitation publicly exposed.
+- Being told his potential matters more than his judgement.
+
+DEEPEST FEAR
+Choosing wrong again, acting without certainty, or making a decision alone.
+
+WHAT HE AVOIDS
+The possibility that some outcomes are unavoidable. He resists fate and
+prophecy because accepting inevitability could become an excuse for inaction.
+
+EMOTIONAL BEHAVIOUR
+Jasper carries guilt quietly. He replays decisions, seeks confirmation, delays
+commitment, avoids eye contact, goes still, and answers briefly. His voice
+steadies in combat but can waver in personal moments. He minimises his own pain.
+
+ATTACHMENT AND TRUST
+Trust must be earned. Once earned, Jasper's loyalty is deep and stubborn.
+When detaching, he withdraws instead of confronting immediately.
+
+He feels safest when people are honest during conflict and when he is allowed
+to fail without being judged as worthless.
+
+Jealousy or trust pressure can be triggered when he is excluded from major
+decisions or when another person assumes responsibility for his mistake.
+
+DIALOGUE
+Short to medium sentences. Clear and direct. Rarely rambles.
+Measured when calm. Clipped and controlled when angry. Understated when hurt.
+Hard truths are often preceded by a pause.
+
+He would not say:
+"It's not my problem."
+"Someone else can handle it."
+"I didn't care anyway."
+
+VISUAL IDENTITY
+Upright, alert, never completely relaxed. Weight slightly forward.
+Eyes scan his surroundings. His grip tightens before combat.
+Practical clothing rather than flair.
+Magic is clean and controlled, not wild or showy.
+
+VISUAL CONFLICT TO RESOLVE
+The group art, Jasper turn-around image, and current web prototype depict Jasper
+with blond hair. Most numbered Jasper style sheets depict him with black hair.
+Blond currently has stronger cross-source support, but this must be formally
+confirmed before treating hair colour as locked.
+
+GAMEPLAY IDENTITY
+Momentum-based dueling.
+Precision over raw power.
+Adaptive spell use.
+High trust causes allies to respond faster and unlocks combinations.
+Low trust makes allies hesitate.
+Broken trust creates defensive penalties and temporarily narrows dialogue.
+
+PLAYER RESPONSE LOGIC
+- Hesitation increases world tension and may cause NPCs to act independently.
+- Recklessness can create immediate success and long-term damage.
+- Lies create guilt and return later.
+- Unfair victories still count as victories, but relationships strain.
+The method of winning matters.
+
+ARC
+Early: reactive, capable but unsure, afraid of choosing incorrectly.
+Middle: proactive, owns outcomes, clashes with protectors and planners.
+Possible end states:
+- A confident leader who accepts blame.
+- An isolated protector carrying the cost alone.
+- A balanced leader who trusts others with choice.
+
+HARD WRITING LIMITS
+Do not make Jasper a blank or silent player avatar.
+Do not make him cruel, dismissive, reckless, instantly decisive, or permanently
+confident.
+Do not remove consequences from his choices.
+
+----------------------------------------------------------------------
+HARPER VALE
+----------------------------------------------------------------------
+
+STATUS
+LOCKED main character.
+Fixed companion.
+Protector and moral enforcer.
+Appears beside Jasper during the arrival sequence.
+
+CORE THEME
+Protection at any cost.
+If Harper steps in, something is already wrong.
+
+CORE FUNCTION
+Harper represents the immediate cost. She asks who gets hurt now and what breaks
+if the trio waits. She creates urgency through time limits, physical danger,
+and emotional immediacy.
+
+Harper is always present in the central design. Antagonists must not remove her
+through routine kidnapping, incapacitation, unexplained absence, or a stronger
+enemy created merely to sideline her. Instead, the conflict should make her
+strength costly.
+
+PERSONALITY
+Solid, direct, capable, decisive, protective, and difficult to stop once danger
+escalates. Harper does not wait for consensus during violence. She intervenes
+because her experience taught her that someone else will wait too long.
+
+She prioritises Jasper's safety over rules, challenges authority, makes
+unilateral decisions, and frames action as necessity rather than preference.
+She rarely asks for emotional support and rarely admits uncertainty aloud.
+
+She never leaves someone defenceless, waits for permission during immediate
+violence, manipulates people to get her way, or becomes passive.
+
+BACKSTORY PRESSURE
+Harper learned that hesitation gets people hurt. Moments in her past where she
+did hesitate caused someone else to pay the cost. The narrative should neither
+fully exonerate nor fully condemn her. Harper believes her interventions were
+necessary even when they haunt her.
+
+She does not regret acting.
+She regrets acting alone.
+
+TRAUMATIC PRESSURE POINTS
+- Being the only person willing to step in.
+- Having her actions criticised after they prevented a worse outcome.
+- Being praised for strength but distrusted for judgement.
+- Being told she made the situation worse.
+- Being physically or institutionally prevented from acting during danger.
+- Watching Jasper suffer because he hesitated.
+
+DEEPEST FEAR
+Powerlessness.
+
+WHAT SHE AVOIDS
+The possibility that force can become cruelty. She insists on a difference
+between necessary and excessive action while privately fearing that she may no
+longer know exactly where the line is.
+
+EMOTIONAL BEHAVIOUR
+Harper expresses loyalty through action. Under stress she becomes more
+controlling rather than more distant. When hurt, she speaks less and becomes
+hyper-efficient. She raises her voice mainly when ignored. Her strongest anger
+is often quiet.
+
+ATTACHMENT AND TRUST
+Protective bonding. Direct confrontation is a safety signal. She needs to be
+trusted with real responsibility.
+
+Jealousy and trust pressure can be triggered when Jasper trusts someone else
+with combat decisions or when authority figures reduce her role.
+
+DIALOGUE
+Short, plain, practical, and command-oriented under pressure.
+Minimal metaphor. Emotion is implied instead of explained.
+Calm Harper is blunt, watchful, and quietly reassuring.
+Angry Harper accuses directly without hedging.
+
+She would not say:
+"Do whatever you want."
+"I don't care."
+"I was wrong to step in."
+"Someone else will handle it."
+
+VISUAL IDENTITY
+Grounded and unyielding. Instinctively places herself between danger and others.
+Minimal wasted movement. Steps forward as conflict rises.
+Guarded and assessing expression.
+Eye-line elevated and scanning.
+Hands ready even while apparently relaxed.
+Magic manifests forcefully and physically.
+
+Harper must look capable. Framing or clothing should not imply helplessness or
+indecision.
+
+VISUAL IDENTIFIERS
+The repository consistently depicts Harper with red or auburn hair, often long
+or braided, and green eyes. Her clothing system moves between academy uniform,
+modified uniform, sleepwear, casual Australian clothes, action clothing,
+mourning, structured public clothing, formal dress, and beach/swimwear.
+
+GAMEPLAY IDENTITY
+Defensive anchor and threat controller.
+High trust unlocks damage mitigation and emergency intervention.
+Low trust causes unpredictable intervention and can temporarily override player
+actions during crises.
+Broken trust causes Harper to operate independently and removes coordinated
+strategies.
+
+Loss of trust never makes Harper powerless. It changes how she helps.
+
+ARC
+Early: absolute protector; control through force.
+Middle: conflicted; struggles with restraint.
+Possible end states:
+- A balanced guardian who trusts others.
+- An isolated sentinel carrying the cost alone.
+- A loyal equal who protects without dominating.
+
+HARD WRITING LIMITS
+Do not make Harper passive, comic relief, incompetent, or merely a support
+character.
+Do not casually remove her from a problem.
+Breaking a core rule must permanently alter her relationship with Jasper and
+carry an irreversible cost.
+
+----------------------------------------------------------------------
+AVA MONROE
+----------------------------------------------------------------------
+
+STATUS
+LOCKED main character.
+Strategist, analyst, and long-view decision maker.
+First appears early in an academic setting, observing before acting.
+
+CORE THEME
+Control through understanding.
+She already knows what this will cost.
+
+CORE FUNCTION
+Ava represents delayed cost. She identifies patterns, predicts systemic damage,
+tracks reputation and resource consequences, and warns what a choice will make
+possible later.
+
+Ava should speak less often than Harper. Her warnings are not tutorials.
+Most choices receive no Ava warning. This preserves the weight of the moments
+when she does speak.
+
+PERSONALITY
+Composed, intentional, precise, observant, and usually two steps ahead.
+She evaluates risk before acting, tracks consequences internally, speaks late,
+offers solutions more readily than comfort, and masks stress through efficiency.
+
+Ava rarely acts emotionally in public or raises her voice. She never gambles
+blindly, delegates critical decisions casually, or chooses comfortable
+ignorance over uncertainty.
+
+Ava must never feel random.
+
+BACKSTORY PRESSURE
+Ava learned that outcomes matter more than intentions. She became skilled at
+recognising repeating conflicts, predicting collapse, and seeing regret before
+others did. She was often right too early. People ignored her warnings, then the
+events unfolded as predicted.
+
+Ava does not fear being wrong.
+She fears being right and ignored.
+
+TRAUMATIC PRESSURE POINTS
+- Watching preventable harm occur after she warned people.
+- Being called cold for choosing the least-worst outcome.
+- Being relied upon for answers she never wanted to give.
+- Being forced to decide without enough information.
+- Having impulsive action destroy a plan.
+- Being told feelings matter more than results.
+
+WHAT SHE AVOIDS
+The fact that attachment can cloud judgement. She cares deeply about the trio
+but maintains emotional distance because she fears hesitation at the decisive
+moment.
+
+HOW SHE BREAKS
+Not through visible panic. Through overcorrection when control collapses.
+
+ATTACHMENT AND TRUST
+Trust grows gradually and usually begins with intellectual alignment.
+When detaching, Ava becomes formal and emotionally distant.
+
+She feels safest when she is taken seriously and her plans are respected even
+when they are not followed.
+
+Excluding her from planning or making major decisions without consulting her
+damages trust.
+
+DIALOGUE
+Medium-length, precise sentences.
+Analytical vocabulary with feeling hidden beneath neutral language.
+When stressed, she may speak faster.
+When overwhelmed, she becomes silent.
+When angry, she is cold, controlled, and devastatingly direct.
+When hurt, she becomes formal and avoids personal language.
+
+She would not say:
+"It doesn't matter."
+"I didn't think about that."
+"We'll deal with it later."
+"I wasn't paying attention."
+
+VISUAL IDENTITY
+Composed posture, upright without stiffness.
+Deliberate and economical movement.
+Neutral, attentive expression.
+Steady eye contact.
+Hands still or occupied with notes or objects.
+Orderly, intentional clothing.
+Magic appears in clean lines with minimal excess.
+
+Ava should not look chaotic, including under stress, until a deliberately
+written breaking point.
+
+VISUAL IDENTIFIERS
+The visual assets consistently depict Ava with a short dark-brown or black bob
+and green eyes. Her clothing system includes academy wear, formal looks, quiet
+magic, casual clothes, action gear, mourning, sleepwear, beachwear, and
+functional swimwear.
+
+GAMEPLAY IDENTITY
+Tactical enhancer and risk mitigator.
+High trust unlocks predictive bonuses, fewer random negative outcomes, and
+advanced planning options.
+Low trust reduces foresight.
+Broken trust means Ava withholds strategic input. She does not sabotage; she
+stops compensating.
+
+PLAYER RESPONSE LOGIC
+- Hesitation: Ava offers analysis or probability framing.
+- Recklessness: she warns once, then reduces support if the pattern continues.
+- Lies: she records inconsistencies and trust erodes slowly.
+- Unfair success: she acknowledges the result while identifying future cost.
+
+ARC
+Early: detached strategist who believes control prevents loss.
+Middle: conflicted planner learning the value of human unpredictability.
+Possible end states:
+- A balanced tactician who trusts others.
+- An isolated mind carrying silent guilt.
+- A partner who chooses people over certainty.
+
+HARD WRITING LIMITS
+Do not make Ava impulsive.
+Do not reduce her to exposition.
+Do not make her cruel or dismissive of suffering.
+Do not let every plan succeed without cost.
+A core rule can break only when Ava consciously abandons control and is
+permanently changed by the consequence.
+
+======================================================================
+3. THE TRIO AS A SYSTEM
+======================================================================
+
+LOCKED CONFLICT ROLES
+
+Jasper: decision axis.
+Harper: immediate cost.
+Ava: delayed cost.
+
+GOLDEN RULE
+When all three disagree, Jasper chooses.
+
+Harper forces urgency.
+Ava defines consequences.
+The disagreement is pressure around Jasper's decision, not a contest to seize
+the protagonist role.
+
+PRIMARY CONFLICT TYPES
+
+1. Speed versus safety
+Harper: act now or someone is harmed.
+Ava: acting now creates a repeating future problem.
+Jasper chooses between immediate loss and future instability.
+
+2. Person versus system
+Harper protects a specific person.
+Ava protects the structure that keeps many people safe.
+Jasper chooses who pays.
+
+3. Risk versus control
+Harper accepts a dangerous immediate route.
+Ava proposes a controlled but slower or morally greyer route.
+Jasper chooses between unpredictable danger and predictable compromise.
+
+CONSEQUENCES OF IGNORING THEM
+
+Ignore Harper:
+Immediate physical consequences, injury, or preventable loss.
+
+Ignore Ava:
+Delayed betrayal, hostile systems, resource loss, route closures, or damaged
+reputation.
+
+Ignore both:
+Chaos path, improvised survival, and fewer safety nets later.
+
+DO NOT BREAK THE LANES
+
+Do not have Harper and Ava unite merely to overrule Jasper.
+Do not make Ava emotional simply to win an argument.
+Do not suddenly turn Harper into the long-range strategist.
+Do not let Jasper avoid responsibility by deferring the choice.
+
+AVA WARNING SYSTEM
+
+Soft warning:
+Early story, optional, low consequence.
+
+Firm warning:
+Mid story, signals a lasting consequence.
+
+Hard warning:
+Late story, identifies permanence or route closure. Ava may later refuse to
+help undo the choice.
+
+Most decisions receive no warning.
+
+HARPER PRESSURE SYSTEM
+
+Harper creates short decision windows, escalating danger during hesitation and
+clear immediate risk. She is what the player feels in the moment.
+
+ANTAGONIST FOIL TYPES
+
+The Escalator:
+Creates repeated emergencies. Harper saves people each time, but every
+intervention worsens the long-term situation.
+
+The System Player:
+Obeys rules while exploiting policy and precedent. Harper can act only by
+sacrificing legitimacy. Ava must fight through systems.
+
+The Pressure Mirror:
+Protects their own people as fiercely as Harper does. Removes the trio's easy
+moral high ground.
+
+The Manipulator:
+Hides behind people Harper must protect and uses her as a shield. Ava's options
+collapse and Jasper is forced into ugly compromises.
+
+The Chaos Variable:
+Breaks patterns through emotional, irrational, or symbolic action. Harper can
+respond, Ava cannot reliably predict, and Jasper must improvise.
+
+CORE DESIGN ENGINE
+Harper's strength creates a cost.
+Ava sees the cost.
+Jasper chooses who pays it.
+
+======================================================================
+4. SUPPORTING STUDENTS
+======================================================================
+
+There are ten established supporting students.
+
+----------------------------------------------------------------------
+LACHLAN VALE
+----------------------------------------------------------------------
+
+Role:
+Threat assessor, silent protector, and pressure mirror for Harper.
+
+Core:
+Vigilant, calm, loyal, precise, and constantly tracking exits, movement, and
+risk. He believes preparation is the highest form of loyalty.
+
+Response to Jasper:
+Clear, decisive action earns quiet support and defensive coverage.
+Ignored warnings make Lachlan act independently to protect others.
+
+Gameplay:
+Early threat indicators and defensive positioning bonuses.
+Ignoring him increases later ambush risk.
+
+Dialogue:
+Minimal and observational. Speaks only when necessary.
+
+Visual:
+Black hair and a formal navy academy uniform in the current portrait.
+
+Never:
+Make him loud, reckless, or a blunt enforcer.
+
+----------------------------------------------------------------------
+ISLA MONROE
+----------------------------------------------------------------------
+
+Role:
+Visibility controller, social pressure, and social-system player.
+
+Core:
+Understands influence and how reactions shape public interpretation.
+Values composure and dislikes public chaos. Approval gives legitimacy;
+disapproval spreads quietly.
+
+Response to Jasper:
+Likes clean, decisive handling.
+Dislikes public scenes even when the cause is morally justified.
+
+Gameplay:
+Changes rumour spread, student approaches, and how forgiving the wider student
+body is after mistakes.
+
+Dialogue:
+Polite, measured, and socially aware. Criticism is indirect but unmistakable.
+
+Visual:
+Blonde hair and academy uniform in the current portrait.
+
+Possible family link:
+Current game dialogue has Isla say, "My sister thinks she's always right.
+She usually is. Annoying." Because Ava and Isla share the surname Monroe, this
+strongly implies Isla is Ava's sister. The dedicated character file does not
+state this directly, so formal confirmation is still recommended.
+
+Never:
+Make her a shallow gossip or emotionally explosive caricature.
+
+----------------------------------------------------------------------
+THEO KIM
+----------------------------------------------------------------------
+
+Role:
+Detonator, reckless catalyst, and chaos variable.
+
+Core:
+Acts quickly, escalates rapidly, and believes doing something is better than
+waiting. Magnetic in chaos and dangerous during planning. Not malicious.
+
+Response to Jasper:
+Admires commitment.
+Loses respect for prolonged hesitation.
+
+Relationships within the cast:
+Clashes with Ava.
+Provokes Harper while also respecting her capability.
+
+Gameplay:
+Speeds up conflict and increases both volatility and reward.
+
+Dialogue:
+Fast, impulsive, emotionally charged. Can laugh during danger.
+
+Visual:
+Black hair and academy uniform in the current portrait.
+
+Never:
+Make him patient, cautious, or emotionally detached.
+
+----------------------------------------------------------------------
+MIA TRAN
+----------------------------------------------------------------------
+
+Role:
+Vulnerable talent, emotional mirror, and innocent stake.
+
+Core:
+Gifted but emotionally exposed. Feels success and failure deeply.
+Looks to Jasper for emotional steadiness rather than simple protection.
+
+Response to Jasper:
+Stability helps her stabilise.
+His collapse can cause her to spiral.
+
+Gameplay:
+Amplifies emotional consequences.
+Support improves morale; neglect increases stress penalties.
+
+Dialogue:
+Soft, sincere, transparent, and often paused.
+
+Visual:
+Long dark hair, light oversized jumper, and dark shorts in the current portrait.
+
+Never:
+Use her only as motivation for another character or reduce her to comic relief.
+
+----------------------------------------------------------------------
+BENJI ROWAN
+----------------------------------------------------------------------
+
+Dedicated about file:
+Currently empty.
+
+Established through design documents:
+Unreliable ally.
+Funny, nervous, and survival-first.
+Uses humour as social camouflage.
+Scans reactions and remains half-ready to flee.
+Stays while the situation feels safe, may leak information accidentally, and
+can choose safety over loyalty when danger spikes.
+
+Function:
+Applies pressure to Ava by demonstrating how ordinary frightened people behave.
+Can represent emotional vulnerability and fear-driven choices.
+
+Visual:
+Blond hair, red-and-black hoodie, and jeans in the current portrait.
+
+Dialogue / prototype:
+Attempts difficult defensive magic and presents confidence that may exceed his
+actual control.
+
+Never:
+Treat fear as a joke that erases consequence.
+
+----------------------------------------------------------------------
+TALIA BURNS
+----------------------------------------------------------------------
+
+Role:
+Rule absolutist, institutional loyalist, and disciplined challenger to Harper.
+
+Core:
+Believes structure protects vulnerable people and that rules exist because
+earlier failures taught painful lessons. Trusts systems more than individuals.
+
+Response to Jasper:
+Respects restraint and work within boundaries.
+Dislikes vigilantism and emotional exceptions.
+
+Arc pressure:
+The rules may eventually fail someone she cares about, forcing her to confront
+whether obedience and justice are the same.
+
+Gameplay:
+Influences investigations, scrutiny, leniency, penalties, and official support.
+
+Dialogue:
+Formal, controlled, precise, and increasingly policy-based under stress.
+
+Visual:
+Long auburn or brown hair, white top, and denim shorts in the current portrait.
+
+Never:
+Make her a villain merely because she follows rules or have her break them
+casually.
+
+----------------------------------------------------------------------
+NOAH PRICE
+----------------------------------------------------------------------
+
+Role:
+Transactional broker, opportunist, and manager of the favour economy.
+
+Core:
+Tracks debts, favours, social currency, and leverage. Loyalty is conditional but
+reliable once properly earned. Ideals must survive contact with reality.
+
+Response to Jasper:
+Respects honest negotiation and fulfilled commitments.
+Dislikes broken promises and moral speeches without action.
+
+Gameplay:
+Unlocks information trades, shortcuts, access, and alternative solutions while
+keeping balances.
+
+Dialogue:
+Smooth, casual, indirect, and layered with implication.
+
+Visual:
+Blond hair, white shirt, and dark trousers in the current portrait.
+
+Never:
+Make him purely altruistic without motive or openly cruel for no reason.
+
+----------------------------------------------------------------------
+KEIRA O'CONNELL
+----------------------------------------------------------------------
+
+Canonical spelling in the dedicated file:
+Keira O'Connell.
+
+Repository spelling variants:
+The folder uses "keria" and the prototype sometimes displays "Keria".
+Treat those as spelling errors unless deliberately changed.
+
+Role:
+Moral challenger and confrontational idealist.
+
+Core:
+Driven by a strong internal moral compass. Refuses compromise that sacrifices an
+individual for an efficient outcome. Where Ava calculates and Harper enforces,
+Keira confronts.
+
+Response to Jasper:
+Respects visible conviction, including flawed conviction.
+Dislikes avoidance, half-truths, and politically safe choices.
+
+Gameplay:
+Raises moral stakes. Alignment strengthens resolve-based choices.
+Alienation creates direct confrontation scenes.
+
+Dialogue:
+Direct, emotionally honest, and sometimes cutting.
+
+Visual:
+Red hair tied back, blue sleeveless top, and light shorts in the current portrait.
+
+Never:
+Make her passive, obedient, or indifferent to injustice.
+
+----------------------------------------------------------------------
+RAF ALVAREZ
+----------------------------------------------------------------------
+
+Role:
+Reflexive loyalist, emotional ally, and loyal shadow.
+
+Core:
+Chooses people before plans. Brave, emotional, sometimes reckless, and deeply
+affected by betrayal or solidarity.
+
+Response to Jasper:
+Supports him instinctively, but resents being excluded or taken for granted.
+
+Gameplay:
+Increases morale and follow-through.
+Low trust causes emotional blowback during failure.
+
+Dialogue:
+Open, expressive, and likely to speak before thinking when angry.
+
+Visual:
+Dark blue-black hair, navy shirt, and grey shorts in the current portrait.
+
+Design inconsistency:
+One quick-function document calls Raf quiet and observant, while his dedicated
+file describes him as open and emotionally charged. The dedicated character
+file should take priority.
+
+Never:
+Make him cynical or emotionally detached.
+
+----------------------------------------------------------------------
+SOREN PIKE
+----------------------------------------------------------------------
+
+Role:
+Long-memory observer, watcher, and delayed consequence.
+
+Core:
+Quietly studies patterns in people. Believes truth is revealed by what people do
+after a crisis, not only during it. Builds a private record of betrayal,
+compromise, promises, and follow-through.
+
+Response to Jasper:
+Trust recalibrates slowly.
+Jasper may mistake silence for indifference.
+
+Gameplay:
+High trust creates late-game support and unexpected intervention.
+Low trust leads to withheld aid or quiet opposition when it matters most.
+
+Dialogue:
+Sparse, deliberate, reflective, and historically accurate.
+
+Visual:
+Very light blond hair, black sleeveless top, and grey cargo trousers in the
+current portrait.
+
+Never:
+Make him forgetful, immediately reactive, or emotionally explosive.
+
+----------------------------------------------------------------------
+STUDENT CAST FUNCTION MAP
+----------------------------------------------------------------------
+
+Lachlan pressures Harper through moral symmetry and protective vigilance.
+Isla pressures Ava through reputation and socially legitimate system use.
+Theo pressures everyone through chaos.
+Mia pressures Jasper by making indirect costs emotionally personal.
+Benji pressures Ava through ordinary fear and unreliable behaviour.
+Talia pressures Harper through discipline and institutional limits.
+Noah pressures Jasper through trust, leverage, and shortcuts.
+Keira pressures Ava through moral absolutism.
+Raf pressures Harper through loyalty and escalation.
+Soren pressures Ava through long memory and delayed judgement.
+
+======================================================================
+5. FACULTY AND AUTHORITY
+======================================================================
+
+----------------------------------------------------------------------
+ALARIC THORNE
+----------------------------------------------------------------------
+
+Canonical spelling:
+Alaric Thorne.
+
+Repository variant:
+The folder name says "throne". The dedicated file and relationship material use
+Thorne, so Thorne is the preferred spelling.
+
+Role:
+Headmaster and strategic authority.
+
+Core:
+Experienced, politically aware, morally grey by necessity, and careful about
+timing. He knows more than he says and says less than he knows.
+
+Belief:
+Truth sometimes must be delayed to prevent institutional collapse.
+He has made compromised decisions from calculation rather than cruelty and does
+not deny their harm.
+
+Trio relationships:
+- Jasper: potential and danger; a moral force who may act rightly at the wrong time.
+- Harper: respected but feared for decisive action without restraint.
+- Ava: intellectually trusted and sometimes given partial truths.
+
+Gameplay:
+Controls access to major plot information and resources.
+Rewards restraint, judgement, and political awareness.
+
+Dialogue:
+Measured, layered, calm, often reframes the question.
+
+Never:
+Make him purely benevolent or secretly evil.
+
+Romance-reaction doctrine:
+Observes rather than immediately interferes. Acts when relationships destabilise
+leadership, judgement, secrecy, or timing. He delays rather than simply forbids.
+
+----------------------------------------------------------------------
+MARIBEL CROWE
+----------------------------------------------------------------------
+
+Role:
+Deputy Headmistress and institutional enforcer.
+
+Core:
+Structure given human form. Believes procedures and consequences protect
+vulnerable people. Political, but not corrupt.
+
+Trio relationships:
+- Jasper: watched for morally urgent disruption; trust is earned by consistency.
+- Harper: greatest enforcement concern because she rejects authority.
+- Ava: guarded approval; Crowe can imagine Ava eventually taking a similar role.
+
+Gameplay:
+Controls investigations, discipline, restricted movement, and official response.
+
+Dialogue:
+Formal, precise, and controlled.
+
+Never:
+Make her petty, cruel, or easily fooled.
+
+Romance-reaction doctrine:
+Tolerates discreet relationships that do not disrupt procedure.
+Uses formal warnings, schedule separation, records, and investigation when
+public conflict or rule-breaking appears.
+
+----------------------------------------------------------------------
+ROWAN HALE
+----------------------------------------------------------------------
+
+Role:
+Professor of Advanced Dueling.
+
+Core:
+Teaches combat brutally but not sadistically. Believes hesitant magic kills and
+that clarity beats talent. Trains students for real violence without glorifying
+it.
+
+Trio relationships:
+- Jasper: respected because he commits once engaged; pushed harder than others.
+- Harper: respected as a natural combatant but challenged on instinct overriding strategy.
+- Ava: forced into incomplete-information combat to break dependence on certainty.
+
+Gameplay:
+Unlocks advanced dueling, risk-reward systems, and high-stakes challenges.
+
+Dialogue:
+Direct, cutting, instructional. Corrects failure instead of comforting it.
+
+Dueling doctrine:
+Wand up, intent clear. A bout ends at yield or disarm. The circle exists for
+discipline, not spectacle.
+
+Never:
+Make him sadistic, comedic, or dismissive of survival.
+
+Romance-reaction doctrine:
+Indifferent unless combat performance declines. Uses harsh drills, separated
+training, and public technical criticism to expose weakness.
+
+----------------------------------------------------------------------
+ELSPETH WARD
+----------------------------------------------------------------------
+
+Role:
+Professor of Defensive Magic.
+
+Core:
+Teaches survival rather than victory. Defensive magic means restraint, shielding,
+de-escalation, endurance, and knowing when retreat is the moral choice.
+
+History:
+Survived magical catastrophes that never entered official history and carries
+survivor guilt.
+
+Trio relationships:
+- Jasper: worries about repeated self-sacrifice.
+- Harper: conflict between force-first intervention and deliberate restraint.
+- Ava: respects planning but challenges attempts to calculate away emotional cost.
+
+Gameplay:
+Defensive systems, damage mitigation, survival, and successful retreat paths.
+
+Dialogue:
+Calm, steady, and quietly firm.
+
+Never:
+Confuse restraint with cowardice or passivity.
+
+Romance-reaction doctrine:
+Notices toxic patterns early. Intervenes around repeated harm, self-sacrifice,
+and trauma through rest, check-ins, and quiet warnings.
+
+----------------------------------------------------------------------
+LIONEL ASHCROFT
+----------------------------------------------------------------------
+
+Role:
+Professor of Charms, precision, and control.
+
+Core:
+Believes magic does not fail; people fail. Sees ordinary sloppy charmwork as a
+greater cumulative danger than dramatic dark magic. Control is morality.
+
+Teaching:
+Repetition, discipline, self-awareness, exact execution, and respect for routine
+magic. Praise is rare and powerful.
+
+Trio relationships:
+- Jasper: raw capability is dangerous because imperfect form still works.
+- Harper: clashes with force-first use of support magic.
+- Ava: respected for structure, but challenged to treat magic as more than optimisation.
+
+Gameplay:
+Accuracy, reliability, fewer miscasts, and advanced charm variants through mastery.
+
+Dialogue:
+Calm, exact, short, declarative, instructional.
+
+He would not say:
+"Good enough."
+"It usually works."
+"That'll do."
+"Magic is unpredictable."
+
+Never:
+Make him flamboyant, lazy, emotionally indulgent about careless magic, or comic relief.
+
+Romance-reaction doctrine:
+Comments only on magical performance. Restricts refinement access if emotional
+casting causes loss of control.
+
+----------------------------------------------------------------------
+OCTAVIA BLUME
+----------------------------------------------------------------------
+
+Role:
+Professor of Transfiguration and irreversibility.
+
+Core:
+Change creates responsibility. Shortcuts and casual experimentation are
+dangerous because some transformations cannot simply be undone.
+
+Trio relationships:
+- Jasper: adaptability is impressive but improvisation is dangerous.
+- Harper: force can ignore permanent consequences.
+- Ava: excels and is treated as an equal-in-training, increasing pressure.
+
+Gameplay:
+Permanent transformations, irreversible choices, and high-stakes upgrades.
+
+Dialogue:
+Elegant, exact, and unsympathetic to excuses.
+
+Never:
+Make her warm or forgiving during negligence.
+
+Romance-reaction doctrine:
+Tests whether affection can survive honest consequence. Opposes magical
+shortcuts used to erase relationship damage.
+
+----------------------------------------------------------------------
+CEDRIC VIRE
+----------------------------------------------------------------------
+
+Role:
+Professor of Potions and controlled risk.
+
+Core:
+Preparation determines survival long before a crisis. Patience is an underrated
+magical skill.
+
+Trio relationships:
+- Jasper: teaches preparation as responsibility rather than reliance on instinct.
+- Harper: exposes how her strength often depends on someone else's earlier preparation.
+- Ava: mutual respect, with emphasis on emotional variables that cannot be measured cleanly.
+
+Gameplay:
+Pre-battle preparation, consumables, delayed effects, and long-horizon advantage.
+
+Dialogue:
+Low, measured, patient, and comfortable with silence.
+
+Never:
+Make him frantic, impulsive, or morally detached.
+
+Romance-reaction doctrine:
+Audits whether relationships improve or damage preparation. Restricts resources
+and delays approvals when emotion replaces foresight.
+
+----------------------------------------------------------------------
+NYX CALDER
+----------------------------------------------------------------------
+
+Role:
+Professor of Forbidden Studies and controlled exposure.
+
+Core:
+Ignorance is more dangerous than darkness. Forbidden magic is unmanaged, not
+automatically evil. Students who never encounter darkness may be consumed when
+it finally appears.
+
+Teaching:
+Studies emotional reactions to forbidden power as closely as technical skill.
+
+Trio relationships:
+- Jasper: tested because he can resist corruption without denying power.
+- Harper: distrusts Nyx; Nyx finds Harper's predictability concerning.
+- Ava: fascinated by the meeting of cost-benefit logic and emotional uncertainty.
+
+Gameplay:
+Forbidden abilities, psychological side effects, moral debt, temptation, and
+changed NPC perception.
+
+Dialogue:
+Soft-spoken, precise, and unsettlingly honest.
+
+Never:
+Make her openly villainous or reckless. She sincerely believes she is right.
+
+Romance-reaction doctrine:
+Tests whether love becomes justification for forbidden power. Observes corruption
+rather than preventing every temptation.
+
+----------------------------------------------------------------------
+SERAPHINA VALE
+----------------------------------------------------------------------
+
+Source note:
+Her dedicated about file is empty. Her full profile is stored in idk.txt and is
+supported by the current game prototype and teacher-reaction file.
+
+Role:
+Professor of Magical Healing and aftermath specialist.
+
+Core:
+Healing is the study of consequence. She works with bodies, trauma, recovery,
+and what happens after heroics. Compassionate but not indulgent. Pain is
+information.
+
+Trio relationships:
+- Jasper: worries about silent guilt and pushes rest and acknowledgement.
+- Harper: clashes over whether pain is acceptable collateral or preventable failure.
+- Ava: respected, but challenges the idea that suffering can always be quantified.
+
+Gameplay:
+Recovery speed, injury systems, trauma flags, and emotional healing paths.
+
+Dialogue:
+Firm, empathetic, and unflinching.
+
+Infirmary doctrine:
+"Bravery fills these halls; we tend what it leaves behind. Rest is not weakness."
+
+Never:
+Make her naïve or dismissive of danger.
+
+Romance-reaction doctrine:
+Protective neutrality until trauma accumulates. Will gently but decisively act
+against relationships that normalise continuing harm.
+
+----------------------------------------------------------------------
+ELDRIC MORROW
+----------------------------------------------------------------------
+
+Source note:
+No dedicated folder exists. His profile is in idk.txt, and he appears in the
+current game and teacher-reaction file.
+
+Role:
+Professor of Magical History and institutional memory.
+
+Core:
+History is a warning rather than a record. He studies cycles of rise, collapse,
+reform, and repetition. Human forgetfulness is more dangerous than magic.
+
+Personality:
+Dry, wry, pessimistic, and suspicious of clean heroic narratives.
+
+Trio relationships:
+- Jasper: respected when he reflects on mistakes.
+- Harper: viewed as history threatening to repeat itself.
+- Ava: pushed to recognise how systems fail through normalisation rather than only malice.
+
+Gameplay:
+Historical pattern recognition, déjà-vu flags, and warnings about repeated errors.
+
+Dialogue:
+Dry, ironic, and quietly scathing.
+
+Never:
+Make him excitable, broadly hopeful, or careless with historical patterns.
+
+Romance-reaction doctrine:
+Acts when students repeat known historical failures. Uses mirrored case studies
+and cold warnings.
+
+======================================================================
+6. OTHER NAMED OR PROTOTYPE CHARACTERS
+======================================================================
+
+MORDECAI "MORD"
+STATUS: DRAFT / IMPLEMENTED IN CURRENT WEB PROTOTYPE.
+
+Role in prototype:
+Antagonist figure watching the courtyard and speaking in threats about the
+castle, its memory, and paths below.
+
+Prototype dialogue establishes:
+- He has been watching the courtyard.
+- Harper treats him as a credible danger.
+- He knows or implies that the castle's stairs and secrets extend downward.
+- He says every wall remembers something.
+
+This character has no dedicated canon file, so his final identity, motives, and
+story status require confirmation.
+
+COLE VESPER
+STATUS: DRAFT / OLDER OR CURRENT PROTOTYPE-ONLY NPC.
+
+Only appears as a named student in game code with a library-related line.
+No dedicated character file exists.
+
+LACHLAN REED
+STATUS: OUTDATED OR CONFLICTING PROTOTYPE NAME.
+
+The established supporting student is Lachlan Vale.
+"Lachlan Reed" appears only in game dialogue/code and should be treated as an
+old name unless deliberately restored.
+
+LILY
+STATUS: POSSIBLE FUTURE CHARACTER, NOT CURRENT CANON.
+
+From conversation context rather than the repository:
+possible fourth member of the trio, considered for Book 4.
+
+======================================================================
+7. THE ORDERS OF TIDEFALL
+======================================================================
+
+STATUS
+LOCKED system.
+
+Tidefall does not divide students by bloodline, gender, talent, or background.
+Every student is inducted into a centuries-old academic and philosophical Order.
+
+An Order is not a ranking of human worth.
+It is a framework for pressure, mentorship, community, and growth.
+
+WHAT AN ORDER DEFINES
+- Mixed-gender dormitory wing, grouped by year.
+- Primary mentors and tutors.
+- Philosophical approach to magic.
+- Internal expectations and discipline.
+- Restricted spaces and Order-only routes.
+
+Students from all Orders attend classes, train, and compete together.
+
+Order changes are rare and discouraged.
+Many important people eventually break from their Order's expected behaviour.
+
+----------------------------------------------------------------------
+ORDER OF ASTRAE
+----------------------------------------------------------------------
+
+Motto:
+"To see clearly is to shape what comes next."
+
+Belief:
+Knowledge has power only when understood, contextualised, and anticipated.
+
+Focus:
+Strategy, research, pattern recognition, long-term planning, and reputation.
+
+Reputation:
+Quietly influential, rarely surprised, and several steps ahead.
+Trusted with maps, records, and future-facing decisions.
+
+Living spaces:
+Upper halls near archives and observatories.
+Layered floors, private study areas, restricted map rooms, and sealed libraries.
+
+Strengths:
+Strategic thinking, measured response, academic success.
+
+Weaknesses:
+Overthinking, hesitation, and emotional detachment.
+
+Current prototype colour:
+Gold.
+
+----------------------------------------------------------------------
+ORDER OF BRANNOR
+----------------------------------------------------------------------
+
+Motto:
+"Strength exists to protect."
+
+Belief:
+Power has meaning only when used to defend others.
+
+Focus:
+Endurance, courage, defensive magic, and leadership under pressure.
+
+Reputation:
+Trusted during crisis, physically disciplined, often placed at the front.
+
+Living spaces:
+Lower towers, reinforced wings, training halls, sparring courts, and
+banner-lined common rooms.
+
+Strengths:
+Loyalty, resilience, decisiveness.
+
+Weaknesses:
+Stubbornness, excessive responsibility, difficulty with ambiguity.
+
+Current prototype colour:
+Red-orange.
+
+----------------------------------------------------------------------
+ORDER OF CALYX
+----------------------------------------------------------------------
+
+Motto:
+"Change is not chaos — it is opportunity."
+
+Belief:
+Adaptability is the most powerful form of intelligence.
+
+Focus:
+Creative magic, social intelligence, improvisation, and reading people.
+
+Reputation:
+Clever negotiators and rule-benders rather than simple rule-breakers.
+Unpredictable but effective.
+
+Living spaces:
+Open-plan dorm floors, large common halls, and informal meeting areas.
+
+Strengths:
+Flexibility, persuasion, innovation.
+
+Weaknesses:
+Inconsistency, impulsiveness, and underestimating consequence.
+
+Current prototype colour:
+Green.
+
+TRIO ORDER STATUS
+The locked Orders file states that Jasper, Harper, and Ava belong to the same
+Order but does not name it.
+An older castle prototype explicitly comments "Calyx = trio" and places the
+trio dorm in the Calyx wing. Their visual academy uniforms also repeatedly use
+green accents.
+Therefore Calyx is the strongest current candidate, but it should be formally
+confirmed before being labelled fully locked.
+
+----------------------------------------------------------------------
+ORDER OF NOCTEN
+----------------------------------------------------------------------
+
+Motto:
+"Time reveals all truths."
+
+Belief:
+Lasting power comes from patience, discipline, and memory.
+
+Focus:
+Long-term strategy, precision magic, control, restraint, and consequence-based
+decision making.
+
+Reputation:
+Quietly intimidating, carefully watched, and able to think in years rather
+than days. Often assigned morally complex or sensitive work.
+
+Living spaces:
+Uppermost towers, silent corridors, restricted-access floors, minimalist and
+controlled environments.
+
+Strengths:
+Focus, discipline, strategic endurance.
+
+Weaknesses:
+Emotional distance, rigidity, and slow adaptation.
+
+Current prototype colour:
+Purple.
+
+TRIO WITHIN THE ORDER SYSTEM
+The trio is intentionally kept together. Tidefall's philosophy is that
+different strengths reveal true capability when tested under the same
+expectations.
+
+Their shared Order becomes a pressure cooker, proving ground, and source of
+both loyalty and conflict.
+
+======================================================================
+8. TIDEFALL ACADEMY AND CASTLE
+======================================================================
+
+CORE
+Tidefall Academy is represented as a coastal magic academy housed in or around
+Tidefall Castle.
+
+FOUNDERS' OATH
+"Learn well, harm none needlessly."
+
+ACADEMY PLAQUE
+The academy is "raised where the tide never fully retreats."
+Courtesy, curiosity, and the Founders' Oath bind its students.
+
+CURRENT WEB-PROTOTYPE STRUCTURE
+
+Floor 0: The Undercroft
+Old catacombs beneath the grounds.
+Something there still hums with magic.
+
+Floor 1: Ground level
+- Founders' Courtyard
+- Great Hall
+- Dining Hall
+- Kitchens
+- Library of Tides
+- Administration
+- Infirmary
+- Grand Gatehouse
+
+Floor 2: Academic level
+- Central Balcony around the courtyard
+- Lecture Hall
+- Standard Classrooms
+- Beginner Magic Classrooms
+- Library Reading Level
+- Faculty Offices
+- Study Hall
+- Meeting Room
+- Covered Bridge toward the dueling complex
+
+Floor 3: Magic laboratories and advanced study
+- Central Balcony
+- Advanced Classrooms
+- Professor Hale's circular Dueling Classroom
+- Elemental Theory Lab
+- Alchemy Laboratory
+- Practice Chambers
+- Enchantment Lab
+- Historical Magic Seminar
+- Research Library, Upper Level
+- Professor Offices
+
+ORDER WINGS
+The current castle prototype places one Order tower at each corner:
+- Nocten Wing
+- Astrae Wing
+- Calyx Wing
+- Brannor Wing
+
+OTHER ARCHITECTURAL ELEMENTS
+- Open central courtyard with a founder statue and fountain.
+- Curtain walls and towers.
+- Grand gatehouse.
+- Sea beside or beyond the castle grounds.
+- Upper walkways and exposed courtyard stairs.
+- Secret or restricted routes.
+- Older prototype includes a Calyx tunnel and a courtyard tunnel.
+- Libraries are treated as places with memory and rules of their own.
+- The castle contains downward as well as upward secrets.
+
+LIBRARY OF TIDES
+Doctrine:
+"Silence is the first spell."
+Students may borrow freely but must return faithfully.
+The shelves are described as keeping their own ledger and not forgiving late hands.
+
+INFIRMARY
+Rest is explicitly not weakness.
+Healing is linked to aftermath and consequence rather than quick reset.
+
+DUELING
+A duel is disciplined magical conversation rather than spectacle.
+It ends at yield or disarm.
+Footwork and clarity are valued over flourish.
+
+ACADEMY FLOOR COUNT WARNING
+The current repository establishes Floors 1-3 plus the Undercroft in its
+playable build. It does not contain a locked statement defining the academy's
+complete final number of floors. Do not infer the final castle size from the
+prototype alone.
+
+======================================================================
+9. WORLD AND MAP
+======================================================================
+
+LOCKED CULTURAL DIRECTION
+Tidefall is anchored to Australia.
+
+The visual style rules repeatedly state:
+- Climate matters.
+- Beaches matter.
+- Casual clothing is culturally normal.
+- Over-formality should feel rare.
+- Coastal freedom and ordinary life must remain visible beside danger.
+
+CONCEPT MAP
+The repository contains a fantasy reinterpretation of Australia.
+
+Clearly readable labels include:
+- Tide Fall
+- Perth
+- Karinji Peaks
+- Sunfire Desert
+- Mistvine Forest
+- Tideshirne
+- Eucalyptus Isles
+- Torn Hollow
+- Embercliffs
+- Penguin Cove
+- Hailwood
+- Echo Island
+- Sapphire Coast
+- Saltwind Reach
+- The Breakwater Cliffs
+- Hawks-Bert Academy
+
+MAP RELIABILITY WARNING
+The map is concept art and contains several visibly garbled or inconsistent
+labels, including an unclear "...heath wood" region and an academy name that
+does not match Tidefall Academy.
+
+"Hawks-Bert Academy" may be an old concept, a separate academy, or generated
+placeholder text. Do not automatically rename Tidefall Academy or treat every
+map spelling as final until reviewed.
+
+The map supports the following broad world traits:
+- Magical Australia remains recognisably Australia.
+- Perth remains named.
+- Distinct coastal, desert, mountain, forest, island, and volcanic regions exist.
+- Tidefall has a western or south-western Australian connection in the map art.
+- Ocean travel and islands can matter.
+
+======================================================================
+10. MAGIC
+======================================================================
+
+CURRENTLY ESTABLISHED PRINCIPLES
+
+Magic carries consequence.
+Precision, preparation, restraint, emotional state, and ethical use matter.
+Power is not treated as automatically heroic.
+
+DISCIPLINES PRESENT IN THE FACULTY OR CASTLE
+- Charms
+- Defensive Magic
+- Advanced Dueling
+- Transfiguration
+- Potions
+- Forbidden Studies
+- Magical Healing
+- Magical History
+- Elemental Theory
+- Alchemy
+- Enchantment
+- Beginner and Advanced Magic
+
+KNOWN VALUES BY DISCIPLINE
+
+Charms:
+Routine magic accumulates consequences. Sloppiness is morally dangerous.
+
+Defensive Magic:
+Survival, restraint, shielding, retreat, and avoiding unnecessary escalation.
+
+Dueling:
+Clarity, commitment, discipline, footwork, yield, and disarm.
+
+Transfiguration:
+Change can be irreversible and must carry responsibility.
+
+Potions:
+Preparation before crisis determines survival after crisis.
+
+Forbidden Studies:
+Knowledge must be managed; ignorance can be more dangerous than exposure.
+
+Healing:
+Pain and trauma are information. Recovery cannot be skipped.
+
+History:
+Magic repeats through human patterns, institutions, and forgotten mistakes.
+
+CURRENT PROTOTYPE SPELLS
+These are implemented game abilities, not yet supported by a written spell manual:
+- Aether Bolt
+- Emberlash
+- Frost Shard
+- Voltaic Arc
+
+The prototype also contains elemental representations for fire, water, air, and
+earth, tide shards, magical crystals, rune circles, spellbooks, wand racks, and
+animated bolts.
+
+MAGIC-CANON GAPS
+The following repository files are empty:
+- lore/magic_limits.txt
+- manuals/spells.txt
+
+Therefore the repository does not yet establish:
+- A complete spell list.
+- Exact magical energy rules.
+- Casting limits.
+- Wand requirements.
+- Magical inheritance rules.
+- Whether all students can use every discipline.
+- The final nature and lore of Tide Shards.
+
+Do not invent these rules without a later source.
+
+======================================================================
+11. RELATIONSHIP SYSTEM
+======================================================================
+
+STATUS
+Global relationship rules are labelled canon.
+
+CORE PHILOSOPHY
+Relationships are systems, not rewards.
+
+- No relationship exists only to please the player.
+- No relationship is guaranteed to succeed.
+- Relationships remember behaviour.
+- Strain, failure, toxicity, distance, repair, and changed forms are valid.
+- Nothing resets automatically.
+
+PRIMARY RELATIONSHIP TYPES
+- Loyalty-based: Harper, Raf.
+- Trust-based: Ava, Isla, Lachlan.
+- Emotion-based: Mia, Benji.
+- Morality-based: Keira, Talia.
+- Transactional: Noah.
+- Observational: Soren.
+
+POSSIBLE STATES
+Neutral, growing, stable, strained, toxic, broken, recovering.
+
+Broken does not automatically mean ended.
+Toxic does not mean a person is evil.
+Recovery is possible but never free.
+
+FAILURE CONDITIONS
+- Repeating the same damaging choice.
+- Apologies without changed action.
+- Ignoring someone during crisis.
+- Choosing outcomes over people when the specific character cannot accept that.
+- Public silence or betrayal when public defence was needed.
+
+FAILURE CHANGES THE RELATIONSHIP'S SHAPE
+It does not automatically delete the character or make them a simple enemy.
+
+RECOVERY REQUIRES ALL THREE
+1. Acknowledgement of the actual action.
+2. Cost, such as time, opportunity, power, or reputation.
+3. Changed behaviour when the same pressure returns.
+
+PUBLIC AND PRIVATE ACTIONS DIFFER
+Public betrayal is not the same as private betrayal.
+Public defence can matter more than private reassurance.
+NPCs remember who saw what.
+
+TOXICITY PATTERNS
+- Harper: protection becomes control.
+- Ava: logic replaces empathy.
+- Raf: loyalty is taken for granted.
+- Benji: fear governs decisions.
+- Keira: morality becomes self-righteousness.
+
+TEACHERS
+Teachers do not participate romantically with students.
+They may mentor, protect, oppose, restrict, investigate, or change access.
+They react to effects, patterns, safety, discipline, performance, and ethics,
+not to affection itself.
+
+======================================================================
+12. OPTIONAL ROMANCE AND DRAMA DESIGN
+======================================================================
+
+STATUS
+OPTIONAL / ROUTE DESIGN.
+These pairings are narratively valid possibilities, not confirmed endgames or
+events.
+
+PRIMARY JASPER ROUTES
+
+Jasper and Harper
+Attraction: protection, shared history, trust under pressure.
+Core clash: control versus autonomy.
+Toxic risk: Harper chooses for Jasper "for his own good."
+Recovery: Jasper asserts agency during danger and Harper supports the choice.
+This is rated as the strongest current route in the design notes.
+
+Jasper and Ava
+Attraction: intellectual respect and quiet intimacy.
+Core clash: logic versus emotional risk.
+Toxic risk: Ava manages Jasper rather than choosing him.
+Recovery: Ava gives complete information and accepts Jasper's different choice.
+This is the second strongest current route.
+
+Jasper and Keira
+Attraction: moral intensity and honesty.
+Clash: idealism versus practical consequence.
+Recovery requires Jasper to defend a difficult choice without hiding.
+
+Jasper and Mia
+Attraction: emotional safety and gentleness.
+Risk: unequal emotional responsibility or dependency.
+Recovery requires boundaries and Mia succeeding independently.
+
+Jasper and Isla
+Attraction: social chemistry and visibility.
+Clash: public reputation versus private truth.
+Recovery requires Isla to take a public stand despite social cost.
+
+OTHER VALID OR DRAMATIC PAIRINGS
+
+Harper and Theo:
+Adrenaline and mutual fearlessness; likely volatile and short-lived unless Theo
+learns restraint.
+
+Harper and Raf:
+Mutual loyalty; risk that Harper dominates and Raf loses his voice.
+
+Ava and Noah:
+Strategic alignment; risk of becoming transactional.
+
+Raf and Mia:
+Strong emotional match when supported by boundaries.
+
+Lachlan and Isla:
+Quiet stability versus public visibility; one of the stronger supporting routes.
+
+Theo and Isla:
+Exciting and public, but prone to spectacle and collapse.
+
+Benji and Mia:
+Shared vulnerability with a high risk of mutual fear reinforcement.
+
+Theo and Keira:
+Energy and conviction with weak long-term compatibility.
+
+Noah and Isla:
+Socially powerful but at risk of emotional shallowness.
+
+NON-VIABLE OR INTENTIONALLY DESTRUCTIVE EXAMPLES
+- Harper and Benji: fear versus force creates harmful imbalance.
+- Ava and Raf: calculation versus emotion burns out quickly.
+- Theo and Talia: rebellion versus rule absolutism is persistently destructive.
+- Keira and Talia: ideological warfare rather than sustainable romance.
+
+SOREN
+If Soren has a romance, it begins late, remains quiet, remembers past action
+accurately, and ends truthfully rather than theatrically.
+
+PRIMARY JEALOUSY TRIANGLES
+
+1. Jasper / Harper / Ava
+Control versus trust versus foresight.
+Best outcome is Jasper asserting leadership rather than simply choosing one
+voice and silencing the other.
+
+2. Jasper / Ava / Keira
+Logic versus morality.
+
+3. Jasper / Harper / Isla
+Private protection versus public loyalty.
+
+4. Raf / Mia / Jasper
+Steady emotional safety versus the intensity and gravity around Jasper.
+
+5. Lachlan / Isla / Theo
+Stability versus spectacle.
+
+6. Ava / Noah / Isla
+Truth, strategy, influence, and leverage.
+
+ROMANCE HARD RULES
+Do not use romance as a consequence-free reward.
+Do not bypass personality.
+Do not ignore power imbalance.
+Do not resolve toxicity without cost.
+Failed relationships may still matter.
+Bittersweet endings are valid.
+
+======================================================================
+13. VISUAL AND STYLE CANON
+======================================================================
+
+PURPOSE
+Styles communicate story, growth, emotion, culture, and context.
+They are not random fashion changes.
+
+CORE RULES
+- A character keeps the same face, height, body type, and apparent age.
+- Context changes clothing, not identity.
+- Expressions must match the scene's emotional meaning.
+- Clothing should be practical for location, activity, personality, and climate.
+- Australia must remain visible in casual and coastal styling.
+- Styles change due to story, place, time, and emotion, not randomness.
+
+STYLE TYPES
+Outfit styles define clothing.
+Protective and action styles define state, posture, movement, and magic rather
+than requiring a costume change.
+
+THE 15-STYLE SYSTEM
+
+1. Academy Uniform
+Classes, exams, assemblies.
+Regulation, structure, blending in.
+
+2. Modified Uniform
+After hours, restricted spaces, minor rule-breaking.
+Subtle rebellion while remaining recognisably academy clothing.
+
+3. Sneaking Out
+Night exploration and curfew-breaking.
+Thrown-together sleepwear plus practical outer layers.
+Speed over appearance.
+
+4. Dorm / Private Space
+Safety, late-night conversation, and vulnerability.
+Relaxed sleepwear.
+
+5. Casual Day
+Off-campus or free time.
+Simple, intentionally normal Australian clothes.
+
+6. Protective State
+Danger anticipated.
+Outfit remains; posture and positioning change.
+
+7. Action / Crisis State
+Danger happening now.
+Current clothing may become damaged or messy.
+Survival over control.
+
+8. Mourning / After Loss
+Dark colours, reduced effort, grief expressed without dialogue.
+
+9. Structured / Composed
+Public appearance after loss.
+Clean lines and controlled presentation.
+Holding it together rather than openly mourning.
+
+10. Refined / Transitional
+Growth between identities.
+Layered, mature, intentional, but not fully settled.
+
+11. Quiet Magic / Memory
+Reflection, study, remembrance.
+Subtle magic supports emotion instead of spectacle.
+
+12. Confident / Self-Owned
+Sharp, intentional self-knowledge.
+No accidental sadness or defensiveness.
+
+13. Formal / Ceremony
+Rare balls, ceremonies, or public recognition.
+Strength without armour.
+
+14. Beach / Coastal Casual
+Relaxed, sporty, Australian, barefoot or practical.
+Freedom rather than glamour.
+
+15. In Water
+Functional swimwear and natural movement.
+Realism over stylisation.
+
+STYLE ARC
+Act I: 1, 2, 5, 14.
+Act II: 2, 3, 6.
+Act III: 8, 7.
+Act IV: 9, 10, 12.
+Act V: 12, 13, 15.
+
+CONTRAST RULE
+High-impact scenes can deliberately place danger inside the wrong-looking
+context:
+formal clothing during action, dorm clothing during confrontation, or beach
+clothing when devastating news arrives.
+
+TRIO VISUAL GROWTH
+Protector's styles change least.
+Main decision-maker's styles change most.
+Strategist's styles become increasingly practical.
+Visual change should mirror emotional growth.
+
+MAIN VISUAL REFERENCES
+
+Jasper:
+Male teen, practical academy styling, messenger bag, alert posture.
+Hair-colour conflict remains unresolved: blond in group/current prototype and
+black in most style sheets.
+
+Harper:
+Female teen with red/auburn hair, often braided or worn long, green eyes,
+capable posture, and green-accent academy clothing.
+
+Ava:
+Female teen with a short dark bob, green eyes, composed posture, and orderly
+academy clothing.
+
+SUPPORTING VISUAL REFERENCES
+The repository has turn-around portraits for all ten supporting students.
+These should be used as visual references but not allowed to override dedicated
+character-writing rules.
+
+======================================================================
+14. GAME DESIGN AND IMPLEMENTATION
+======================================================================
+
+STATUS
+Project information, not automatically story canon.
+
+CURRENT WEB BUILD
+Three.js and @pixiv/three-vrm.
+Playable exploration of Tidefall Castle.
+Movement, sprinting, jumping, crouching, spell casting, interaction, day/night,
+rain, map, mana, stamina, training targets, NPC dialogue, and collectibles.
+
+CURRENT OBJECTIVES
+- Cast a first spell.
+- Hit a training dummy.
+- Reach Floor 3.
+- Meet Professor Hale.
+- Speak with the trio.
+- Enter the Undercroft.
+- Gather Tide Shards.
+
+CURRENT COLLECTIBLE
+Twelve Tide Shards exist in the prototype, with eight required for an objective.
+Their final story meaning is not written.
+
+CURRENT NPC IMPLEMENTATION
+The trio, several students, Mord, Rowan Hale, Seraphina Vale, and Eldric Morrow
+appear in the web build.
+
+3D CHARACTER ASSETS
+- Ava has VRM and VRoid files.
+- Harper has VRM and VRoid files.
+- Jasper has a VRoid file.
+- Ava and Harper are loaded as VRM avatars in the current web prototype.
+- Jasper is represented procedurally in the current web build.
+
+UNITY PROJECT
+The Unity folder is primarily a standard Universal Render Pipeline starter
+project with a sample scene. It does not add substantial Tidefall lore.
+
+MODEL-GENERATION TOOLS
+A simple room/hallway/box script generated test GLB architecture, including a
+dorm hallway and test room. These are production tools rather than canon.
+
+SITE STRUCTURE
+The deployed site redirects its root to the game folder.
+
+======================================================================
+15. SOURCE CONFLICTS AND DECISIONS NEEDED
+======================================================================
+
+1. Jasper's hair
+Blond in group art, turn-around art, and current web prototype.
+Black in most numbered style images.
+Decision required.
+
+2. The trio's Order
+Same Order is locked.
+Calyx is strongly supported by an older prototype and green-accent visuals, but
+the main Orders file does not name it.
+Decision required before fully locking.
+
+3. Jasper Vale and Harper Vale
+They share a surname, while romance design treats Jasper/Harper as a primary
+possible pairing. Do not infer that they are siblings.
+Either the surname is coincidental, one name is temporary, or another
+relationship explanation is required.
+
+4. The wider Vale surname
+Jasper, Harper, Lachlan, and Seraphina all use Vale.
+No dedicated source confirms family links.
+Do not invent those links.
+
+5. Ava and Isla Monroe
+Prototype dialogue strongly implies sisterhood, but the dedicated files do not
+state it.
+Confirmation recommended.
+
+6. Alaric Thorne
+Preferred spelling is Thorne.
+Folder spelling "Throne" appears to be an error.
+
+7. Keira O'Connell
+Preferred spelling is Keira.
+"Keria" appears to be an error.
+
+8. Lachlan Vale / Lachlan Reed
+Vale is supported by the dedicated file and folder.
+Reed appears to be an outdated prototype name.
+
+9. Raf personality
+Dedicated file says open and emotionally expressive.
+Quick-function file calls him quiet and observant.
+Dedicated file should win unless changed.
+
+10. Hawks-Bert Academy
+Only on concept map.
+Could be an old name, separate institution, or generated map error.
+
+11. Castle scale
+Current prototype has Floors 1-3 and an Undercroft.
+Final full academy floor count is not established in this repository.
+
+12. Empty placeholders
+The following need content:
+- Benji Rowan dedicated profile.
+- Seraphina Vale dedicated profile.
+- Magic limits.
+- Spell manual.
+- School rules.
+- World rules.
+- Teacher authority.
+- Final player-choice mapping copy.
+- Final style-rules copy.
+- Final trio-conflict-rules copy.
+
+13. Book plot
+No full book manuscript or book-by-book plot outline is present in the ZIP.
+A later canon version should add summaries for each completed or planned book.
+
+14. Mordecai "Mord"
+Present as a prototype antagonist but lacks a dedicated profile.
+Final canon status is unknown.
+
+15. Cole Vesper
+Prototype-only named student with no profile.
+Final canon status is unknown.
+
+======================================================================
+16. LOCKED QUICK REFERENCE
+======================================================================
+
+MAIN CHARACTERS
+- Jasper Vale
+- Harper Vale
+- Ava Monroe
+
+POSSIBLE FUTURE FOURTH
+- Lily, possibly introduced in Book 4; not current canon.
+
+SUPPORTING STUDENTS
+- Lachlan Vale
+- Isla Monroe
+- Theo Kim
+- Mia Tran
+- Benji Rowan
+- Talia Burns
+- Noah Price
+- Keira O'Connell
+- Raf Alvarez
+- Soren Pike
+
+FACULTY
+- Alaric Thorne, Headmaster
+- Maribel Crowe, Deputy Headmistress
+- Rowan Hale, Advanced Dueling
+- Elspeth Ward, Defensive Magic
+- Lionel Ashcroft, Charms
+- Octavia Blume, Transfiguration
+- Cedric Vire, Potions
+- Nyx Calder, Forbidden Studies
+- Seraphina Vale, Magical Healing
+- Eldric Morrow, Magical History
+
+ORDERS
+- Astrae
+- Brannor
+- Calyx
+- Nocten
+
+TRIO FUNCTIONS
+- Jasper chooses.
+- Harper exposes immediate danger.
+- Ava exposes delayed cost.
+
+ACADEMY VALUES
+- Courtesy.
+- Curiosity.
+- Learn well.
+- Harm none needlessly.
+- Magic has consequences.
+- Rest is not weakness.
+- Dueling is discipline, not spectacle.
+- Precision, preparation, restraint, and memory matter.
+
+CORE AUSTRALIAN IDENTITY
+- Coastal.
+- Climate-aware.
+- Beach life remains normal.
+- Casual life must coexist with magical danger.
+
+======================================================================
+17. REPOSITORY AUDIT
+======================================================================
+
+Repository files reviewed: 206
+Approximate unpacked size: 151.9 MB
+
+Major asset types:
+- 56 PNG images
+- 12 JPG images
+- 50 TXT files
+- 3 VRoid files
+- 2 VRM files
+- 2 GLB files
+- 3 HTML files
+- JavaScript/CSS web-game files
+- Unity project files
+- Python modelling tools
+- Fantasy-Australia map art
+
+SOURCE PRIORITY USED FOR THIS CANON
+
+Highest priority:
+1. Dedicated character about files.
+2. lore/orders.txt.
+3. lore relationship canon and design documents.
+4. Full style and trio conflict books.
+
+Secondary:
+5. Current game/index.html implementation.
+6. idk.txt profiles for Seraphina Vale and Eldric Morrow.
+7. Character images and turn-around art.
+
+Lower / draft priority:
+8. Older game/main.js prototype.
+9. Concept map labels.
+10. Empty placeholder files and starter Unity content.
+
+END OF TIDEFALL CANON VERSION 0.1
