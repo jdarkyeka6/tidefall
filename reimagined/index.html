@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#060f1e">
+<meta name="description" content="Tidefall: The Veil, a new third-person fantasy action adventure prototype.">
+<title>TIDEFALL — THE VEIL</title>
+</head><body>
+<div id="app">
+  <div id="viewport"></div>
+  <div id="vignette"></div>
+  <div id="crosshair" aria-hidden="true"><span></span></div>
+  <div id="hud" class="hidden">
+    <div class="hud-top"><div class="logo-small">TIDEFALL <span>THE VEIL</span></div><div id="location">THE SHATTERED COAST</div><div id="fps"></div></div>
+    <div id="objective" class="objective"><div class="eyebrow">◆ THE SALTWATER THREAD <small>01 / BOOK ONE</small></div><div class="objective-title" id="objective-title"></div><div class="objective-sub" id="objective-sub"></div></div>
+    <div class="hud-bottom">
+      <div class="vitals">
+        <div class="vital-row"><span>HEALTH</span><strong id="health-number">100</strong></div><div class="meter"><div class="fill health" id="health-fill"></div></div>
+        <div class="vital-row"><span>AETHER</span><strong id="mana-number">100</strong></div><div class="meter"><div class="fill mana" id="mana-fill"></div></div>
+        <div class="vital-row stamina-row"><span>STAMINA</span><strong id="stamina-number">100</strong></div><div class="meter thin"><div class="fill stamina" id="stamina-fill"></div></div>
+      </div>
+      <div class="spells"><div class="spell selected" id="spell-0"><kbd>1</kbd><b>✦</b><span>AETHER BOLT</span></div><div class="spell" id="spell-1"><kbd>2</kbd><b>❖</b><span>EMBER BURST</span></div><div class="spell" id="spell-2"><kbd>3</kbd><b>✳</b><span>FROST NOVA</span></div><div class="spell" id="spell-3"><kbd>4</kbd><b>✧</b><span>HEAL</span></div></div>
+    </div>
+    <div id="prompt" class="prompt hidden"></div>
+    <div id="boss" class="boss hidden"><div>ABYSSAL WARDEN <small>THE GATEKEEPER</small></div><div class="boss-meter"><div id="boss-fill"></div></div></div>
+    <div id="toast" class="toast hidden"></div>
+    <div class="controls-hint">WASD MOVE <span>·</span> SHIFT SPRINT <span>·</span> SPACE DODGE <span>·</span> Q PARRY <span>·</span> V MELEE <span>·</span> MOUSE AIM <span>·</span> CLICK CAST <span>·</span> E INTERACT <span>·</span> M MAP <span>·</span> K UPGRADES <span>·</span> N MUTE <span>·</span> ESC PAUSE</div>
+    <div class="waypoint"><div id="waypoint-arrow">▲</div><div id="waypoint-dist"></div></div>
+  </div>
+  <div id="menu" class="menu">
+    <div class="menu-top"><div class="edition">A NEW TIDEFALL EXPERIENCE <span>PROTOTYPE 0.2</span></div><div class="menu-status"><i></i> IN DEVELOPMENT</div></div>
+    <div class="menu-content"><div class="section-marker">BOOK ONE <span>◆</span> THE SALTWATER THREAD</div><h1>TIDEFALL</h1><div class="title-sub">THE <em>VEIL</em></div>
+    <p>When the ocean forgets its shore,<br>the forgotten begin to wake.</p>
+    <div class="menu-buttons"><button id="play" class="primary">ENTER THE VEIL <span>↗</span></button><button id="new-game" class="secondary">NEW GAME</button></div>
+    <div class="menu-controls"><span><b>WASD</b> MOVE</span><span><b>MOUSE</b> CAMERA</span><span><b>1–4</b> SPELLS</span><span><b>E</b> INTERACT</span><span><b>Q</b> PARRY</span><span><b>V</b> MELEE</span></div>
+    </div>
+    <div class="menu-bottom"><div>JASPER HOLLOWAY <span>·</span> THE SHATTERED COAST</div><div><label for="quality">GRAPHICS</label><select id="quality" aria-label="Graphics quality"><option value="auto">AUTO</option><option value="high">HIGH · DETAILED CHARACTERS</option><option value="medium">BALANCED</option><option value="low">PERFORMANCE</option></select></div><div id="load-status">PREPARING THE COAST...</div></div>
+  </div>
+  <div id="dialogue" class="dialogue hidden"><div id="speaker" class="speaker"></div><p id="dialogue-line"></p><div class="dialogue-footer">PRESS E TO CONTINUE <span>↵</span></div></div>
+  <div id="game-over" class="end-screen hidden"><div class="end-inner"><span id="end-eyebrow">THE VEIL REMAINS</span><h2 id="end-title">FALLEN</h2><p id="end-description">The tide has not claimed its last.</p><button id="retry" class="primary">TRY AGAIN ↗</button><button id="return-menu" class="secondary">MAIN MENU</button></div></div>
+</div>
+<link rel="stylesheet" href="./src/style.css">
+<link rel="stylesheet" href="./src/interface-plus.css">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.164.1/examples/jsm/","@pixiv/three-vrm":"https://cdn.jsdelivr.net/npm/@pixiv/three-vrm@2.1.3/lib/three-vrm.module.js"}}</script>
+<script type="module" src="./src/main.js"></script></body></html>
