@@ -17,10 +17,10 @@ export function createWorldPlus({scene,root,terrain,hAt,rand,player,quality="aut
  const g=(p,s,material,parent=group)=>{const m=make(boxGeo,material,parent);m.position.set(...p);m.scale.set(...s);return m;};
  const tower=(x,z,r,h,y=0)=>{
    const baseY=hAt(x,z)+y,body=make(new THREE.CylinderGeometry(r*.93,r,h,10),limestone);
-   body.position.set(x,baseY+h*.5,z);
+   body.position.set(x,baseY+h*.5,z);body.castShadow=true;
    const base=make(new THREE.CylinderGeometry(r*1.16,r*1.2,.85,10),slate);base.position.set(x,baseY+.4,z);
    const top=make(new THREE.CylinderGeometry(r*1.12,r*1.12,.8,10),pale);top.position.set(x,baseY+h+.15,z);
-   const spire=make(new THREE.ConeGeometry(r*1.42,3.3,10),roof);spire.position.set(x,baseY+h+2.1,z);
+   const spire=make(new THREE.ConeGeometry(r*1.42,3.3,10),roof);spire.position.set(x,baseY+h+2.1,z);spire.castShadow=true;
    const needle=make(new THREE.CylinderGeometry(.06,.06,1.5,6),warm);needle.position.set(x,baseY+h+4.1,z);
    for(let i=0;i<8;i++){const a=i*TAU/8,p=make(boxGeo,slate);p.position.set(x+Math.sin(a)*r*.84,baseY+h*.74,z+Math.cos(a)*r*.84);p.scale.set(.4,1.7,.13);p.rotation.y=a;}
    return {x,z,h};
@@ -28,12 +28,12 @@ export function createWorldPlus({scene,root,terrain,hAt,rand,player,quality="aut
  const arch=(x,z,w=11,h=9,rot=0)=>{
    const y=hAt(x,z)+.1,base=new THREE.Group();base.position.set(x,y,z);base.rotation.y=rot;group.add(base);
    for(const d of [-1,1]){
-     const col=make(new THREE.CylinderGeometry(.84,1.05,h,9),limestone,base);col.position.set(d*w*.5,h*.5,0);
+     const col=make(new THREE.CylinderGeometry(.84,1.05,h,9),limestone,base);col.position.set(d*w*.5,h*.5,0);col.castShadow=true;
      const cap=g([d*w*.5,h-.15,0],[2.15,.85,2.2],pale,base);
      const socket=g([d*w*.5,.5,0],[2.55,1.15,2.4],slate,base);
      for(const off of [-.28,.28])g([d*w*.5+off,h*.42,-.83],[.12,h*.55,.12],slate,base);
    }
-   const beam=g([0,h-.35,0],[w+1,1.3,2.2],pale,base);
+   const beam=g([0,h-.35,0],[w+1,1.3,2.2],pale,base);beam.castShadow=true;
    for(let i=0;i<10;i++)g([-w/2+(i+.5)*w/10,h+.62,0],[.52,.82,1.9],limestone,base);
    const keystone=make(new THREE.BoxGeometry(1.3,2.3,2.45),warm,base);keystone.position.set(0,h-.15,0);keystone.rotation.z=PI/4;
    return base;
@@ -54,11 +54,11 @@ export function createWorldPlus({scene,root,terrain,hAt,rand,player,quality="aut
   mesh.rotation.x=-PI/2;mesh.position.set(x,hAt(x,z)+.105,z);return mesh;
  }
  // An actual silhouette over the central courtyard, including a high lookout.
- for(const [x,z,r,h] of [[-25,1,3.2,24],[25,1,3.2,24],[-24,30,3.1,20],[24,30,3.1,20],[-8,-12,3,15],[8,-12,3,15]]){
+ for(const [x,z,r,h] of [[-25,1,3.2,24],[25,1,3.2,24],[-33,35,3.1,20],[33,35,3.1,20],[-8,-12,3,15],[8,-12,3,15]]){
    tower(x,z,r,h);
  }
  arch(0,3,14,11,0);arch(0,-12,13,12,0);arch(0,31,19,11,0);
- for(const x of [-24,24]){
+ for(const x of [-32,32]){
    for(const z of [5,13,21])g([x,hAt(x,z)+7,z],[2.5,13,5.2],limestone);
    for(const z of [5,13,21])g([x,hAt(x,z)+13.8,z],[3.0,1.1,5.4],pale);
    for(const z of [7,19])banner(x+(x<0?1.6:-1.6),z,x<0?0x659aa4:0xb29e74,1.5,6,13.2);
