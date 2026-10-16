@@ -14,3 +14,8 @@
 .shop-tip{font-size:10px;color:#829fab;margin-top:8px;letter-spacing:.04em}
 @media(max-width:850px){.veil-map{top:84px;right:13px;width:162px}.veil-map.expanded{width:min(290px,48vw)}.veil-map .map-header{font-size:8px}.veil-map .map-footer{font-size:8px}.veil-rank{top:57px;right:15px;font-size:9px}.veil-upgrades{padding:9px}.shop-heading{font-size:10px;display:block}.shop-heading small{display:block}}
 @media(max-height:790px){.veil-upgrades{margin-top:9px;padding:8px}.upgrade-row{padding:4px 9px;min-height:35px}.upgrade-row small{display:none}.shop-content{margin-top:7px}.menu-content p{margin:12px 0}.menu h1{font-size:clamp(53px,7vw,99px)}.menu-controls{display:none}}
+
+.damage-number{position:fixed;pointer-events:none;z-index:24;transform:translate(-50%,-50%);color:#ffe4b2;font:800 19px/1 'DM Sans',sans-serif;letter-spacing:.04em;text-shadow:0 2px 4px #05111c,0 0 15px rgba(250,192,115,.6);animation:damage-rise .61s cubic-bezier(.1,.75,.3,1) both;will-change:transform,opacity}
+@keyframes damage-rise{from{opacity:0;transform:translate(-50%,-10%) scale(.7)}20%{opacity:1}to{opacity:0;transform:translate(-50%,-120%) scale(1.14)}}
+.menu:after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(90deg,transparent,transparent 210px,rgba(255,255,255,.009) 211px,transparent 212px);mix-blend-mode:screen}
+.spell.selected b{animation:spell-pulse 2s ease-in-out infinite}@keyframes spell-pulse{50%{text-shadow:0 0 22px rgba(164,230,251,.95)}}
