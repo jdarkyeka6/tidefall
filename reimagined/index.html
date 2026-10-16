@@ -23,7 +23,7 @@
     <div id="prompt" class="prompt hidden"></div>
     <div id="boss" class="boss hidden"><div>ABYSSAL WARDEN <small>THE GATEKEEPER</small></div><div class="boss-meter"><div id="boss-fill"></div></div></div>
     <div id="toast" class="toast hidden"></div>
-    <div class="controls-hint">WASD MOVE <span>·</span> SHIFT SPRINT <span>·</span> SPACE DODGE <span>·</span> MOUSE AIM <span>·</span> CLICK CAST <span>·</span> E INTERACT <span>·</span> ESC PAUSE</div>
+    <div class="controls-hint">WASD MOVE <span>·</span> SHIFT SPRINT <span>·</span> SPACE DODGE <span>·</span> Q PARRY <span>·</span> V MELEE <span>·</span> MOUSE AIM <span>·</span> CLICK CAST <span>·</span> E INTERACT <span>·</span> M MAP <span>·</span> K UPGRADES <span>·</span> N MUTE <span>·</span> ESC PAUSE</div>
     <div class="waypoint"><div id="waypoint-arrow">▲</div><div id="waypoint-dist"></div></div>
   </div>
   <div id="menu" class="menu">
@@ -31,7 +31,7 @@
     <div class="menu-content"><div class="section-marker">BOOK ONE <span>◆</span> THE SALTWATER THREAD</div><h1>TIDEFALL</h1><div class="title-sub">THE <em>VEIL</em></div>
     <p>When the ocean forgets its shore,<br>the forgotten begin to wake.</p>
     <div class="menu-buttons"><button id="play" class="primary">ENTER THE VEIL <span>↗</span></button><button id="new-game" class="secondary">NEW GAME</button></div>
-    <div class="menu-controls"><span><b>WASD</b> MOVE</span><span><b>MOUSE</b> CAMERA</span><span><b>1–4</b> SPELLS</span><span><b>E</b> INTERACT</span></div>
+    <div class="menu-controls"><span><b>WASD</b> MOVE</span><span><b>MOUSE</b> CAMERA</span><span><b>1–4</b> SPELLS</span><span><b>E</b> INTERACT</span><span><b>Q</b> PARRY</span><span><b>V</b> MELEE</span></div>
     </div>
     <div class="menu-bottom"><div>JASPER HOLLOWAY <span>·</span> THE SHATTERED COAST</div><div><label for="quality">GRAPHICS</label><select id="quality" aria-label="Graphics quality"><option value="auto">AUTO</option><option value="high">HIGH</option><option value="medium">BALANCED</option><option value="low">PERFORMANCE</option></select></div><div id="load-status">PREPARING THE COAST...</div></div>
   </div>
@@ -39,5 +39,6 @@
   <div id="game-over" class="end-screen hidden"><div class="end-inner"><span id="end-eyebrow">THE VEIL REMAINS</span><h2 id="end-title">FALLEN</h2><p id="end-description">The tide has not claimed its last.</p><button id="retry" class="primary">TRY AGAIN ↗</button><button id="return-menu" class="secondary">MAIN MENU</button></div></div>
 </div>
 <link rel="stylesheet" href="./src/style.css">
+<link rel="stylesheet" href="./src/interface-plus.css">
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js"}}</script>
 <script type="module" src="./src/main.js"></script></body></html>
