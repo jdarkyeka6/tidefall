@@ -343,7 +343,7 @@ function particles(dt){
  pgeom.attributes.position.needsUpdate=true;
  pgeom.attributes.color.needsUpdate=true;
 }
-const projectiles=[],ringsFX=[];
+const projectiles=[],ringsFX=[],projectilePool=[];
 const S=[
  {name:"AETHER BOLT",cost:10,cd:.23,damage:37,speed:53,color:0x8bdcff,radius:.31},
  {name:"EMBER BURST",cost:25,cd:.8,damage:62,speed:34,color:0xff9868,radius:.6},
@@ -376,9 +376,16 @@ function cast(){
  }
  if(selected===2){explosion(from,0xa6e9ff,9,34*statsFor(save).damageMult,true);return;}
  const dir=new V3(Math.sin(yaw),clamp(.16-pitch*.75,-.25,.5),-Math.cos(yaw)).normalize();
- const m=orb(from.x,from.y,from.z,s.radius,new THREE.MeshBasicMaterial({color:s.color}));
- const halo=glow(s.color,0,0,0,s.radius*7,m);
- projectiles.push({m,dir,vel:s.speed,life:1.8,damage:s.damage*statsFor(save).damageMult,color:s.color,type:selected,r:s.radius});
+ let p=projectilePool.pop();
+ if(!p){
+  const m=orb(0,0,0,1,new THREE.MeshBasicMaterial({color:s.color}));
+  p={m,dir:new V3(),halo:glow(s.color,0,0,0,7,m)};
+ }
+ p.m.visible=true;p.m.position.copy(from);p.m.scale.setScalar(s.radius);
+ p.m.material.color.setHex(s.color);p.halo.material.color.setHex(s.color);
+ p.dir.copy(dir);p.vel=s.speed;p.life=1.8;p.damage=s.damage*statsFor(save).damageMult;
+ p.color=s.color;p.type=selected;p.r=s.radius;
+ projectiles.push(p);
  burst(from,s.color,12,4);
 }
 function updateProjectiles(dt){
@@ -396,7 +403,7 @@ function updateProjectiles(dt){
   if(pos.y<hAt(pos.x,pos.z)+.25||hit||p.life<=0){
    if(!hit&&p.type===1)explosion(pos,p.color,4.5,p.damage*.7);
    else if(!hit)burst(pos,p.color,7,3);
-   root.remove(p.m);p.m.material.dispose();projectiles.splice(i,1);
+   p.m.visible=false;projectiles.splice(i,1);projectilePool.push(p);
   }
  }
  for(let i=ringsFX.length-1;i>=0;i--){
