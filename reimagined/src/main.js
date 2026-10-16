@@ -47,6 +47,7 @@ function applyQuality(){
  if(typeof smallParticles!=="undefined")smallParticles.visible=quality!=="low";
  if(typeof worldPlus!=="undefined")worldPlus.setQuality(quality);
  if(quality==="high")loadDetailedAvatars();
+ for(const av of detailedAvatars){const use=quality==="high"||quality==="auto"&&fps>=40;av.model.visible=use;av.npc.group.visible=!use;if(av.tag)av.tag.visible=use;}
 }
 $("quality").value=quality;
 $("quality").addEventListener("change",e=>{quality=e.target.value;save.quality=quality;persist();applyQuality();});
@@ -280,7 +281,7 @@ function humanFigure(name,x,z,colors={}){
  const collar=mesh(new THREE.TorusGeometry(.37,.055,8,24),trim,g);collar.rotation.x=PI/2;collar.position.set(0,2.12,-.08);
  const cape=mesh(new THREE.ConeGeometry(.72,2.1,16,1,true),capeMat,g);cape.position.set(0,1.15,.33);cape.rotation.x=PI+.08;
  for(const sx of [-1,1]){
-  const shoulder=orb(sx*.45,1.99,0,.25,clothing,g);shoulder.scale.set(.92,.85,.9);
+  const shoulder=orb(sx*.42,1.94,0,.19,clothing,g);shoulder.scale.set(.95,.75,.85);
   const upper=cy(sx*.60,1.58,-.035,.16,.20,.64,clothing,g,10);upper.rotation.z=sx*.14;
   orb(sx*.63,1.17,-.04,.16,skin,g);
   const leg=cy(sx*.23,.43,0,.20,.25,.76,boots,g,10);
@@ -291,14 +292,14 @@ function humanFigure(name,x,z,colors={}){
  const face=orb(0,2.54,-.035,.34,skin,g);face.scale.set(.9,1.04,.9);
  for(const sx of [-1,1]){
   orb(sx*.13,2.58,-.35,.037,mat(0x1f3545),g);
-  orb(sx*.32,2.54,-.02,.055,skin,g);
+  orb(sx*.29,2.54,-.02,.05,skin,g);
  }
  orb(0,2.48,-.36,.047,skin,g);
- const top=orb(0,2.81,.03,.35,hcol,g);top.scale.set(1,.40,1.08);
+ const top=orb(0,2.80,.035,.32,hcol,g);top.scale.set(1,.58,1.02);
  for(let i=0;i<5;i++){
    const angle=(i/4-.5)*1.8;
-   const lock=mesh(new THREE.ConeGeometry(.095,.48,7),hcol,g);
-   lock.position.set(Math.sin(angle)*.26,2.78,-.26+Math.abs(angle)*.035);
+   const lock=mesh(new THREE.ConeGeometry(.070,.24,8),hcol,g);
+   lock.position.set(Math.sin(angle)*.24,2.71,-.25+Math.abs(angle)*.035);
    lock.rotation.z=Math.sin(angle)*-.22;lock.rotation.x=.28;
  }
  for(const sx of [-1,1]){
@@ -333,7 +334,7 @@ const npcs=[
 // Optional, asynchronous, and non-blocking. Procedural avatars remain as fallback.
 const detailedAvatars=[];let detailedAvatarsAttempted=false;
 async function loadDetailedAvatars(){
- if(detailedAvatarsAttempted||quality!=="high")return;
+ if(detailedAvatarsAttempted||(quality!=="high"&&quality!=="auto"))return;
  detailedAvatarsAttempted=true;
  try{
   const [{GLTFLoader},{VRMLoaderPlugin}]=await Promise.all([
@@ -359,8 +360,9 @@ async function loadDetailedAvatars(){
     model.updateMatrixWorld(true);
     const scaled=new THREE.Box3().setFromObject(model);
     model.position.y=hAt(npc.x,npc.z)-scaled.min.y;
+    const tag=labelSprite(npc.name);tag.position.set(npc.x,hAt(npc.x,npc.z)+3.65,npc.z);root.add(tag);
     npc.group.visible=false;
-    detailedAvatars.push({npc,vrm,model});
+    detailedAvatars.push({npc,vrm,model,tag});
    }catch(e){console.info("VRM unavailable; procedural avatar kept:",item.id);}
   }));
  }catch(e){console.info("Detailed models unavailable; stylized fallback enabled.");}
@@ -372,9 +374,9 @@ const cape=mesh(new THREE.ConeGeometry(.87,2.35,11,1,true),robeBack,animated);
 cape.position.set(0,1.17,.23);cape.rotation.x=PI;
 const torso=cy(0,1.65,0,.47,.69,1.75,darkRobe,animated,12);
 cy(0,2.45,0,.39,.47,.45,darkRobe,animated,12);
-const head=orb(0,2.84,-.08,.42,skin,animated);head.scale.set(1,1.1,1);
-const hairCap=orb(0,3.13,.02,.41,hair,animated);hairCap.scale.set(1,.55,1.03);
-for(const dx of [-.17,.17])orb(dx,2.88,-.44,.036,obsidian,animated);
+const head=orb(0,2.82,-.08,.33,skin,animated);head.scale.set(1,1.14,.94);
+const hairCap=orb(0,3.05,.02,.35,hair,animated);hairCap.scale.set(1,.50,1.0);
+for(const dx of [-.12,.12])orb(dx,2.84,-.39,.03,obsidian,animated);
 const ring=mesh(new THREE.TorusGeometry(.17,.037,7,24),robeTrim,animated);ring.position.set(0,2.32,-.45);
 const arms=[];
 for(const sx of [-1,1]){
@@ -847,6 +849,10 @@ function animate(){
    if(fps<42&&activeDpr>.8)activeDpr=Math.max(.8,activeDpr-.12);
    if(fps>58&&activeDpr<cap)activeDpr=Math.min(cap,activeDpr+.06);
    if(Math.abs(before-activeDpr)>.015)renderer.setPixelRatio(activeDpr);
+   if(fps>=54&&clock.elapsedTime>4)loadDetailedAvatars();
+   for(const av of detailedAvatars){
+     const use=fps>=40;av.model.visible=use;av.npc.group.visible=!use;if(av.tag)av.tag.visible=use;
+   }
   }
  }
  renderer.render(scene,camera);
