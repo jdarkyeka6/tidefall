@@ -304,6 +304,7 @@ const leftBoot=cy(-.25,.37,-.08,.23,.25,.71,stone2,animated,7),rightBoot=cy(.25,
 const wand=new THREE.Group();arms[1].add(wand);wand.position.set(.11,-.96,-.3);wand.rotation.x=PI/2;
 cy(0,.42,0,.035,.055,1,wood,wand);orb(0,.93,0,.12,iceMat,wand);
 const wandTip=glow(0x8be6ff,0,.93,0,1.2,wand);
+heroGroup.traverse(obj=>{if(obj.isMesh)obj.castShadow=true;});
 heroGroup.position.set(0,hAt(0,23),23);
 
 // Reusable particles: 1 GPU draw call for hundreds of spell motes.
@@ -637,6 +638,7 @@ document.addEventListener("keydown",e=>{
 document.addEventListener("keyup",e=>{keys[e.code]=false;});
 window.addEventListener("blur",()=>{for(const k in keys)keys[k]=false;});
 renderer.domElement.addEventListener("mousedown",e=>{if(e.button===0)cast();});
+let hudAcc=0;
 const updateHud=()=>{
  const q=currentQuest(save);
  $("objective-title").textContent=q.title;
@@ -661,7 +663,7 @@ function animate(){
  const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
  waterMat.uniforms.time.value=t;
  updateRelics(t);
- if(playing&&!gameEnded){heroMove(dt,t);enemiesTick(dt,t);updateProjectiles(dt);particles(dt);updateHud();}
+ if(playing&&!gameEnded){heroMove(dt,t);enemiesTick(dt,t);updateProjectiles(dt);particles(dt);hudAcc+=dt;if(hudAcc>.10){hudAcc=0;updateHud();}}
  else{for(const n of npcs)n.group.rotation.y=Math.sin(t*.35+n.x)*.15;}
  camTick(dt);
  if(toasting>0){toasting-=dt;if(toasting<=0)$("toast").classList.add("hidden");}
@@ -671,10 +673,10 @@ function animate(){
   $("fps").textContent=fps+" FPS  ·  "+(quality==="auto"?"AUTO":quality.toUpperCase());
   // Auto scaler never raises the internal pixel ratio above its GPU-conscious cap.
   if(quality==="auto"&&started){
-   const cap=Math.min(window.devicePixelRatio||1,1.55);
+   const cap=Math.min(window.devicePixelRatio||1,1.55),before=activeDpr;
    if(fps<42&&activeDpr>.8)activeDpr=Math.max(.8,activeDpr-.12);
    if(fps>58&&activeDpr<cap)activeDpr=Math.min(cap,activeDpr+.06);
-   renderer.setPixelRatio(activeDpr);
+   if(Math.abs(before-activeDpr)>.015)renderer.setPixelRatio(activeDpr);
   }
  }
  renderer.render(scene,camera);
