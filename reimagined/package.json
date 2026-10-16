@@ -7,7 +7,7 @@
     "dev": "vite --host 0.0.0.0",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0",
-    "test": "node --test tests/progression.test.mjs tests/upgrades.test.mjs",
+    "test": "node --test tests/progression.test.mjs tests/upgrades.test.mjs tests/navigation.test.mjs",
     "test:browser": "node --test tests/browser.test.mjs"
   },
   "dependencies": {
