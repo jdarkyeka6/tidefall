@@ -431,7 +431,6 @@ function spawnWarden(){
  notify("THE ABYSSAL WARDEN HAS AWAKENED");
  burst(boss.group.position.clone().add(new V3(0,4,0)),0xb18afa,95,13);
 }
-if(save.relics.length===3)spawnWarden();
 function hitEnemy(e,damage,freeze=false){
  if(e.dead)return;
  e.hp=Math.max(0,e.hp-damage);e.flash=.19;
@@ -499,6 +498,7 @@ function updateRelics(t){
  portalSurface.material.uniforms.sealed.value=save.finished?1:0;
 }
 let yaw=0,pitch=.16,playing=false,started=false,dialogueOpen=false,dialogueNpc=null,dialogueIndex=0,toasting=0,gameEnded=false;
+if(save.relics.length===3)spawnWarden();
 const keys={};
 function notify(txt){$("toast").textContent=txt;$("toast").classList.remove("hidden");toasting=4;}
 const target=new V3(),desired=new V3(),moveVec=new V3();
@@ -674,7 +674,7 @@ function animate(){
    const cap=Math.min(window.devicePixelRatio||1,1.55);
    if(fps<42&&activeDpr>.8)activeDpr=Math.max(.8,activeDpr-.12);
    if(fps>58&&activeDpr<cap)activeDpr=Math.min(cap,activeDpr+.06);
-   renderer.setPixelRatio(activeDpr);renderer.setSize(innerWidth,innerHeight,false);
+   renderer.setPixelRatio(activeDpr);
   }
  }
  renderer.render(scene,camera);
