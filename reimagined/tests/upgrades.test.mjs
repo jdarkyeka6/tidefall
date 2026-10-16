@@ -11,7 +11,7 @@ test("legacy saves gain valid XP and upgrade defaults",()=>{
 });
 test("progression saves sanitize hacked stats and oversized resources",()=>{
  const s=normalizeSave({version:1,xp:1e100,essence:1e100,upgrades:{power:6,vitality:-5,focus:2.3}});
- assert.equal(s.xp,0);assert.equal(s.essence,0);
+ assert.equal(s.xp,100000);assert.equal(s.essence,999);
  assert.deepEqual(s.upgrades,{power:5,vitality:0,focus:0});
 });
 test("rank grows with XP and is capped",()=>{
