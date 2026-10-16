@@ -145,7 +145,7 @@ export function createWorldPlus({scene,root,terrain,hAt,rand,player,quality="aut
   rainMat.uniforms.time.value=t;rainMat.uniforms.hero.value.copy(player.position);
   stormCooldown-=dt;
   if(stormCooldown<=0){stormCooldown=19+rand()*23;lightning=.14;scene.fog.color.setHex(0x5e7491);}
-  if(lightning>0){lightning-=dt;if(lightning<=0)scene.fog.color.setHex(0x244458);}
+  if(lightning>0){lightning-=dt;if(lightning<=0)scene.fog.color.setHex(0x527080);}
  }
  function setQuality(q){
   const low=q==="low";
