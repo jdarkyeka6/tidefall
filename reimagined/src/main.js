@@ -2,6 +2,7 @@ import * as THREE from "three";
 import {createWorldPlus} from "./world-plus.js";
 import {TidefallAudio} from "./audio.js";
 import {setupGameUI} from "./interface-plus.js";
+import {slideMotion} from "./navigation.mjs";
 // Stylesheet linked from index.html for both static preview and Vite builds.
 import {SAVE_KEY,RELICS,DIALOGUES,freshSave,normalizeSave,currentQuest,claimRelic,defeatWarden,sealVeil,moveAxis,statsFor,rankAtXP,gainRewards,purchaseUpgrade,UPGRADE_LABELS} from "./logic.mjs";
 
@@ -362,7 +363,7 @@ function explosion(pos,color,radius,damage,slow=false){
   if(dist<radius+e.size)hitEnemy(e,damage*(1-.45*Math.max(0,dist/radius)),slow);
  }
 }
-let selected=0,hero={health:statsFor(save).maxHealth,mana:statsFor(save).maxMana,stamina:100,attackCooldown:0,dodgeCooldown:0,dodgeTime:0,invincible:0,step:0,parryTime:0,parryCooldown:0,combo:0};
+let selected=0,hero={health:statsFor(save).maxHealth,mana:statsFor(save).maxMana,stamina:100,attackCooldown:0,dodgeCooldown:0,dodgeTime:0,invincible:0,step:0,parryTime:0,parryCooldown:0,combo:0,vx:0,vz:0};
 function selectSpell(i){selected=i;for(let j=0;j<4;j++)$("spell-"+j).classList.toggle("selected",j===i);}
 function cast(){
  if(!playing||dialogueOpen||hero.attackCooldown>0)return;
@@ -599,9 +600,13 @@ function heroMove(dt,t){
   vx=hero.dodgeX;vz=hero.dodgeZ;
  }
  const speed=hero.dodgeTime>0?17:(sprint?8.9:5.2);
- let x=heroGroup.position.x+vx*speed*dt,z=heroGroup.position.z+vz*speed*dt;
- // Solid coastline guard. Avoid water and out-of-map positions.
- if(hAt(x,z)>-1.45&&Math.hypot(x,z+14)<112){heroGroup.position.x=x;heroGroup.position.z=z;}
+ const acceleration=Math.min(1,dt*(hero.dodgeTime>0?28:(input.active?10:16)));
+ hero.vx=lerp(hero.vx,vx*speed,acceleration);
+ hero.vz=lerp(hero.vz,vz*speed,acceleration);
+ const movement=slideMotion(heroGroup.position.x,heroGroup.position.z,hero.vx*dt,hero.vz*dt,hAt);
+ heroGroup.position.x=movement.x;heroGroup.position.z=movement.z;
+ if(movement.blockedX)hero.vx=0;
+ if(movement.blockedZ)hero.vz=0;
  const y=hAt(heroGroup.position.x,heroGroup.position.z);
  heroGroup.position.y=lerp(heroGroup.position.y,y,Math.min(1,dt*12));
  const walk=Math.hypot(vx,vz),moving=walk>.01;
@@ -669,7 +674,7 @@ function endGame(won){
 function respawn(){
  gameEnded=false;$("game-over").classList.add("hidden");
  hero.health=statsFor(save).maxHealth;hero.mana=statsFor(save).maxMana;hero.stamina=100;hero.parryTime=0;hero.parryCooldown=0;
- hero.attackCooldown=0;hero.invincible=2;
+ hero.attackCooldown=0;hero.invincible=2;hero.vx=0;hero.vz=0;
  heroGroup.position.set(0,hAt(0,23),23);
  for(const r of RELICS)if(!save.relics.includes(r.id)&&!enemies.some(e=>!e.dead&&e.tag===r.id))
   for(let j=0;j<3;j++){let a=j/3*TAU+.5;creature(r.x+Math.cos(a)*9,r.z+Math.sin(a)*9,0,r.id);}
