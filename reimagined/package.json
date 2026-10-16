@@ -11,7 +11,7 @@
     "test:browser": "node --test tests/browser.test.mjs"
   },
   "dependencies": {
-    "three": "0.160.1",
+    "three": "0.164.1",
     "@pixiv/three-vrm": "2.1.3"
   },
   "devDependencies": {
