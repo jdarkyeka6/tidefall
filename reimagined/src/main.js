@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import {createWorldPlus} from "./world-plus.js";
 // Stylesheet linked from index.html for both static preview and Vite builds.
 import {SAVE_KEY,RELICS,DIALOGUES,freshSave,normalizeSave,currentQuest,claimRelic,defeatWarden,sealVeil,moveAxis} from "./logic.mjs";
 
@@ -40,6 +41,7 @@ function applyQuality(){
  renderer.shadowMap.needsUpdate=true;
  if(typeof vegetation!=="undefined")vegetation.visible=quality!=="low";
  if(typeof smallParticles!=="undefined")smallParticles.visible=quality!=="low";
+ if(typeof worldPlus!=="undefined")worldPlus.setQuality(quality);
 }
 $("quality").value=quality;
 $("quality").addEventListener("change",e=>{quality=e.target.value;save.quality=quality;persist();applyQuality();});
@@ -109,6 +111,7 @@ function buildSky(){
 }
 buildSky();
 
+let terrainMesh=null;
 function buildGround(){
  const size=260,steps=130,geo=new THREE.PlaneGeometry(size,size,steps,steps);
  geo.rotateX(-PI/2);
@@ -123,7 +126,7 @@ function buildGround(){
   C.offsetHSL(0,0,noise*.25);cols.push(C.r,C.g,C.b);
  }
  geo.setAttribute("color",new THREE.Float32BufferAttribute(cols,3));geo.computeVertexNormals();
- const ground=mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.97}));
+ const ground=mesh(geo,new THREE.MeshStandardMaterial({vertexColors:true,roughness:.97}));terrainMesh=ground;
  ground.receiveShadow=true;
  const water=new THREE.ShaderMaterial({transparent:true,depthWrite:false,side:THREE.DoubleSide,uniforms:{time:{value:0}},
  vertexShader:"uniform float time;varying vec2 uvV;varying vec3 worldPos;void main(){uvV=uv;vec3 p=position;p.z+=sin(p.x*.045+time*.95)*.27+cos(p.y*.062-time*.8)*.17;worldPos=p;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}",
@@ -306,6 +309,7 @@ cy(0,.42,0,.035,.055,1,wood,wand);orb(0,.93,0,.12,iceMat,wand);
 const wandTip=glow(0x8be6ff,0,.93,0,1.2,wand);
 heroGroup.traverse(obj=>{if(obj.isMesh)obj.castShadow=true;});
 heroGroup.position.set(0,hAt(0,23),23);
+const worldPlus=createWorldPlus({scene,root,terrain:terrainMesh,hAt,rand,player:heroGroup,quality});
 
 // Reusable particles: 1 GPU draw call for hundreds of spell motes.
 const POOL=700,px=new Float32Array(POOL*3),pc=new Float32Array(POOL*3),vel=new Float32Array(POOL*3),ttl=new Float32Array(POOL);
@@ -663,6 +667,7 @@ function animate(){
  const dt=Math.min(clock.getDelta(),.05),t=clock.elapsedTime;
  waterMat.uniforms.time.value=t;
  updateRelics(t);
+ worldPlus.update(dt,t);
  if(playing&&!gameEnded){heroMove(dt,t);enemiesTick(dt,t);updateProjectiles(dt);particles(dt);hudAcc+=dt;if(hudAcc>.10){hudAcc=0;updateHud();}}
  else{for(const n of npcs)n.group.rotation.y=Math.sin(t*.35+n.x)*.15;}
  camTick(dt);
