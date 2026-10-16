@@ -1,12 +1,15 @@
 import * as THREE from "three";
 import {createWorldPlus} from "./world-plus.js";
+import {TidefallAudio} from "./audio.js";
+import {setupGameUI} from "./interface-plus.js";
 // Stylesheet linked from index.html for both static preview and Vite builds.
-import {SAVE_KEY,RELICS,DIALOGUES,freshSave,normalizeSave,currentQuest,claimRelic,defeatWarden,sealVeil,moveAxis} from "./logic.mjs";
+import {SAVE_KEY,RELICS,DIALOGUES,freshSave,normalizeSave,currentQuest,claimRelic,defeatWarden,sealVeil,moveAxis,statsFor,rankAtXP,gainRewards,purchaseUpgrade,UPGRADE_LABELS} from "./logic.mjs";
 
 // Tidefall: The Veil is a standalone, GPU-conscious vertical slice.
 // All geometry/textures are generated once; the runtime is asset-download-free.
 const $=id=>document.getElementById(id);
 const viewport=$("viewport"),menu=$("menu"),hud=$("hud"),playBtn=$("play");
+const sound=new TidefallAudio();
 const PI=Math.PI, TAU=PI*2, V3=THREE.Vector3;
 const clamp=THREE.MathUtils.clamp, lerp=THREE.MathUtils.lerp;
 const tmpVec=new V3(),clock=new THREE.Clock();
@@ -359,23 +362,23 @@ function explosion(pos,color,radius,damage,slow=false){
   if(dist<radius+e.size)hitEnemy(e,damage*(1-.45*Math.max(0,dist/radius)),slow);
  }
 }
-let selected=0,hero={health:100,mana:100,stamina:100,attackCooldown:0,dodgeCooldown:0,dodgeTime:0,invincible:0,step:0};
+let selected=0,hero={health:statsFor(save).maxHealth,mana:statsFor(save).maxMana,stamina:100,attackCooldown:0,dodgeCooldown:0,dodgeTime:0,invincible:0,step:0,parryTime:0,parryCooldown:0,combo:0};
 function selectSpell(i){selected=i;for(let j=0;j<4;j++)$("spell-"+j).classList.toggle("selected",j===i);}
 function cast(){
  if(!playing||dialogueOpen||hero.attackCooldown>0)return;
  const s=S[selected];if(hero.mana<s.cost){notify("NOT ENOUGH AETHER");return;}
- hero.mana-=s.cost;hero.attackCooldown=s.cd;
+ hero.mana-=s.cost;hero.attackCooldown=s.cd;sound.spell(selected);
  const from=heroGroup.position.clone().add(new V3(0,2,0));
  if(selected===3){
-  hero.health=Math.min(100,hero.health+35);burst(from,0xa5ffbe,35,5);
-  glow(0x8dffc3,0,1.7,0,3,heroGroup);
+  hero.health=Math.min(statsFor(save).maxHealth,hero.health+35+save.upgrades.power*3);burst(from,0xa5ffbe,35,5);
+  wave(from.x,hAt(from.x,from.z)+.2,from.z,0xa5ffbe,2);
   return;
  }
- if(selected===2){explosion(from,0xa6e9ff,9,34,true);return;}
+ if(selected===2){explosion(from,0xa6e9ff,9,34*statsFor(save).damageMult,true);return;}
  const dir=new V3(Math.sin(yaw),clamp(.16-pitch*.75,-.25,.5),-Math.cos(yaw)).normalize();
  const m=orb(from.x,from.y,from.z,s.radius,new THREE.MeshBasicMaterial({color:s.color}));
  const halo=glow(s.color,0,0,0,s.radius*7,m);
- projectiles.push({m,dir,vel:s.speed,life:1.8,damage:s.damage,color:s.color,type:selected,r:s.radius});
+ projectiles.push({m,dir,vel:s.speed,life:1.8,damage:s.damage*statsFor(save).damageMult,color:s.color,type:selected,r:s.radius});
  burst(from,s.color,12,4);
 }
 function updateProjectiles(dt){
@@ -417,8 +420,10 @@ function creature(x,z,tier=0,tag=null){
  }
  const core=orb(0,.35,-.52,.35,new THREE.MeshBasicMaterial({color:c}),g);
  const halo=glow(c,0,.35,-.5,2.5,g);
+ const tell=mesh(new THREE.RingGeometry(tier?4.7:1.8,tier?5.1:2.15,44),new THREE.MeshBasicMaterial({color:tier?0xff7295:0xffb6a7,transparent:true,opacity:.32,side:THREE.DoubleSide,depthWrite:false}));
+ tell.rotation.x=-PI/2;tell.visible=false;
  const e={group:g,x,z,homeX:x,homeZ:z,hp:tier?365:100,max:tier?365:100,size:tier?3.0:1.15,
-  tier,tag,dead:false,timer:1+rand()*1.5,slow:0,flash:0,death:0,phase:rand()*TAU,core};
+  tier,tag,dead:false,timer:1+rand()*1.5,slow:0,flash:0,death:0,phase:rand()*TAU,core,tell,windup:0,attackX:x,attackZ:z};
  enemies.push(e);return e;
 }
 const enemies=[];
@@ -433,55 +438,108 @@ let boss=null;
 function spawnWarden(){
  if(boss||save.wardenDefeated||save.relics.length<3)return;
  boss=creature(0,-58,1,"warden");boss.hp=365;
- notify("THE ABYSSAL WARDEN HAS AWAKENED");
+ notify("THE ABYSSAL WARDEN HAS AWAKENED");sound.boss();
  burst(boss.group.position.clone().add(new V3(0,4,0)),0xb18afa,95,13);
 }
 function hitEnemy(e,damage,freeze=false){
  if(e.dead)return;
- e.hp=Math.max(0,e.hp-damage);e.flash=.19;
- if(freeze)e.slow=3.2;
- burst(e.group.position.clone().add(new V3(0,1.6,0)),e.tier?0xbf8aff:0xf9a5cf,10,4);
+ const before=e.hp;e.hp=Math.max(0,e.hp-damage);e.flash=.22;
+ if(freeze){e.slow=3.2;e.windup=0;e.tell.visible=false;}
+ sound.hit();
+ burst(e.group.position.clone().add(new V3(0,1.6,0)),e.tier?0xbf8aff:0xf9a5cf,11,4);
+ const pos=e.group.position.clone().add(new V3(0,e.tier?4.7:2.3,0));
+ floatingNumber("-"+Math.ceil(Math.min(before,damage)),pos,freeze?"#a5eeff":"#ffe3b3");
  if(e.hp<=0){
-  e.dead=true;e.death=.5;
-  burst(e.group.position.clone().add(new V3(0,2,0)),e.tier?0x9a89ff:0x8ce5ff,e.tier?120:36,13);
-  if(e.tier){defeatWarden(save);persist();notify("THE WARDEN IS FALLEN · SEAL THE VEIL");}
+  e.dead=true;e.death=.55;e.tell.visible=false;
+  burst(e.group.position.clone().add(new V3(0,2,0)),e.tier?0x9a89ff:0x8ce5ff,e.tier?115:35,11);
+  const oldRank=rankAtXP(save.xp);
+  gainRewards(save,e.tier?220:45,e.tier?8:1);
+  persist();interfacePlus.renderShop();
+  if(rankAtXP(save.xp)>oldRank){notify("RANK UP · "+rankAtXP(save.xp));sound.collect();}
+  if(e.tier){defeatWarden(save);persist();notify("THE WARDEN IS FALLEN · SEAL THE VEIL");sound.boss();}
  }
 }
-function takeHit(amount){
+function takeHit(amount,source=null){
+ if(hero.parryTime>0&&source){
+  hero.parryTime=0;hero.mana=Math.min(statsFor(save).maxMana,hero.mana+13);
+  hitEnemy(source,source.tier?48:58,true);hero.invincible=.22;sound.parry();
+  notify("PERFECT PARRY · COUNTERSTRIKE");return;
+ }
  if(hero.invincible>0||!playing||dialogueOpen)return;
- hero.health=Math.max(0,hero.health-amount);hero.invincible=.65;
+ hero.health=Math.max(0,hero.health-amount);hero.invincible=.65;sound.hurt();
  document.getElementById("vignette").style.boxShadow="inset 0 0 150px rgba(234,38,55,.6)";
  setTimeout(()=>{document.getElementById("vignette").style.boxShadow="";},220);
  if(hero.health<=0)endGame(false);
 }
+function floatingNumber(text,position,color="#e7d2a9"){
+ const el=document.createElement("div");el.className="damage-number";el.textContent=text;el.style.color=color;
+ const projection=position.clone().project(camera);
+ if(projection.z>1)return;
+ el.style.left=(projection.x*.5+.5)*window.innerWidth+"px";
+ el.style.top=(-projection.y*.5+.5)*window.innerHeight+"px";
+ document.body.appendChild(el);setTimeout(()=>el.remove(),620);
+}
+function melee(){
+ if(!playing||dialogueOpen||hero.attackCooldown>0)return;
+ hero.attackCooldown=.36;hero.combo=(hero.combo+1)%3;
+ const p=heroGroup.position,fwdX=Math.sin(yaw),fwdZ=-Math.cos(yaw);
+ let landed=false;
+ for(const e of enemies){
+  if(e.dead)continue;
+  const dx=e.group.position.x-p.x,dz=e.group.position.z-p.z,d=Math.hypot(dx,dz);
+  if(d>3.7+e.size)continue;
+  if((dx*fwdX+dz*fwdZ)/Math.max(.01,d)<-.05)continue;
+  hitEnemy(e,(24+hero.combo*7)*statsFor(save).damageMult);landed=true;
+ }
+ burst(p.clone().add(new V3(fwdX*2,1.8,fwdZ*2)),0xfde3b1,22,5);
+ if(!landed)sound.dash();
+}
+function parry(){
+ if(!playing||dialogueOpen||hero.parryCooldown>0||hero.stamina<18)return;
+ hero.stamina-=18;hero.parryTime=.38;hero.parryCooldown=1.15;
+ wave(heroGroup.position.x,hAt(heroGroup.position.x,heroGroup.position.z)+.18,heroGroup.position.z,0xb3e9ff,2);
+ sound.dash();
+}
 function enemiesTick(dt,t){
  const heroPos=heroGroup.position;
- for(const e of enemies){
+ for(let i=enemies.length-1;i>=0;i--){
+  const e=enemies[i];
   if(e.dead){
    e.death-=dt;e.group.scale.multiplyScalar(Math.max(.1,1-dt*2));
-   if(e.death<=0){root.remove(e.group);enemies.splice(enemies.indexOf(e),1);}
+   if(e.death<=0){root.remove(e.group);root.remove(e.tell);e.tell.geometry.dispose();e.tell.material.dispose();enemies.splice(i,1);}
    continue;
   }
-  const p=e.group.position,dx=heroPos.x-p.x,dz=heroPos.z-p.z,dist=Math.hypot(dx,dz),reached=dist<e.size+1.25;
+  const p=e.group.position,dx=heroPos.x-p.x,dz=heroPos.z-p.z,dist=Math.hypot(dx,dz),reached=dist<e.size+1.3;
   e.timer-=dt;e.flash=Math.max(0,e.flash-dt);e.slow=Math.max(0,e.slow-dt);
-  const speed=(e.tier?2.0:2.45)*(e.slow>0?.3:1);
-  if(playing&&!dialogueOpen&&dist<(e.tier?30:19)&&!reached){
-   p.x+=dx/dist*speed*dt;p.z+=dz/dist*speed*dt;
-  }else if(dist>25&&!e.tier){
-   const hx=e.homeX-p.x,hz=e.homeZ-p.z,hl=Math.hypot(hx,hz)||1;p.x+=hx/hl*speed*.4*dt;p.z+=hz/hl*speed*.4*dt;
+  const speed=(e.tier?2.4:3.15)*(e.slow>0?.3:1);
+  if(e.windup>0){
+   e.windup-=dt;
+   e.tell.visible=true;e.tell.material.opacity=.27+.39*(.5+.5*Math.sin(t*17));
+   if(e.windup<=0){
+    e.tell.visible=false;const radius=e.tier?5.0:2.18;
+    const d=Math.hypot(heroPos.x-e.attackX,heroPos.z-e.attackZ);
+    burst(new V3(e.attackX,hAt(e.attackX,e.attackZ)+.3,e.attackZ),e.tier?0xeb79ad:0xffc3ad,e.tier?34:12,5);
+    if(d<radius)takeHit(e.tier?27:13,e);
+    e.timer=e.tier?3.2:1.7;
+   }
+  }else{
+   e.tell.visible=false;
+   if(playing&&!dialogueOpen&&dist<(e.tier?33:19)&&!reached){
+    p.x+=dx/dist*speed*dt;p.z+=dz/dist*speed*dt;
+   }else if(dist>25&&!e.tier){
+    const hx=e.homeX-p.x,hz=e.homeZ-p.z,hl=Math.hypot(hx,hz)||1;
+    p.x+=hx/hl*speed*.36*dt;p.z+=hz/hl*speed*.36*dt;
+   }
+   if(e.timer<=0&&playing&&!dialogueOpen&&dist<(e.tier?17:3.5)){
+    e.attackX=heroPos.x;e.attackZ=heroPos.z;
+    e.windup=e.tier?1.15:.78;
+    e.tell.position.set(e.attackX,hAt(e.attackX,e.attackZ)+.13,e.attackZ);
+    e.tell.visible=true;
+   }else if(e.timer<=0)e.timer=.35;
   }
   p.y=hAt(p.x,p.z)+(e.tier?2.5:1.2)+Math.sin(t*2.5+e.phase)*.24;
-  const ang=Math.atan2(dx,-dz);e.group.rotation.y=ang;
+  const angle=Math.atan2(dx,-dz);e.group.rotation.y=angle;
   e.core.material.color.setHex(e.flash>0?0xffffff:(e.tier?0xc06cf6:0xe569a3));
-  if(e.timer<=0&&playing&&!dialogueOpen){
-   if(e.tier&&dist<17){
-    wave(heroPos.x,hAt(heroPos.x,heroPos.z)+.16,heroPos.z,0xf384ae,6);
-    if(dist<6)takeHit(24);
-    e.timer=2.8;
-   }else if(!e.tier&&dist<2.8){
-    takeHit(12);e.timer=1.55;
-   }else e.timer=.45;
-  }
  }
  if(boss&&!boss.dead){
   $("boss").classList.remove("hidden");$("boss-fill").style.width=clamp(boss.hp/365*100,0,100)+"%";
@@ -503,6 +561,15 @@ function updateRelics(t){
  portalSurface.material.uniforms.sealed.value=save.finished?1:0;
 }
 let yaw=0,pitch=.16,playing=false,started=false,dialogueOpen=false,dialogueNpc=null,dialogueIndex=0,toasting=0,gameEnded=false;
+const interfacePlus=setupGameUI({hud,menu,getSave:()=>save,onPurchase:type=>{
+  const old=statsFor(save),oldHealth=hero.health,oldMana=hero.mana;
+  if(!purchaseUpgrade(save,type))return false;
+  const next=statsFor(save);
+  hero.health=Math.min(next.maxHealth,oldHealth+(next.maxHealth-old.maxHealth));
+  hero.mana=Math.min(next.maxMana,oldMana+(next.maxMana-old.maxMana));
+  persist();sound.purchase();notify(UPGRADE_LABELS[type]+" UPGRADED");return true;
+}});
+interfacePlus.renderShop();
 if(save.relics.length===3)spawnWarden();
 const keys={};
 function notify(txt){$("toast").textContent=txt;$("toast").classList.remove("hidden");toasting=4;}
@@ -512,7 +579,9 @@ function heroMove(dt,t){
  hero.attackCooldown=Math.max(0,hero.attackCooldown-dt);
  hero.dodgeCooldown=Math.max(0,hero.dodgeCooldown-dt);
  hero.invincible=Math.max(0,hero.invincible-dt);
- hero.mana=Math.min(100,hero.mana+16*dt);
+ hero.parryTime=Math.max(0,hero.parryTime-dt);
+ hero.parryCooldown=Math.max(0,hero.parryCooldown-dt);
+ hero.mana=Math.min(statsFor(save).maxMana,hero.mana+statsFor(save).manaRegen*dt);
  const input=moveAxis(keys);
  const sprint=(keys.ShiftLeft||keys.ShiftRight)&&hero.stamina>0&&input.active&&hero.dodgeTime<=0;
  hero.stamina=Math.min(100,Math.max(0,hero.stamina+(sprint?-21:16)*dt));
@@ -540,7 +609,7 @@ function dodge(){
  const m=moveAxis(keys),fx=Math.sin(yaw),fz=-Math.cos(yaw),rx=Math.cos(yaw),rz=Math.sin(yaw);
  hero.dodgeX=m.active?(fx*m.z+rx*m.x):fx;hero.dodgeZ=m.active?(fz*m.z+rz*m.x):fz;
  hero.dodgeTime=.3;hero.dodgeCooldown=.8;hero.invincible=.48;hero.stamina-=24;
- burst(heroGroup.position.clone().add(new V3(0,.7,0)),0x86d2e8,12,5);
+ burst(heroGroup.position.clone().add(new V3(0,.7,0)),0x86d2e8,12,5);sound.dash();
 }
 function camTick(dt){
  const p=heroGroup.position;
@@ -574,11 +643,11 @@ function interact(){
  }else if(item.kind==="relic"){
   const alive=enemies.some(e=>!e.dead&&e.tag===item.r.id);
   if(claimRelic(save,item.r.id,alive)){
-   persist();notify(item.r.name+" RESTORED");burst(new V3(item.r.x,hAt(item.r.x,item.r.z)+3,item.r.z),item.r.color,100,13);
+   persist();sound.collect();notify(item.r.name+" RESTORED");burst(new V3(item.r.x,hAt(item.r.x,item.r.z)+3,item.r.z),item.r.color,100,13);
    if(save.relics.length===3)spawnWarden();
   }else notify(alive?"DEFEAT THE GUARDIANS FIRST":"SPEAK WITH JASPER FIRST");
  }else if(item.kind==="seal"){
-  if(sealVeil(save)){persist();notify("THE VEIL IS SEALED");setTimeout(()=>endGame(true),1100);}
+  if(sealVeil(save)){persist();sound.collect();notify("THE VEIL IS SEALED");setTimeout(()=>endGame(true),1100);}
  }
 }
 function endGame(won){
@@ -592,7 +661,7 @@ function endGame(won){
 }
 function respawn(){
  gameEnded=false;$("game-over").classList.add("hidden");
- hero.health=100;hero.mana=100;hero.stamina=100;
+ hero.health=statsFor(save).maxHealth;hero.mana=statsFor(save).maxMana;hero.stamina=100;hero.parryTime=0;hero.parryCooldown=0;
  hero.attackCooldown=0;hero.invincible=2;
  heroGroup.position.set(0,hAt(0,23),23);
  for(const r of RELICS)if(!save.relics.includes(r.id)&&!enemies.some(e=>!e.dead&&e.tag===r.id))
@@ -602,9 +671,10 @@ function respawn(){
 }
 $("retry").addEventListener("click",respawn);
 $("return-menu").addEventListener("click",()=>{gameEnded=false;$("game-over").classList.add("hidden");menu.classList.remove("hidden");hud.classList.add("hidden");});
-function pause(){playing=false;menu.classList.remove("hidden");hud.classList.add("hidden");$("load-status").textContent="PAUSED · CLICK TO RESUME";playBtn.textContent="CONTINUE EXPLORING  ↗";}
+function pause(){playing=false;sound.setActive(false);menu.classList.remove("hidden");hud.classList.add("hidden");$("load-status").textContent="PAUSED · CLICK TO RESUME";playBtn.textContent="CONTINUE EXPLORING  ↗";}
 function resume(){
  if(gameEnded)return;
+ sound.unlock();
  try{
   const p=renderer.domElement.requestPointerLock();
   if(p&&p.catch)p.catch(()=>{$("load-status").textContent="CLICK THE GAME TO ENABLE MOUSE LOOK";});
@@ -618,7 +688,7 @@ $("new-game").addEventListener("click",()=>{
 document.addEventListener("pointerlockchange",()=>{
  if(gameEnded)return;
  if(document.pointerLockElement===renderer.domElement){
-  playing=true;started=true;menu.classList.add("hidden");hud.classList.remove("hidden");
+  playing=true;started=true;sound.setActive(true);menu.classList.add("hidden");hud.classList.remove("hidden");
   $("load-status").textContent="READY";
  }else if(started)pause();
 });
@@ -637,24 +707,31 @@ document.addEventListener("keydown",e=>{
  if(e.code==="KeyE")interact();
  if(e.code==="Space")dodge();
  if(e.code==="KeyF")cast();
+ if(e.code==="KeyV")melee();
+ if(e.code==="KeyQ")parry();
+ if(e.code==="KeyM")interfacePlus.toggleMap();
+ if(e.code==="KeyN"){const muted=sound.toggleMute();notify(muted?"AUDIO MUTED":"AUDIO ON");}
+ if(e.code==="KeyK"&&playing)document.exitPointerLock();
  if(e.code==="Escape"&&document.pointerLockElement!==renderer.domElement&&playing)pause();
 });
 document.addEventListener("keyup",e=>{keys[e.code]=false;});
 window.addEventListener("blur",()=>{for(const k in keys)keys[k]=false;});
-renderer.domElement.addEventListener("mousedown",e=>{if(e.button===0)cast();});
+renderer.domElement.addEventListener("mousedown",e=>{if(e.button===0)cast();else if(e.button===2)melee();});
+renderer.domElement.addEventListener("contextmenu",e=>e.preventDefault());
 let hudAcc=0;
 const updateHud=()=>{
  const q=currentQuest(save);
  $("objective-title").textContent=q.title;
  $("objective-sub").textContent=q.hint;
- $("health-fill").style.width=hero.health+"%";$("health-number").textContent=Math.ceil(hero.health);
- $("mana-fill").style.width=hero.mana+"%";$("mana-number").textContent=Math.floor(hero.mana);
+ $("health-fill").style.width=hero.health/statsFor(save).maxHealth*100+"%";$("health-number").textContent=Math.ceil(hero.health);
+ $("mana-fill").style.width=hero.mana/statsFor(save).maxMana*100+"%";$("mana-number").textContent=Math.floor(hero.mana);
  $("stamina-fill").style.width=hero.stamina+"%";$("stamina-number").textContent=Math.floor(hero.stamina);
  const p=heroGroup.position,dx=q.x-p.x,dz=q.z-p.z;
  const bearing=Math.atan2(dx,-dz)-yaw;
  $("waypoint-arrow").style.transform="rotate("+(bearing*180/PI)+"deg)";
  $("waypoint-dist").textContent=Math.round(Math.hypot(dx,dz))+" M";
  $("location").textContent=save.finished?"THE RESTORED COAST":Math.hypot(p.x,p.z+58)<22?"THE VEIL GATE":RELICS.find(r=>Math.hypot(p.x-r.x,p.z-r.z)<20)?.location||"THE SHATTERED COAST";
+ interfacePlus.render(heroGroup.position,q,RELICS,enemies,npcs,.12);
  const item=nearObject(),el=$("prompt");
  if(!item||dialogueOpen){el.classList.add("hidden");}
  else{
