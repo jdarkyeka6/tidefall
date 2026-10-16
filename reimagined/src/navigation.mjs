@@ -2,11 +2,11 @@
 // Horizontal capsule projected to X/Z. Decoupled from renderer for direct testing.
 export const OBSTACLES=Object.freeze([
  // Six citadel towers, central approach and gatehouses.
- [-25,1,3.8,3.8],[25,1,3.8,3.8],[-24,30,3.6,3.6],[24,30,3.6,3.6],
+ [-25,1,3.8,3.8],[25,1,3.8,3.8],[-33,35,3.6,3.6],[33,35,3.6,3.6],
  [-8,-12,3.4,3.4],[8,-12,3.4,3.4],
  // Citadel walls: three broken panels, with an open central corridor.
- [-24,5,1.7,3],[-24,13,1.7,3],[-24,21,1.7,3],
- [24,5,1.7,3],[24,13,1.7,3],[24,21,1.7,3],
+ [-32,5,1.7,3],[-32,13,1.7,3],[-32,21,1.7,3],
+ [32,5,1.7,3],[32,13,1.7,3],[32,21,1.7,3],
  // Veil gate watchtowers.
  [-14,-58,2.8,2.8],[14,-58,2.8,2.8],
  // Ruined arch uprights.
