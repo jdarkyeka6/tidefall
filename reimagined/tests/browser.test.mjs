@@ -33,7 +33,9 @@ test("render the new game in a real WebGL browser, test graphics switching and e
   assert.ok(await page.locator("#viewport canvas").count(),"3D canvas mounted");
   assert.ok(await page.locator(".veil-upgrades").count(),"upgrade station mounted");
   await page.selectOption("#quality","low");
-  await page.waitForTimeout(300);
+  await page.waitForTimeout(250);
+  await page.selectOption("#quality","medium");
+  await page.waitForTimeout(200);
   await mkdir("artifacts",{recursive:true});
   await page.screenshot({path:"artifacts/tidefall-menu.png"});
   await page.click("#play");
@@ -42,9 +44,10 @@ test("render the new game in a real WebGL browser, test graphics switching and e
   const locked=await page.evaluate(()=>document.pointerLockElement!==null);
   if(locked){
    assert.equal(await page.locator("#hud").isVisible(),true,"HUD visible after entering");
-   await page.keyboard.press("m");
    await page.keyboard.press("v");
    await page.screenshot({path:"artifacts/tidefall-gameplay.png"});
+   await page.keyboard.press("m");
+   await page.screenshot({path:"artifacts/tidefall-expanded-map.png"});
   }
   assert.deepEqual(errors,[],"no uncaught browser errors during graphics initialization");
  } finally {
