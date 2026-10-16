@@ -1,0 +1,20 @@
+name: Tidefall Book One
+on:
+  push:
+    paths:
+      - 'game/**'
+      - '.github/workflows/book-one-checks.yml'
+  pull_request:
+    paths:
+      - 'game/**'
+      - '.github/workflows/book-one-checks.yml'
+jobs:
+  story-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Test quest progression, save validation and game integration
+        run: node --test game/*.test.mjs

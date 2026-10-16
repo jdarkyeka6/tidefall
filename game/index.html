@@ -62,12 +62,12 @@
     <div id="cross"></div><div id="room"></div><div id="toast"></div>
     <div id="mapWrap"><div class="cap" id="mapCap">Floor 1</div><canvas id="map" width="184" height="164"></canvas></div>
     <div id="help"><b>WASD</b> move · <b>Mouse</b> look<br/><b>Shift</b> sprint · <b>Space</b> jump · <b>C</b> crouch<br/><b>Click/F</b> cast · <b>1-4</b> spell · <b>E</b> talk/read<br/><b>T</b> time · <b>R</b> rain · <b>P</b> perf · <b>O</b> mute · <b>M</b> map<br/>
-      <b>Stairs</b> climb the courtyard edges · <b>M</b> map · <b>Esc</b> release</div>
+      <b>Stairs</b> climb the courtyard edges · <b>M</b> map · <b>J</b> journal · <b>Esc</b> release</div>
   </div>
   <div id="overlay"><div class="card">
     <div class="crest">Tidefall Academy</div><h1>Tidefall Castle</h1>
     <div class="sub" id="cardSub">Climb the keep · cast spells · meet the cast · gather the tide shards</div>
-    <div class="keys"><span>WASD move</span><span>Mouse look</span><span>Click cast</span><span>1–4 spells</span><span>E talk</span></div>
+    <div class="keys"><span>WASD move</span><span>Mouse look</span><span>Click cast</span><span>1–4 spells</span><span>E talk</span><span>J journal</span><span>Auto-save</span></div>
     <div id="loadWrap" style="margin:2px 0 16px"><div style="height:7px;background:rgba(255,255,255,.12);border-radius:5px;overflow:hidden"><div id="loadBar" style="height:100%;width:10%;background:linear-gradient(90deg,#f0c061,#d9a441);transition:width .3s ease"></div></div><div id="loadTxt" style="font-size:12px;color:var(--parchment-dim);margin-top:6px">Preparing the castle…</div></div>
     <button id="startBtn" disabled>Loading…</button>
     <div id="settings" style="margin-top:18px;font-size:12px;color:var(--parchment-dim);text-align:left;display:grid;gap:7px;max-width:300px;margin-left:auto;margin-right:auto">
@@ -75,6 +75,7 @@
       <label style="display:flex;justify-content:space-between;align-items:center;gap:10px">Look sensitivity<input id="setSens" type="range" min="30" max="250" value="100" style="width:150px"></label>
       <label style="display:flex;justify-content:space-between;align-items:center;gap:10px">Field of view<input id="setFov" type="range" min="60" max="95" value="72" style="width:150px"></label>
     </div>
+    <button id="resetSaveBtn" type="button" style="font:12px Georgia,serif;color:#efe6d2;border:1px solid rgba(217,164,65,.4);background:transparent;border-radius:8px;padding:7px 14px;margin-top:12px;cursor:pointer">Restart Book One (delete progress)</button>
     <div class="credits" style="font-size:11px;color:var(--parchment-dim);margin-top:16px;line-height:1.6">Built with three.js &amp; @pixiv/three-vrm · World &amp; characters © Jake — Tidefall<br/>Esc to pause · P for low-spec mode</div>
   </div></div>
 
@@ -90,6 +91,7 @@
 <script type="module">
 import * as THREE from "three";
 import { PointerLockControls } from "three/addons/controls/PointerLockControls.js";
+import {STORY_STEPS,SAVE_KEY,freshProgress,normalizeProgress,recordStoryEvent,nextStoryStep,completedStorySteps} from "./story.mjs";
 
 /* +X=East -X=West  +Z=South(road)  -Z=North(sea) */
 (function(){ try{ const c=document.createElement('canvas'); if(!(c.getContext('webgl')||c.getContext('experimental-webgl')))throw 0; }catch(e){ const ov=document.getElementById('overlay'); if(ov)ov.innerHTML="<div class='card'><div class='crest'>Tidefall Academy</div><h1>Tidefall Castle</h1><div class='sub'>This game needs WebGL. Please use a desktop browser (Chrome, Edge, or Firefox) with hardware acceleration enabled.</div></div>"; throw new Error('WebGL unavailable'); } })();
@@ -541,13 +543,13 @@ const _matCache={};
 function colMat(c){ return _matCache[c]||(_matCache[c]=new THREE.MeshStandardMaterial({color:c,roughness:.8})); }
 function glowMat(c){ const k='g'+c; return _matCache[k]||(_matCache[k]=new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:1.1,roughness:.4})); }
 const LINES={
-"Jasper Vale":"If something needs doing, I'm not going to look away.",
+"Jasper Holloway":"If something needs doing, I'm not going to look away.",
 "Harper":"Stay behind me — I'll handle it.",
-"Ava Monroe":"I already know what this will cost.",
+"Ava Rees":"I already know what this will cost.",
 "Lachlan Reed":"You here for the duel trials too?",
 "Cole Vesper":"Keep your voice down — the librarian hears everything.",
 "Theo Kim":"Did you finish the warding essay? ...Me neither.",
-"Isla Monroe":"My sister thinks she's always right. She usually is. Annoying.",
+"Isla Monroe":"Ava keeps her plans close. I wish I knew what she was thinking.",
 "Talia Burns":"Careful — Mord's been watching the courtyard all week.",
 "Mordecai “Mord”":"Enjoy the view. It won't last.",
 "Prof. Rowan Hale":"Wand up. A duel is a conversation you can't afford to lose.",
@@ -569,10 +571,10 @@ function person(x,z,y,o){ const sk=colMat(o.skin||0xeec6a0),hr=colMat(o.hair||0x
   if(o.wand){ piece(cyl(0.025,0.045,0.95,6),colMat(0x2a1d12),x+0.46,ty+0.55,z+0.08); piece(sph(0.07,8),glowMat(o.wandTip||0x8fe0ff),x+0.46,ty+1.05,z+0.08); }
   if(o.name){ label(o.name,x,z,hy+1.0,o.labelCol||"#efe6d2",18); npcs.push({name:o.name,line:LINES[o.name]||"",x,z,fl:(y>13?3:y>6?2:1)}); } }
 /* the trio — courtyard (colours from the character art) */
-person(-3,15,0,{name:"Jasper Vale",skin:0xf0c8a0,hair:0xf0c34a,top:0x1d1d22,under:0xeaeaea,bottom:0x26262b,bag:true,wand:true,wandTip:0x8fe0ff,labelCol:"#f0d49a"});
+person(-3,15,0,{name:"Jasper Holloway",skin:0xf0c8a0,hair:0xf0c34a,top:0x1d1d22,under:0xeaeaea,bottom:0x26262b,bag:true,wand:true,wandTip:0x8fe0ff,labelCol:"#f0d49a"});
 /* Harper & Ava use real VRM avatars (loaded in the PLAYER section); labels + dialogue kept here */
 label("Harper",-7,16.5,2.9,"#e8a07a",18); npcs.push({name:"Harper",line:LINES["Harper"],x:-7,z:16.5,fl:1});
-label("Ava Monroe",3,16,2.9,"#9fc6e0",18); npcs.push({name:"Ava Monroe",line:LINES["Ava Monroe"],x:3,z:16,fl:1});
+label("Ava Rees",3,16,2.9,"#9fc6e0",18); npcs.push({name:"Ava Rees",line:LINES["Ava Rees"],x:3,z:16,fl:1});
 /* students through the halls */
 person(11,-30,0,{name:"Lachlan Reed",hair:0x3a2a1a,top:0x6a3535,bottom:0x2a2a30,wand:true,wandTip:0xff6a8a});
 person(-30,-18,0,{name:"Cole Vesper",hair:0x202024,top:0x2a4a3a,bottom:0x242428,wand:true,wandTip:0x6fe07a});
@@ -710,7 +712,7 @@ startBtn.addEventListener('click',start);
 addEventListener('keydown',e=>{ if(e.code==='Enter'&&overlay.style.display!=='none')start(); });
 controls.addEventListener('lock',()=>{ overlay.style.display='none'; hud.classList.remove('hidden'); started=true; cardSub.textContent=SUB_DEFAULT; initAudio(); if(actx){ actx.resume(); master.gain.value=baseVol; } });
 controls.addEventListener('unlock',()=>{ overlay.style.display='grid'; if(!won&&started)cardSub.textContent="Paused — press Enter or click to resume."; });
-function showWin(){ if(won)return; won=true; cardSub.innerHTML="🏰 <b>You've mastered Tidefall Castle.</b><br>All objectives complete · "+score+" hits · "+shardCount+"/"+SHARD_TOTAL+" shards gathered"; startBtn.textContent="Keep exploring"; controls.unlock(); }
+function showWin(){ if(won)return; won=true; saveProgress(); cardSub.innerHTML="🏰 <b>Book One prologue complete!</b><br>All objectives complete · "+score+" hits · "+shardCount+"/"+SHARD_TOTAL+" shards gathered"; startBtn.textContent="Keep exploring"; controls.unlock(); }
 const keys={}; addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyM')mapWrap.classList.toggle('hidden'); });
 addEventListener('keyup',e=>{ keys[e.code]=false; });
 /* player spellcasting (left-click or F) */
@@ -718,7 +720,7 @@ const boltPool=[],trailPool=[]; let boltIdx=0,trailIdx=0;
 for(let i=0;i<8;i++){ const m=new THREE.Mesh(new THREE.SphereGeometry(0.18,10,10),glowMat(0x9fd0ff)); m.visible=false; world.add(m); boltPool.push({mesh:m,vel:new THREE.Vector3(),life:0}); }
 for(let i=0;i<48;i++){ const m=new THREE.Mesh(new THREE.SphereGeometry(0.12,8,8),glowMat(0x9fd0ff)); m.visible=false; world.add(m); trailPool.push({mesh:m,life:0}); }
 function emitTrail(x,y,z,c){ trailIdx=(trailIdx+1)%trailPool.length; const p=trailPool[trailIdx]; if(c)p.mesh.material=glowMat(c); p.mesh.position.set(x,y,z); p.mesh.visible=true; p.life=0.35; p.mesh.scale.setScalar(1); }
-function castSpell(){ if(!controls.isLocked)return; const s=SPELLS[curSpell]; if(mana<s.cost||castCD>0)return; mana-=s.cost; castCD=s.cd; castedOnce=true;
+function castSpell(){ if(!controls.isLocked)return; const s=SPELLS[curSpell]; if(mana<s.cost||castCD>0)return; mana-=s.cost; castCD=s.cd; castedOnce=true; storyEvent("cast");
   const dir=new THREE.Vector3(); camera.getWorldDirection(dir); const o=controls.getObject().position;
   boltIdx=(boltIdx+1)%boltPool.length; const b=boltPool[boltIdx]; b.mesh.material=glowMat(s.c); b.col=s.c; b.mesh.position.set(o.x+dir.x,o.y+dir.y,o.z+dir.z); b.mesh.visible=true; b.mesh.scale.setScalar(1); b.vel.copy(dir).multiplyScalar(s.sp); b.life=1.6; sfxCast(); }
 addEventListener('mousedown',e=>{ if(e.button===0)castSpell(); });
@@ -726,6 +728,7 @@ addEventListener('keydown',e=>{
   if(e.code==='KeyF')castSpell();
   else if(e.code==='Digit1'){curSpell=0;sfxBlip();} else if(e.code==='Digit2'){curSpell=1;sfxBlip();} else if(e.code==='Digit3'){curSpell=2;sfxBlip();} else if(e.code==='Digit4'){curSpell=3;sfxBlip();}
   else if(e.code==='KeyE')interact();
+   else if(e.code==='KeyJ'&&!e.repeat){journalOpen=!journalOpen;journalEl.style.display=journalOpen?'block':'none';}
   else if(e.code==='KeyP'){ lowSpec=!lowSpec; renderer.shadowMap.enabled=!lowSpec; renderer.setPixelRatio(lowSpec?1:dpr0);
     scene.traverse(o=>{ if(o.material){ (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{m.needsUpdate=true;}); } }); }
 });
@@ -848,32 +851,67 @@ plaque(-30,4,1,0,"Library of Tides","Silence is the first spell. Borrow freely, 
 plaque(40,-10,1,0,"The Infirmary","Bravery fills these halls; we tend what it leaves behind. Rest is not weakness. — S. Vale");
 plaque(-14,-30,3,14,"Dueling Etiquette","Wand up, intent clear. A bout ends at yield or disarm. The circle is for discipline, never spectacle. — R. Hale");
 /* dialogue: extra lines per character (E to cycle) */
-const TRIO=new Set(["Jasper Vale","Harper","Ava Monroe"]);
+const TRIO=new Set(["Jasper Holloway","Harper","Ava Rees"]);
 const MOREL={
-"Jasper Vale":["If something needs doing, I'm not going to look away.","Winning a duel doesn't stop loss elsewhere. Learned that the hard way.","Stick close — the upper floors get strange after dark."],
-"Harper":["Stay behind me — I'll handle it.","I don't regret stepping in. I regret doing it alone.","If Mord makes a move, you'll want me in front of you."],
-"Ava Monroe":["I already know what this will cost.","Most disasters are avoidable if someone plans far enough ahead.","Don't mistake my calm for not caring."],
-"Prof. Rowan Hale":["Wand up. A duel is a conversation you can't afford to lose.","Footwork first, flourish never.","You'll cast cleaner once you stop trying to look impressive."],
+"Jasper Holloway":["My yellow necklace warmed up when the tide pulled back. That's never happened before.","Ava has a brass key; nobody knows what it opens.","Something is calling from under Tidefall. Help us find out what."],
+"Harper":["Stick together. Something moved below the castle last night.","The upper floors are safer if you know how to cast. Find Professor Hale.","You followed the Saltwater Thread? Good. We'll face what comes next together."],
+"Ava Rees":["The old brass key I found doesn't fit any door I know.","A forgotten passage in the Library of Tides mentions a Saltwater Thread.","If we go below the castle, we're taking a plan with us."],
+"Prof. Rowan Hale":["You're heading beneath the keep? You'll need spell control first.","Try a training dummy. Aim carefully before you fire.","Good. A steady hand will serve you better than raw power."],
 "Mordecai “Mord”":["Enjoy the view. It won't last.","Every wall in this castle remembers something.","You think the stairs only go up?"]
 };
 /* objectives */
 const OBJ=[{t:"Cast your first spell",done:false},{t:"Hit a training dummy",done:false},{t:"Climb to Floor 3",done:false},{t:"Meet Prof. Hale",done:false},{t:"Talk to the trio (E)",done:false},{t:"Descend to the Undercroft",done:false},{t:"Gather 8 Tide Shards",done:false}];
+// Book One save is separate from audio/graphics settings.
+let story=freshProgress();
+try { story=normalizeProgress(JSON.parse(localStorage.getItem(SAVE_KEY)||"null")); } catch(e) { story=freshProgress(); }
+function saveProgress() {
+  const p=controls.getObject().position;
+  story.shards=shards.flatMap((s,i)=>s.got?[i]:[]);
+  story.score=score;story.spell=curSpell;
+  story.objectives=OBJ.map(o=>o.done);
+  story.position=[p.x,p.y,p.z];
+  story.won=won;
+  try {localStorage.setItem(SAVE_KEY,JSON.stringify(story));} catch(e) {}
+}
+function storyEvent(kind,target="") {
+  const changed=recordStoryEvent(story,kind,target,shardCount);
+  if(changed) {
+    const next=nextStoryStep(story);
+    toast(next?"Book One: "+next.title:"Book One prologue complete! Return to the castle.");
+    renderStory();
+    saveProgress();
+  }
+  return changed;
+}
 /* HUD elements */
 function mkEl(css){ const e=document.createElement('div'); e.style.cssText=css; hud.appendChild(e); return e; }
 const statEl=mkEl("position:absolute;right:16px;bottom:16px;width:196px;background:rgba(8,22,30,.82);border:1px solid rgba(217,164,65,.35);border-radius:12px;padding:10px 12px;font:12px/1.4 ui-monospace,monospace;color:#efe6d2");
 const fpsEl=mkEl("position:absolute;top:8px;left:50%;transform:translateX(-50%);font:11px ui-monospace,monospace;color:#9fc6a0;opacity:.8");
 const objEl=mkEl("position:absolute;top:66px;left:20px;font:12px/1.7 'Iowan Old Style',Georgia,serif;color:var(--parchment-dim);background:rgba(8,22,30,.7);border:1px solid rgba(217,164,65,.25);border-radius:10px;padding:8px 12px;max-width:230px");
 const loreEl=mkEl("position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,86vw);background:rgba(8,22,30,.92);border:1px solid rgba(217,164,65,.45);border-radius:14px;padding:20px 24px;font:15px/1.6 'Iowan Old Style',Georgia,serif;color:#efe6d2;opacity:0;transition:opacity .25s ease;pointer-events:none");
+const questEl=mkEl("position:absolute;left:20px;top:287px;max-width:254px;background:rgba(8,22,30,.82);border:1px solid rgba(217,164,65,.4);border-radius:11px;padding:10px 12px;font:12px/1.5 'Iowan Old Style',Georgia,serif;color:#efe6d2");
+const journalEl=mkEl("position:absolute;left:20px;top:375px;max-height:calc(100vh - 390px);overflow:hidden;width:270px;background:rgba(8,22,30,.94);border:1px solid rgba(217,164,65,.4);border-radius:11px;padding:12px 14px;font:12px/1.8 'Iowan Old Style',Georgia,serif;color:#efe6d2;display:none");
+let journalOpen=false;
+function renderStory() {
+  const next=nextStoryStep(story);
+  questEl.innerHTML="<div style='color:#d9a441;letter-spacing:.12em'>BOOK ONE · THE SALTWATER THREAD</div>"
+    +"<div style='font-size:14px;margin:4px 0'>"+(next?next.title:"Prologue complete ✓")+"</div>"
+    +"<div style='color:#b8b4a9'>"+(next?next.hint:"You have followed the thread beneath Tidefall.")+"</div>"
+    +"<div style='margin-top:5px;color:#7ad07a'>"+completedStorySteps(story)+"/"+STORY_STEPS.length+" chapters · J for journal</div>";
+  journalEl.innerHTML="<div style='color:#d9a441;letter-spacing:.14em;margin-bottom:8px'>THE SALTWATER THREAD</div>"
+    +STORY_STEPS.map(s=>"<div style='color:"+(story.flags[s.id]?"#7ad07a":"#d9c8a4")+"'>"
+    +(story.flags[s.id]?"✓ ":"○ ")+s.title+"</div>").join("");
+}
 function bar(label,val,col){ return "<div style='display:flex;justify-content:space-between'><span>"+label+"</span><span>"+Math.round(val)+"</span></div><div style='height:6px;background:rgba(255,255,255,.12);border-radius:4px;margin:2px 0 7px'><div style='height:100%;width:"+Math.max(0,val)+"%;background:"+col+";border-radius:4px'></div></div>"; }
 function renderStats(){ const s=SPELLS[curSpell];
   statEl.innerHTML="<div style='color:#d9a441;letter-spacing:.12em;margin-bottom:6px'>"+s.n.toUpperCase()+" <span style='color:#7c8a92'>[1-4]</span></div>"+bar("Mana",mana,"#6fb6ff")+bar("Stamina",stamina,"#7ad07a")+"<div style='display:flex;justify-content:space-between'><span>Hits</span><span style='color:#ffce6a'>"+score+"</span></div><div style='display:flex;justify-content:space-between'><span>Shards</span><span style='color:#4fe0d0'>"+shardCount+"/"+SHARD_TOTAL+"</span></div>"; }
 function renderObj(){ objEl.innerHTML="<div style='color:#d9a441;letter-spacing:.1em;margin-bottom:3px'>OBJECTIVES</div>"+OBJ.map(o=>(o.done?"<span style='color:#7ad07a'>✓ </span><s>":"<span style='color:#caa15a'>○ </span>")+o.t+(o.done?"</s>":"")).join("<br>"); }
-renderStats(); renderObj();
+renderStats(); renderObj(); renderStory();
 function interact(){ if(!controls.isLocked)return; const pos=controls.getObject().position,fl=currentFloor(pos);
   let pl=null,pd=3.4; for(const q of plaques){ if(q.fl!==fl)continue; const d=Math.hypot(pos.x-q.x,pos.z-q.z); if(d<pd){pd=d;pl=q;} }
-  if(pl){ loreOpen=!(loreTarget===pl&&loreOpen); loreTarget=pl; return; }
+  if(pl){ loreOpen=!(loreTarget===pl&&loreOpen); loreTarget=pl; if(loreOpen)storyEvent("plaque",pl.title); return; }
   let nn=null,ndd=3.6; for(const n of npcs){ if(n.fl!==fl)continue; const d=Math.hypot(pos.x-n.x,pos.z-n.z); if(d<ndd){ndd=d;nn=n;} }
-  if(nn){ const arr=MOREL[nn.name]||[nn.line]; talkIdx=(talkName===nn.name)?talkIdx+1:0; talkName=nn.name; talkLine=arr[talkIdx%arr.length]; talkT=4.5; if(TRIO.has(nn.name))OBJ[4].done=true; } }
+  if(nn){ const arr=MOREL[nn.name]||[nn.line]; talkIdx=(talkName===nn.name)?talkIdx+1:0; talkName=nn.name; talkLine=arr[talkIdx%arr.length]; talkT=4.5; if(TRIO.has(nn.name))OBJ[4].done=true; storyEvent("talk",nn.name); } }
 /* ====================================================================
    ENVIRONMENT FX: stained glass, fountain/sea, weather, day-night, crests
    ==================================================================== */
@@ -951,8 +989,28 @@ function sfxBlip(){ blip(660,0.07,'square',0.06); }
 function flOf(y){ return y>13?3:y>6?2:(y<-2?0:1); }
 function shard(x,z,y){ const m=new THREE.Mesh(sph(0.22,8),glowMat(0x4fe0d0)); m.position.set(x,y,z); world.add(m); shards.push({mesh:m,x,z,y,fl:flOf(y),got:false}); }
 [[10,8,0.9],[-23,-40,0.9],[15,-44,0.9],[-40,-10,0.9],[8,16,0.9],[0,-44,7.9],[-24,38,7.9],[40,0,7.9],[-40,20,14.9],[40,20,14.9],[-3,-44,14.9],[0,96,-5.4]].forEach(s=>shard(s[0],s[1],s[2]));
+// Restore saved achievements, shards, and location after world creation.
+for(const i of story.shards){const sh=shards[i];if(sh){sh.got=true;sh.mesh.visible=false;}}
+shardCount=shards.filter(s=>s.got).length;
+score=story.score;curSpell=story.spell;
+OBJ.forEach((o,i)=>{o.done=story.objectives[i]===true;});
+if(story.flags.cast){castedOnce=true;OBJ[0].done=true;}
+if(story.flags.dummy)OBJ[1].done=true;
+if(story.flags.hale)OBJ[3].done=true;
+if(story.flags.under)OBJ[5].done=true;
+if(shardCount>=8){OBJ[6].done=true;recordStoryEvent(story,"shards","",shardCount);}
+if(story.position)controls.getObject().position.set(...story.position);
+won=story.won;
+renderStats();renderObj();renderStory();
+document.getElementById("resetSaveBtn").addEventListener("click",()=>{
+  if(!confirm("Restart Book One and permanently clear quest, shards and position? Your audio and graphics settings will stay."))return;
+  try{localStorage.removeItem(SAVE_KEY);}catch(e){}
+  location.reload();
+});
+addEventListener("pagehide",()=>{if(started)saveProgress();});
+addEventListener("visibilitychange",()=>{if(document.hidden&&started)saveProgress();});
 const arrowEl=mkEl("position:absolute;left:50%;top:52px;width:0;height:0;border-left:9px solid transparent;border-right:9px solid transparent;border-bottom:16px solid #4fe0d0;transform-origin:50% 70%;opacity:0;filter:drop-shadow(0 0 5px #4fe0d0)");
-const clock=new THREE.Clock(); let shownFloor=1; const hinted={};
+const clock=new THREE.Clock(); let shownFloor=1; const hinted={}; let autosaveAt=0;
 function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getDelta(),0.05);
   if(controls.isLocked){
     const moving=keys['KeyW']||keys['KeyS']||keys['KeyA']||keys['KeyD'];
@@ -986,12 +1044,13 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
     else if(pl){ npcEl.innerHTML="📜 <b>"+pl.title+"</b> <span style='color:#7c8a92'>[E to read]</span>"; npcEl.style.opacity=1; }
     else npcEl.style.opacity=0;
     if(loreOpen&&loreTarget&&loreTarget.fl===fl&&Math.hypot(pos.x-loreTarget.x,pos.z-loreTarget.z)<4.2){ loreEl.innerHTML="<div style='color:#d9a441;letter-spacing:.1em;margin-bottom:8px'>"+loreTarget.title.toUpperCase()+"</div>"+loreTarget.text+"<div style='color:#7c8a92;margin-top:12px;font-size:12px'>press E to close</div>"; loreEl.style.opacity=1; } else { loreOpen=false; loreEl.style.opacity=0; }
-    if(castedOnce)OBJ[0].done=true; if(fl===3)OBJ[2].done=true; if(fl===0)OBJ[5].done=true; if(near&&near.name==="Prof. Rowan Hale")OBJ[3].done=true;
-    for(const sh of shards){ if(!sh.got&&sh.fl===fl&&Math.hypot(pos.x-sh.x,pos.z-sh.z)<1.8){ sh.got=true; sh.mesh.visible=false; shardCount++; if(shardCount>=8)OBJ[6].done=true; sfxCollect(); } }
+    if(castedOnce)OBJ[0].done=true; if(fl===3)OBJ[2].done=true; if(fl===0){OBJ[5].done=true;storyEvent("visit","Undercroft");} if(near&&near.name==="Prof. Rowan Hale")OBJ[3].done=true;
+    for(const sh of shards){ if(!sh.got&&sh.fl===fl&&Math.hypot(pos.x-sh.x,pos.z-sh.z)<1.8){ sh.got=true; sh.mesh.visible=false; shardCount++; if(shardCount>=8)OBJ[6].done=true; storyEvent("shards"); saveProgress(); sfxCollect(); } }
     let sb=null,sd=1e9; for(const sh of shards){ if(sh.got||sh.fl!==fl)continue; const d=Math.hypot(pos.x-sh.x,pos.z-sh.z); if(d<sd){sd=d;sb=sh;} }
     if(sb){ const ang=Math.atan2(sb.x-pos.x,sb.z-pos.z)-Math.atan2(fwd.x,fwd.z); arrowEl.style.transform="translateX(-50%) rotate("+(ang*180/Math.PI)+"deg)"; arrowEl.style.opacity=.85; } else arrowEl.style.opacity=0;
-    if(!won&&OBJ.every(o=>o.done))showWin();
+    if(!won&&OBJ.every(o=>o.done)&&!nextStoryStep(story))showWin();
     renderStats(); renderObj();
+     if(clock.elapsedTime-autosaveAt>=15){autosaveAt=clock.elapsedTime;saveProgress();}
   }
   const t=clock.elapsedTime;
   for(const o of torches){ const f=0.7+Math.sin(t*12+o.l.position.x)*0.18+Math.random()*0.12; o.l.intensity=o.base*f; o.flame.scale.setScalar(0.9+f*0.25); }
@@ -999,7 +1058,7 @@ function animate(){ requestAnimationFrame(animate); const dt=Math.min(clock.getD
   for(const s of spellBolts){ const f=Math.sin(t*s.spd+s.ph)*0.5+0.5; s.mesh.position.set(s.ax+(s.bx-s.ax)*f,s.ay+(s.by-s.ay)*f+Math.sin(f*Math.PI)*1.0,s.az+(s.bz-s.az)*f); s.mesh.scale.setScalar(0.8+Math.sin(t*10+s.ph)*0.2); }
   for(const r of castRings){ const f=(t*r.spd+r.ph)%1; r.mesh.scale.set(0.3+f*2.4,1,0.3+f*2.4); r.mat.opacity=0.65*(1-f); }
   for(const b of boltPool){ if(b.life>0){ b.life-=dt; const bp=b.mesh.position; bp.addScaledVector(b.vel,dt); emitTrail(bp.x,bp.y,bp.z,b.col);
-    for(const tg of targets){ if(Math.abs(bp.y-tg.y)<1.3&&Math.hypot(bp.x-tg.x,bp.z-tg.z)<tg.r){ emitImpact(bp.x,bp.y,bp.z,b.col||0xffffff); tg.hitT=0.3; score++; OBJ[1].done=true; sfxHit(); b.life=0; break; } }
+    for(const tg of targets){ if(Math.abs(bp.y-tg.y)<1.3&&Math.hypot(bp.x-tg.x,bp.z-tg.z)<tg.r){ emitImpact(bp.x,bp.y,bp.z,b.col||0xffffff); tg.hitT=0.3; score++; OBJ[1].done=true; storyEvent("dummy"); sfxHit(); b.life=0; break; } }
     if(b.life<=0)b.mesh.visible=false; } }
   for(const tg of targets){ if(tg.hitT>0){ tg.hitT-=dt; tg.ring.scale.setScalar(1+Math.max(0,tg.hitT)*2.2); } }
   for(const p of impactPool){ if(p.life>0){ p.life-=dt; const f=Math.max(0,p.life/0.26); p.mesh.scale.setScalar((1-f)*1.6+0.3); if(p.life<=0)p.mesh.visible=false; } }
