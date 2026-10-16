@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import "./style.css";
+// Stylesheet linked from index.html for both static preview and Vite builds.
 import {SAVE_KEY,RELICS,DIALOGUES,freshSave,normalizeSave,currentQuest,claimRelic,defeatWarden,sealVeil,moveAxis} from "./logic.mjs";
 
 // Tidefall: The Veil is a standalone, GPU-conscious vertical slice.
