@@ -21,7 +21,7 @@ export const DIALOGUES=Object.freeze({
     "We'll deal with the Veil. No one faces this on their own."
   ]
 });
-export function freshSave(){return {version:1,metJasper:false,relics:[],wardenDefeated:false,finished:false,quality:"auto"};}
+export function freshSave(){return {version:1,metJasper:false,relics:[],wardenDefeated:false,finished:false,quality:"auto",xp:0,essence:0,upgrades:{power:0,vitality:0,focus:0}};}
 export function normalizeSave(raw){
   const s=freshSave();if(!raw||typeof raw!=="object"||raw.version!==1)return s;
   s.metJasper=raw.metJasper===true;
@@ -29,6 +29,12 @@ export function normalizeSave(raw){
   s.wardenDefeated=raw.wardenDefeated===true&&s.relics.length===3&&s.metJasper;
   s.finished=raw.finished===true&&s.wardenDefeated;
   s.quality=["auto","high","medium","low"].includes(raw.quality)?raw.quality:"auto";
+  s.xp=Number.isInteger(raw.xp)?Math.max(0,Math.min(raw.xp,100000)):0;
+  s.essence=Number.isInteger(raw.essence)?Math.max(0,Math.min(raw.essence,999)):0;
+  for(const name of ["power","vitality","focus"]) {
+    const val=raw.upgrades?.[name];
+    s.upgrades[name]=Number.isInteger(val)?Math.max(0,Math.min(val,5)):0;
+  }
   return s;
 }
 export function currentQuest(save){
@@ -58,4 +64,33 @@ export function damageAfterArmour(amount,damageReduction=0){
 export function moveAxis(keys){
  const x=(keys.KeyD?1:0)-(keys.KeyA?1:0),z=(keys.KeyW?1:0)-(keys.KeyS?1:0);
  const l=Math.hypot(x,z)||1;return {x:x/l,z:z/l,active:x!==0||z!==0};
+}
+
+
+export const UPGRADE_TYPES=Object.freeze(["power","vitality","focus"]);
+export const UPGRADE_LABELS=Object.freeze({power:"SPELLCRAFT",vitality:"IRONWILL",focus:"AETHERFLOW"});
+export function upgradeCost(tier){return Number.isInteger(tier)&&tier>=0&&tier<5?2+tier*2:Infinity;}
+export function rankAtXP(xp){return Math.min(50,1+Math.floor(Math.sqrt(Math.max(0,xp)/60)));}
+export function statsFor(save){
+  return {
+    maxHealth:100+save.upgrades.vitality*20,
+    maxMana:100+save.upgrades.focus*14,
+    manaRegen:16+save.upgrades.focus*3.6,
+    damageMult:1+save.upgrades.power*.18,
+    rank:rankAtXP(save.xp)
+  };
+}
+export function gainRewards(save,xp=0,essence=0){
+  if(!Number.isFinite(xp)||!Number.isFinite(essence))return false;
+  if(xp<0||essence<0)return false;
+  save.xp=Math.min(100000,save.xp+Math.round(xp));
+  save.essence=Math.min(999,save.essence+Math.round(essence));
+  return true;
+}
+export function purchaseUpgrade(save,type){
+  if(!UPGRADE_TYPES.includes(type))return false;
+  const tier=save.upgrades[type],cost=upgradeCost(tier);
+  if(!Number.isFinite(cost)||save.essence<cost)return false;
+  save.essence-=cost;save.upgrades[type]++;
+  return true;
 }
