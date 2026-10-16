@@ -311,7 +311,7 @@ const POOL=700,px=new Float32Array(POOL*3),pc=new Float32Array(POOL*3),vel=new F
 const pgeom=new THREE.BufferGeometry();
 pgeom.setAttribute("position",new THREE.BufferAttribute(px,3).setUsage(THREE.DynamicDrawUsage));
 pgeom.setAttribute("color",new THREE.BufferAttribute(pc,3).setUsage(THREE.DynamicDrawUsage));
-const smallParticles=new THREE.Points(pgeom,new THREE.PointsMaterial({size:.22,vertexColors:true,transparent:true,opacity:.92,depthWrite:false,blending:THREE.AdditiveBlending}));
+smallParticles=new THREE.Points(pgeom,new THREE.PointsMaterial({size:.22,vertexColors:true,transparent:true,opacity:.92,depthWrite:false,blending:THREE.AdditiveBlending}));
 smallParticles.frustumCulled=false;scene.add(smallParticles);
 for(let i=0;i<POOL;i++)px[3*i+1]=-1000;
 let particleIndex=0;
