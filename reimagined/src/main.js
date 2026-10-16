@@ -46,6 +46,7 @@ function applyQuality(){
  if(typeof vegetation!=="undefined")vegetation.visible=quality!=="low";
  if(typeof smallParticles!=="undefined")smallParticles.visible=quality!=="low";
  if(typeof worldPlus!=="undefined")worldPlus.setQuality(quality);
+ if(quality==="high")loadDetailedAvatars();
 }
 $("quality").value=quality;
 $("quality").addEventListener("change",e=>{quality=e.target.value;save.quality=quality;persist();applyQuality();});
@@ -328,7 +329,43 @@ const npcs=[
  {id:"ava",name:"AVA REES",x:-5,z:16,lines:DIALOGUES.ava,color:0x96c7fa,group:humanFigure("AVA",-5,16,{robe:0x334063,trim:0x96c7fa,hair:0x644736})},
  {id:"harper",name:"HARPER VALE",x:10,z:15,lines:DIALOGUES.harper,color:0xe99f88,group:humanFigure("HARPER",10,15,{robe:0x36483c,trim:0xbfd096,hair:0x9d5741})}
 ];
-// Player: sculpted low-poly silhouette, robe, wand, hair and the yellow necklace.
+// High graphics: reuse Tidefall's actual existing Ava / Harper VRM art.
+// Optional, asynchronous, and non-blocking. Procedural avatars remain as fallback.
+const detailedAvatars=[];let detailedAvatarsAttempted=false;
+async function loadDetailedAvatars(){
+ if(detailedAvatarsAttempted||quality!=="high")return;
+ detailedAvatarsAttempted=true;
+ try{
+  const [{GLTFLoader},{VRMLoaderPlugin}]=await Promise.all([
+    import("three/addons/loaders/GLTFLoader.js"),
+    import("@pixiv/three-vrm")
+  ]);
+  const loader=new GLTFLoader();
+  loader.register(parser=>new VRMLoaderPlugin(parser));
+  const selections=[
+   {id:"ava",url:"../charecters/ava/3d_model/ava.vrm"},
+   {id:"harper",url:"../charecters/harper/3d_model/harper.vrm"}
+  ];
+  await Promise.all(selections.map(async item=>{
+   const npc=npcs.find(n=>n.id===item.id);if(!npc)return;
+   try{
+    const gltf=await new Promise((resolve,reject)=>loader.load(item.url,resolve,undefined,reject));
+    const vrm=gltf.userData.vrm;if(!vrm)return;
+    const model=vrm.scene;scene.add(model);
+    const bb=new THREE.Box3().setFromObject(model);
+    const height=Math.max(.2,bb.max.y-bb.min.y);
+    model.scale.multiplyScalar(clamp(2.9/height,.2,5.5));
+    model.rotation.y=Math.PI;model.position.set(npc.x,0,npc.z);
+    model.updateMatrixWorld(true);
+    const scaled=new THREE.Box3().setFromObject(model);
+    model.position.y=hAt(npc.x,npc.z)-scaled.min.y;
+    npc.group.visible=false;
+    detailedAvatars.push({npc,vrm,model});
+   }catch(e){console.info("VRM unavailable; procedural avatar kept:",item.id);}
+  }));
+ }catch(e){console.info("Detailed models unavailable; stylized fallback enabled.");}
+}
+// Player: stylized apprentice with a woven robe and magic wand.
 const heroGroup=new THREE.Group();root.add(heroGroup);
 const animated=new THREE.Group();heroGroup.add(animated);
 const cape=mesh(new THREE.ConeGeometry(.87,2.35,11,1,true),robeBack,animated);
@@ -795,6 +832,7 @@ function animate(){
  waterMat.uniforms.time.value=t;
  updateRelics(t);
  worldPlus.update(dt,t);
+ for(const avatar of detailedAvatars){avatar.vrm.update(dt);avatar.model.rotation.y=Math.PI+Math.sin(t*.3+avatar.npc.x)*.08;}
  if(playing&&!gameEnded){heroMove(dt,t);enemiesTick(dt,t);updateProjectiles(dt);particles(dt);hudAcc+=dt;if(hudAcc>.10){hudAcc=0;updateHud();}}
  else{for(const n of npcs)n.group.rotation.y=Math.PI+Math.sin(t*.35+n.x)*.15;}
  camTick(dt);
